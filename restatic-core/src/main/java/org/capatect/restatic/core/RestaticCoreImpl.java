@@ -5,5 +5,5 @@ package org.capatect.restatic.core;
  *
  * Provides the core functionality of the Restatic module.
  */
-public class RestaticCoreImpl implements RestaticCore {
+public final class RestaticCoreImpl implements RestaticCore {
 }
