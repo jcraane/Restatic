@@ -1,5 +1,7 @@
 package org.capatect.restatic.core.configuration;
 
+import org.apache.commons.lang.Validate;
+
 import java.io.File;
 import java.util.List;
 
@@ -35,12 +37,19 @@ public final class Configuration {
         private List<File> sourceRootPaths;
 
         public ConfigurationBuilder addSourceRootPaths(final List<File> sourceRootPaths) {
+            Validate.notNull(sourceRootPaths, "sourceRootPaths may not be null.");
+            Validate.noNullElements(sourceRootPaths, "No sourceRootPath in sourceRootPaths may be null.");
+
             this.sourceRootPaths = sourceRootPaths;
             return this;
         }
 
+        /**
+         * Builds an instance of Configuration from the state of the builder.
+         * @return A new Configuration instance.
+         */
         public Configuration build() {
-            return null;  //To change body of created methods use File | Settings | File Templates.
+            return new Configuration(this);
         }
     }
 }

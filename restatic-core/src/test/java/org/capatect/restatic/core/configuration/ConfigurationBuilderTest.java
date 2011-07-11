@@ -15,15 +15,23 @@ import static junit.framework.Assert.assertNotNull;
 public class ConfigurationBuilderTest {
     @Test
     public void buildWithSourceRootPaths() {
-
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void buildWithEmptySourceRootPaths() {
         List<File> sourceRootPaths = new ArrayList<File>();
         sourceRootPaths.add(new File("/org/capatect/restatic/core/onebundle"));
         Configuration configuration = new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build();
+        assertNotNull(configuration);
         assertNotNull(configuration.getSourceRootPaths());
         assertEquals(1, configuration.getSourceRootPaths().size());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildWithNullSourceRootPaths() {
+        new Configuration.ConfigurationBuilder().addSourceRootPaths(null).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildWithNullSourceRootPathsInList() {
+        List<File> sourceRootPaths = new ArrayList<File>();
+        sourceRootPaths.add(null);
+        new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build();
     }
 }
