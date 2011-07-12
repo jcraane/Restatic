@@ -3,6 +3,8 @@ package org.capatect.restatic.core.configuration;
 import org.apache.commons.lang.Validate;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,12 +14,14 @@ import java.util.List;
  * to do its work. The configuration constists of:
  * <p/>
  * - sourceRootPaths: a list of source folder to scan for resource bundles.
+ *
+ * This class is immutable.
  */
 public final class Configuration {
     private List<File> sourceRootPaths;
 
     private Configuration(final ConfigurationBuilder builder) {
-        this.sourceRootPaths = builder.sourceRootPaths;
+        this.sourceRootPaths = new ArrayList<File>(builder.sourceRootPaths);
     }
 
     /**
@@ -26,14 +30,13 @@ public final class Configuration {
      * @return The root folders configured for this configuration instance.
      */
     public List<File> getSourceRootPaths() {
-        return sourceRootPaths;
+        return Collections.unmodifiableList(sourceRootPaths);
     }
 
     /**
      * @author: Jamie Craane
      */
-    public static class ConfigurationBuilder {
-        private Configuration configuration;
+    public static final class ConfigurationBuilder {
         private List<File> sourceRootPaths;
 
         public ConfigurationBuilder addSourceRootPaths(final List<File> sourceRootPaths) {
