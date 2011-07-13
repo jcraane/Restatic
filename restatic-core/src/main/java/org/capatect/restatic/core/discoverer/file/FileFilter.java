@@ -3,8 +3,6 @@ package org.capatect.restatic.core.discoverer.file;
 /**
  * Listener for callbacks when directories and files are found when exploring a
  * directory, or a jar file for example.
- *
- * @author <a href="mailto:ycoppel@google.com">ycoppel@google.com</a> (Yohann Coppel)
  */
 public interface FileFilter {
     /**

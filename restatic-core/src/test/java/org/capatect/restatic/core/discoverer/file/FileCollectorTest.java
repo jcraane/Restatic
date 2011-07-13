@@ -1,6 +1,5 @@
 package org.capatect.restatic.core.discoverer.file;
 
-import org.capatect.restatic.core.FileTestUtils;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,7 +14,8 @@ public class FileCollectorTest {
     @Test
     public void findPropertiesFiles() {
         FileFilter filter = new ResourceBundleFileFilter();
-        File path = new File(FileTestUtils.getSystemIndependentPath("restatic-core/src/test/resources"));
+        File baseDir = new File(System.getProperty("basedir", "restatic-core"));
+        File path = new File(baseDir, "src/test/resources");
         FileCollector fileCollector = new FileCollector(path, filter);
         List<File> matchedFiles = fileCollector.collect();
         assertEquals(2, matchedFiles.size());
