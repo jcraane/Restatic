@@ -18,7 +18,7 @@ public class ConfigurationBuilderTest {
         List<File> sourceRootPaths = new ArrayList<File>();
         sourceRootPaths.add(new File("/org/capatect/restatic/core/bundleone"));
         sourceRootPaths.add(new File("/org/capatect/restatic/core/bundletwo"));
-        Configuration configuration = new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build();
+        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).build();
         assertNotNull(configuration);
         assertNotNull(configuration.getSourceRootPaths());
         assertEquals(2, configuration.getSourceRootPaths().size());
@@ -26,21 +26,21 @@ public class ConfigurationBuilderTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void buildWithNullSourceRootPaths() {
-        new Configuration.ConfigurationBuilder().addSourceRootPaths(null).build();
+        new Configuration.ConfigurationBuilder(null).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void buildWithNullSourceRootPathsInList() {
         List<File> sourceRootPaths = new ArrayList<File>();
         sourceRootPaths.add(null);
-        new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build();
+        new Configuration.ConfigurationBuilder(sourceRootPaths).build();
     }
 
     @Test
     public void testSafeCopySourceRootPaths() {
         List<File> sourceRootPaths = new ArrayList<File>();
         sourceRootPaths.add(new File("/org/capatect/restatic/core/bundleone"));
-        Configuration configuration = new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build();
+        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).build();
         sourceRootPaths.remove(0);
         assertEquals(1, configuration.getSourceRootPaths().size());
     }
@@ -49,6 +49,6 @@ public class ConfigurationBuilderTest {
     public void testUnmodifiableSourceRootPaths() {
         List<File> sourceRootPaths = new ArrayList<File>();
         sourceRootPaths.add(new File("/org/capatect/restatic/core/bundleone"));
-        new Configuration.ConfigurationBuilder().addSourceRootPaths(sourceRootPaths).build().getSourceRootPaths().remove(0);
+        new Configuration.ConfigurationBuilder(sourceRootPaths).build().getSourceRootPaths().remove(0);
     }
 }

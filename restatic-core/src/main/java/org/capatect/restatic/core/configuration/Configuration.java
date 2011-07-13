@@ -39,12 +39,11 @@ public final class Configuration {
     public static final class ConfigurationBuilder {
         private List<File> sourceRootPaths;
 
-        public ConfigurationBuilder addSourceRootPaths(final List<File> sourceRootPaths) {
+        public ConfigurationBuilder(final List<File> sourceRootPaths) {
             Validate.notNull(sourceRootPaths, "sourceRootPaths may not be null.");
             Validate.noNullElements(sourceRootPaths, "No sourceRootPath in sourceRootPaths may be null.");
 
             this.sourceRootPaths = sourceRootPaths;
-            return this;
         }
 
         /**
