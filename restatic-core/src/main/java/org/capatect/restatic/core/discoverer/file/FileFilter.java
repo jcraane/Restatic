@@ -5,23 +5,24 @@ package org.capatect.restatic.core.discoverer.file;
  * directory, or a jar file for example.
  */
 public interface FileFilter {
+
     /**
      * Filter to apply to (normal - i.e not a directory) files found in the
-     * directory. May be a simple filename check as "end with .class"
+     * directory. May be a simple filename check as "end with .class".
      *
-     * @param name filename
+     * @param name the filename to match.
      * @return true if the filename pass the filter, and that proceedFile should
-     *         be called on this file later
+     *         be called on this file later.
      */
-    public boolean fileMatches(String name);
+    boolean fileMatches(String name);
 
     /**
-     * callback called at the begining of the processing
+     * Callback called at the beginning of the processing.
      */
-    public void startProcessing();
+    void startProcessing();
 
     /**
-     * callback called at the end of the processing
+     * Callback called at the end of the processing.
      */
-    public void endOfProcessing();
+    void endOfProcessing();
 }

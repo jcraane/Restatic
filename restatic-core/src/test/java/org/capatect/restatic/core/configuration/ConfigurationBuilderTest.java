@@ -1,18 +1,18 @@
 package org.capatect.restatic.core.configuration;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 /**
- * @author: Jamie Craane
+ * @author Jamie Craane
  */
 public class ConfigurationBuilderTest {
     private List<File> sourceRootPaths;

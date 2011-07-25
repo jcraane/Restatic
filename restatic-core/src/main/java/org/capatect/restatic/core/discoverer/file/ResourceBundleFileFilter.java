@@ -1,12 +1,12 @@
 package org.capatect.restatic.core.discoverer.file;
 
 /**
- * @author: Jamie Craane
- *
  * FileFilter implementation which matches standard Java resource bundles (properties and xml files).
  *
  * TODO Maybe we should also look at the contents of the filter to check if it really is a resource bundle.
  * This is especially true with XML files.
+ *
+ * @author Jamie Craane
  */
 public class ResourceBundleFileFilter implements FileFilter {
 

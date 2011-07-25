@@ -1,14 +1,14 @@
 package org.capatect.restatic.core.discoverer.file;
 
-import org.junit.Test;
-
 import java.io.File;
 import java.util.List;
+
+import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
 /**
- * @author: Jamie Craane
+ * @author Jamie Craane
  */
 public class FileCollectorTest {
     @Test

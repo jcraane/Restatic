@@ -1,16 +1,16 @@
 package org.capatect.restatic.core.discoverer;
 
+import java.io.File;
+
 import org.capatect.restatic.core.FileTestUtils;
 import org.junit.Test;
 
-import java.io.File;
-
 /**
- * @author: Jamie Craane
- *
  * Tests the discovery of resource bundles in source trees. Since there is no practical way to emulate file systems in memory
  * with Java <= 6, we use the src/test/resources directory to store our resource bundles. The same packaging scheme for the
  * resources is used as for the testcases.
+ *
+ * @author Jamie Craane
  */
 public class RecursiveResourceBundleDiscovererTest {
     private final String pathSeparator = File.pathSeparator;
