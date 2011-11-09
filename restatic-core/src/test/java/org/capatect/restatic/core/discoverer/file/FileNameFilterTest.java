@@ -8,12 +8,11 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author: Jamie Craane
  */
-public class ResourceBundleFileFilterTest {
+public class FileNameFilterTest {
     @Test
-    public void matchesPropertiesFiles() {
-        FileFilter filter = new ResourceBundleFileFilter();
+    public void matchesExactlyOnePropertyFiles() {
+        FileFilter filter = FileNameFilter.create("resources.properties");
         assertTrue(filter.fileMatches("resources.properties"));
-        assertTrue(filter.fileMatches("resources.xml"));
-        assertFalse(filter.fileMatches("readme.txt"));
+        assertFalse(filter.fileMatches("resources.xml"));
     }
 }

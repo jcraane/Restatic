@@ -21,8 +21,8 @@ import java.util.List;
  * This class is immutable.
  */
 public final class Configuration {
-    private List<File> sourceRootPaths;
-    private List<String> filters;
+    private final List<File> sourceRootPaths;
+    private final List<String> filters;
 
     private Configuration(final ConfigurationBuilder builder) {
         this.sourceRootPaths = new ArrayList<File>(builder.sourceRootPaths);
@@ -51,7 +51,7 @@ public final class Configuration {
     public static final class ConfigurationBuilder {
         private static final String DEFAULT_FILTER = "*.properties";
 
-        private List<File> sourceRootPaths;
+        private final List<File> sourceRootPaths;
         private List<String> filters = Arrays.asList(DEFAULT_FILTER);
 
         /**
