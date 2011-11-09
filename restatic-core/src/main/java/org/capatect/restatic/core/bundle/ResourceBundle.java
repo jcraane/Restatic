@@ -1,9 +1,9 @@
 package org.capatect.restatic.core.bundle;
 
 /**
- * @author: Jamie Craane
- *
  * ResourceBundle abstraction for Restatic.
+ *
+ * @author Jamie Craane
  */
 public interface ResourceBundle {
 }

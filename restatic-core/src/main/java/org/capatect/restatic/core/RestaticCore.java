@@ -1,9 +1,9 @@
 package org.capatect.restatic.core;
 
 /**
- * @author: Jamie Craane
- *
  * Provides the core functionality of the restatic module.
+ *
+ * @author Jamie Craane
  */
 public interface RestaticCore {
 }

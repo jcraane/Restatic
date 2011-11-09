@@ -1,14 +1,14 @@
 package org.capatect.restatic.core.discoverer;
 
-import org.capatect.restatic.core.bundle.ResourceBundle;
-
 import java.io.File;
 import java.util.List;
 
+import org.capatect.restatic.core.bundle.ResourceBundle;
+
 /**
- * @author: Jamie Craane
- *
  * Resource bundle discovery which walks a given directory recursively for resource bundles.
+ *
+ * @author Jamie Craane
  */
 public final class RecursiveResourceBundleDiscoverer implements ResourceBundleDiscoverer {
     private final File basePath;

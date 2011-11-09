@@ -1,24 +1,25 @@
 package org.capatect.restatic.core.configuration;
 
-import org.apache.commons.lang.Validate;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
 /**
- * @author: Jamie Craane
- * <p/>
- * Represents the configuration for the Restatic core module. Contains all the configuration that is needed for the core module
- * to do its work. The configuration constists of:
- * <p/>
- * - sourceRootPaths: a list of source folder to scan for resource bundles.
- * - filters: the filters to use to search for resource bundles. Example: *.properties or just a list of resource bundles.
- *      Defaults to: *.properties
+ * Represents the configuration for the Restatic core module. Contains all the configuration that is needed for the
+ * core module to do its work. The configuration constists of:
+ * <ul>
+ *     <li>sourceRootPaths: a list of source folder to scan for resource bundles.</li>
+ *     <li>filters: the filters to use to search for resource bundles. Example: *.properties or just a list of resource
+ *     bundles. Defaults to: *.properties</li>
+ * </ul>
  *
  * This class is immutable.
+ *
+ * @author Jamie Craane
  */
 public final class Configuration {
     private final List<File> sourceRootPaths;
@@ -46,7 +47,7 @@ public final class Configuration {
     }
 
     /**
-     * @author: Jamie Craane
+     * @author Jamie Craane
      */
     public static final class ConfigurationBuilder {
         private static final String DEFAULT_FILTER = "*.properties";

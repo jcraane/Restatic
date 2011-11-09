@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * @Author Jamie Craane
- *
+/**
  * Resursively scans a given directory for files which matches the given filter.
  *
  * This class is NOT threadsafe.
+ *
+ * @author Jamie Craane
  */
 public final class FileCollector {
+
     /**
      * Base directory to explore.
      */
@@ -23,13 +24,13 @@ public final class FileCollector {
      */
     private final FileFilter filter;
 
-    private final List<File> matchedFiles = new ArrayList();
+    private final List<File> matchedFiles = new ArrayList<File>();
 
     /**
-     * @param rootPath path to the classFile (usually top level package as com in
-     *                  com.google.common)
+     * @param rootPath path to the classFile (usually top level package as com in com.google.common)
+     * @param fileFilter the file filter to match.
      */
-    public FileCollector(File rootPath, FileFilter fileFilter) {
+    public FileCollector(final File rootPath, final FileFilter fileFilter) {
         this.rootPath = rootPath;
         this.filter = fileFilter;
     }
@@ -42,7 +43,7 @@ public final class FileCollector {
      *
      * @param file File where to start the recursiveFileSearch
      */
-    private void recursiveFileSearch(File file) {
+    private void recursiveFileSearch(final File file) {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
                 recursiveFileSearch(f);
@@ -56,7 +57,8 @@ public final class FileCollector {
 
     /**
      * Collections all files recursively form the given rootPath which matches the file filter.
-     * @return A List of files which matches the filefilter for all directories under rootPath.
+     *
+     * @return A List of files which matches the file filter for all directories under rootPath.
      */
     public List<File> collect() {
         filter.startProcessing();

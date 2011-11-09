@@ -9,7 +9,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 
 /**
- * @author: Jamie Craane
+ * @author Jamie Craane
  */
 public class FileCollectorTest {
     @Ignore

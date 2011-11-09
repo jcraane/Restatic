@@ -3,7 +3,7 @@ package org.capatect.restatic.core;
 import java.io.File;
 
 /**
- * @author: Jamie Craane
+ * @author Jamie Craane
  */
 public final class FileTestUtils {
     private FileTestUtils() {
