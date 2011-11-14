@@ -33,21 +33,19 @@ public class FileCollectorTest {
         FileFilter filter = AntStylePatternFileNameFilter.create("*.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File path = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = new FileCollector(path, filter);
+        FileCollector fileCollector = FileCollector.createWithPathAndFilter(path, filter);
         List<File> matchedFiles = fileCollector.collect();
         assertEquals(2, matchedFiles.size());
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
-    public void emptyFirstFilter() {
-
+    public void emptyRootPath() {
+        FileCollector.createWithPathAndFilter(null, new DefaultFileFilter());
     }
 
-    @Ignore
     @Test(expected = IllegalArgumentException.class)
-    public void emptyAdditionalFilters() {
-
+    public void emptyNullFilter() {
+        FileCollector.createWithPathAndFilter(new File(System.getProperty("basedir", "restatic-core")), null);
     }
 
     @Ignore
@@ -59,5 +57,28 @@ public class FileCollectorTest {
 //        FileCollector fileCollector = new FileCollector(path, filter);
 //        List<File> matchedFiles = fileCollector.collect();
 //        assertEquals(2, matchedFiles.size());
+    }
+
+    /**
+     * Implementation of the FileFilter which only exists for testing purposes.
+     *
+     * This implementation does nothing.
+     */
+    private static class DefaultFileFilter implements FileFilter {
+
+        @Override
+        public boolean fileMatches(final String name) {
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void startProcessing() {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void endOfProcessing() {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
     }
 }

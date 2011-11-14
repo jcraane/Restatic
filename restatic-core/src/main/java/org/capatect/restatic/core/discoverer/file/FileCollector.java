@@ -15,13 +15,17 @@ package org.capatect.restatic.core.discoverer.file;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.Validate;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Resursively scans a given directory for files which matches the given filter.
+ * Resursively scans a given directory (rootPath) for files which matches the given filter.
+ *
+ * An instance of this class can be created by using the static factory method createWithPathAndFilter.
  *
  * This class is NOT threadsafe.
  *
@@ -42,12 +46,40 @@ public final class FileCollector {
     private final List<File> matchedFiles = new ArrayList<File>();
 
     /**
+     * Creates a new instance of the FileCollector with the given rootPath and filter.
+     * @param rootPath The root path to search for files, for example src/main/resource.
+     * @param filter An implementation of the FileFilter interface which filters the files from the given rootPath.
+     * @return
+     */
+    public static FileCollector createWithPathAndFilter(final File rootPath, final FileFilter filter) {
+        return new FileCollector(rootPath, filter);
+    }
+
+    /**
      * @param rootPath path to the classFile (usually top level package as com in com.google.common)
      * @param fileFilter the file filter to match.
      */
-    public FileCollector(final File rootPath, final FileFilter fileFilter) {
+    private FileCollector(final File rootPath, final FileFilter fileFilter) {
+        Validate.notNull(rootPath, "The rootPath may not be null.");
+        Validate.notNull(fileFilter, "The fileFilter may not be null.");
+
         this.rootPath = rootPath;
         this.filter = fileFilter;
+    }
+
+    /**
+     * Collections all files recursively form the given rootPath which matches the file filter.
+     *
+     * @return An unmodifiable List of files which matches the FileFilter for all directories under rootPath.
+     */
+    public List<File> collect() {
+        filter.startProcessing();
+        for (File file : rootPath.listFiles()) {
+            recursiveFileSearch(file);
+        }
+        filter.endOfProcessing();
+
+        return Collections.unmodifiableList(matchedFiles);
     }
 
     /**
@@ -68,20 +100,5 @@ public final class FileCollector {
                 matchedFiles.add(file);
             }
         }
-    }
-
-    /**
-     * Collections all files recursively form the given rootPath which matches the file filter.
-     *
-     * @return A List of files which matches the file filter for all directories under rootPath.
-     */
-    public List<File> collect() {
-        filter.startProcessing();
-        for (File file : rootPath.listFiles()) {
-            recursiveFileSearch(file);
-        }
-        filter.endOfProcessing();
-
-        return Collections.unmodifiableList(matchedFiles);
     }
 }
