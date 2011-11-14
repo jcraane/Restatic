@@ -26,8 +26,8 @@ import java.util.List;
 /**
  * Filter which matches filenames and directories by using Ant style patterns.
  *
- * This code is inspired by Spring's AntPathMatcher which is in turn inspired
- * by Ant's source code.
+ * This code uses Spring's AntPathMatcher class which is copied into this project to prevent a jar dependency on
+ * the Spring project.
  *
  * @author: Jamie Craane
  */

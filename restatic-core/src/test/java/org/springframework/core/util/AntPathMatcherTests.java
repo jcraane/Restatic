@@ -47,8 +47,6 @@ public class AntPathMatcherTests {
 		assertFalse(pathMatcher.match("test", "/test"));
 		assertFalse(pathMatcher.match("/test", "test"));
 
-        assertFalse(pathMatcher.match("org/test/**/*.properties", "nl/company/test/bundle.properties"));
-
 		// test matching with ?'s
 		assertTrue(pathMatcher.match("t?st", "test"));
 		assertTrue(pathMatcher.match("??st", "test"));
@@ -495,7 +493,4 @@ public class AntPathMatcherTests {
 		assertEquals("/**/login.*", paths.get(1));
 		paths.clear();
 	}
-
-
-
 }
