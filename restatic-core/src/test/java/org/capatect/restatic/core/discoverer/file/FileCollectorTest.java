@@ -15,7 +15,7 @@ public class FileCollectorTest {
     @Ignore
     @Test
     public void findFilesPropertiesFiles() {
-        FileFilter filter = FileNameFilter.create("*.properties");
+        FileFilter filter = AntStylePatternFileNameFilter.create("*.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File path = new File(baseDir, "src/test/resources");
         FileCollector fileCollector = new FileCollector(path, filter);
@@ -38,7 +38,7 @@ public class FileCollectorTest {
     @Ignore
     @Test
     public void findSpecificResourceBundle() {
-//        FileFilter filter = new FileNameFilter();
+//        FileFilter filter = new AntStylePatternFileNameFilter();
 //        File baseDir = new File(System.getProperty("basedir", "restatic-core"));
 //        File path = new File(baseDir, "src/test/resources");
 //        FileCollector fileCollector = new FileCollector(path, filter);
