@@ -48,8 +48,7 @@ public class FileCollectorTest {
 
     @Test
     public void findSpecificResourceBundle() {
-//        FileFilter filter = AntStylePatternFileNameFilter.create("org/capatect/restatic/discoverer/resources/bundleone/resources.properties");
-        FileFilter filter = AntStylePatternFileNameFilter.create("org/**/resources.properties");
+        FileFilter filter = AntStylePatternFileNameFilter.create("org/capatect/restatic/discoverer/resources/bundleone/resources.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File rootPath = new File(baseDir, "src/test/resources");
         FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
