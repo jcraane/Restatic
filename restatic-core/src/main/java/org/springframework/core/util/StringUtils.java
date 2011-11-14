@@ -129,30 +129,6 @@ public abstract class StringUtils {
 		return count;
 	}
 
-
-
-	/**
-	 * Delete any character in a given String.
-	 * @param inString the original String
-	 * @param charsToDelete a set of characters to delete.
-	 * E.g. "az\n" will delete 'a's, 'z's and new lines.
-	 * @return the resulting String
-	 */
-	public static String deleteAny(String inString, String charsToDelete) {
-		if (!hasLength(inString) || !hasLength(charsToDelete)) {
-			return inString;
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < inString.length(); i++) {
-			char c = inString.charAt(i);
-			if (charsToDelete.indexOf(c) == -1) {
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
-
-
 	//---------------------------------------------------------------------
 	// Convenience methods for working with formatted Strings
 	//---------------------------------------------------------------------
