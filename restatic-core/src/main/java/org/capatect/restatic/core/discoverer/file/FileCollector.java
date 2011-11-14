@@ -96,9 +96,15 @@ public final class FileCollector {
                 recursiveFileSearch(f);
             }
         } else {
-            if (filter.fileMatches(file.getPath())) {
+            String path = stripRootPathFromFilePath(file);
+            if (filter.fileMatches(path)) {
                 matchedFiles.add(file);
             }
         }
+    }
+
+    private String stripRootPathFromFilePath(final File file) {
+        String filePath = file.getPath();
+        return filePath.substring(rootPath.getPath().length() + 1, filePath.length());
     }
 }

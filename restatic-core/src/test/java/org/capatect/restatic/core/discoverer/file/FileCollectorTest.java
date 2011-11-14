@@ -15,7 +15,6 @@ package org.capatect.restatic.core.discoverer.file;
  * limitations under the License.
  */
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,13 +26,12 @@ import static junit.framework.Assert.assertEquals;
  * @author Jamie Craane
  */
 public class FileCollectorTest {
-    @Ignore
     @Test
-    public void findFilesPropertiesFiles() {
-        FileFilter filter = AntStylePatternFileNameFilter.create("*.properties");
+    public void findPropertiesFiles() {
+        FileFilter filter = AntStylePatternFileNameFilter.create("**/*.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
-        File path = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = FileCollector.createWithPathAndFilter(path, filter);
+        File rootPath = new File(baseDir, "src/test/resources");
+        FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
         List<File> matchedFiles = fileCollector.collect();
         assertEquals(2, matchedFiles.size());
     }
@@ -48,15 +46,15 @@ public class FileCollectorTest {
         FileCollector.createWithPathAndFilter(new File(System.getProperty("basedir", "restatic-core")), null);
     }
 
-    @Ignore
     @Test
     public void findSpecificResourceBundle() {
-//        FileFilter filter = new AntStylePatternFileNameFilter();
-//        File baseDir = new File(System.getProperty("basedir", "restatic-core"));
-//        File path = new File(baseDir, "src/test/resources");
-//        FileCollector fileCollector = new FileCollector(path, filter);
-//        List<File> matchedFiles = fileCollector.collect();
-//        assertEquals(2, matchedFiles.size());
+//        FileFilter filter = AntStylePatternFileNameFilter.create("org/capatect/restatic/discoverer/resources/bundleone/resources.properties");
+        FileFilter filter = AntStylePatternFileNameFilter.create("org/**/resources.properties");
+        File baseDir = new File(System.getProperty("basedir", "restatic-core"));
+        File rootPath = new File(baseDir, "src/test/resources");
+        FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
+        List<File> matchedFiles = fileCollector.collect();
+        assertEquals(1, matchedFiles.size());
     }
 
     /**
