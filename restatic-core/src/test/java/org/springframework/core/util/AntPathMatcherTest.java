@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
  * @author Juergen Hoeller
  * @author Arjen Poutsma
  */
-public class AntPathMatcherTests {
+public class AntPathMatcherTest {
 
 	private AntPathMatcher pathMatcher;
 
