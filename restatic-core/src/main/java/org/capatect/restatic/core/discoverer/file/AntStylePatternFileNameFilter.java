@@ -58,14 +58,4 @@ public class AntStylePatternFileNameFilter implements FileFilter {
 
         return false;
     }
-
-    @Override
-    public void startProcessing() {
-        System.out.println("Start processing");
-    }
-
-    @Override
-    public void endOfProcessing() {
-        System.out.println("End processing");
-    }
 }

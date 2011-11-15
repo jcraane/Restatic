@@ -30,14 +30,4 @@ public interface FileFilter {
      *         be called on this file later.
      */
     boolean fileMatches(String name);
-
-    /**
-     * Callback called at the beginning of the processing.
-     */
-    void startProcessing();
-
-    /**
-     * Callback called at the end of the processing.
-     */
-    void endOfProcessing();
 }
