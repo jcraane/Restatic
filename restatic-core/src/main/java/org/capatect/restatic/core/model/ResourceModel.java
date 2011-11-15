@@ -1,4 +1,4 @@
-package org.capatect.restatic.core.discoverer;
+package org.capatect.restatic.core.model;
 /*
  * Copyright 2002-2011 the original author or authors.
  *
@@ -15,20 +15,10 @@ package org.capatect.restatic.core.discoverer;
  * limitations under the License.
  */
 
-import org.capatect.restatic.core.bundle.ResourceBundle;
-
-import java.util.List;
-
 /**
- * Discoverer for resource bundles.
+ * ResourceModel abstraction for Restatic.
  *
  * @author Jamie Craane
  */
-public interface ResourceBundleDiscoverer {
-
-    /**
-     * Fetch the resource bundles and returns them.
-     * @return The resource bundles found.
-     */
-    List<ResourceBundle> fetchResourceBundles();
+public class ResourceModel {
 }

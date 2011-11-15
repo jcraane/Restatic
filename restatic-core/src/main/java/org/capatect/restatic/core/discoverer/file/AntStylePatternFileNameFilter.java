@@ -29,7 +29,7 @@ import java.util.List;
  * This code uses Spring's AntPathMatcher class which is copied into this project to prevent a jar dependency on
  * the Spring project.
  *
- * @author: Jamie Craane
+ * @author Jamie Craane
  */
 public class AntStylePatternFileNameFilter implements FileFilter {
     private static final String PATH_SEPERATOR = File.separator;

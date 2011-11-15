@@ -33,7 +33,7 @@ public class FileCollectorTest {
         File rootPath = new File(baseDir, "src/test/resources");
         FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
         List<File> matchedFiles = fileCollector.collect();
-        assertEquals(2, matchedFiles.size());
+        assertEquals(3, matchedFiles.size());
     }
 
     @Test(expected = IllegalArgumentException.class)

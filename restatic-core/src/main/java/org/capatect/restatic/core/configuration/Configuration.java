@@ -38,6 +38,7 @@ import java.util.List;
  */
 public final class Configuration {
     private final List<File> sourceRootPaths;
+    // TODO: Change to FileFilter filter (one filter)
     private final List<String> filters;
 
     private Configuration(final ConfigurationBuilder builder) {
