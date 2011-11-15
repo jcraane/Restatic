@@ -73,11 +73,9 @@ public final class FileCollector {
      * @return An unmodifiable List of files which matches the FileFilter for all directories under rootPath.
      */
     public List<File> collect() {
-        filter.startProcessing();
         for (File file : rootPath.listFiles()) {
             recursiveFileSearch(file);
         }
-        filter.endOfProcessing();
 
         return Collections.unmodifiableList(matchedFiles);
     }
@@ -97,7 +95,7 @@ public final class FileCollector {
             }
         } else {
             String path = stripRootPathFromFilePath(file);
-            if (filter.fileMatches(path)) {
+            if (filter.matches(path)) {
                 matchedFiles.add(file);
             }
         }

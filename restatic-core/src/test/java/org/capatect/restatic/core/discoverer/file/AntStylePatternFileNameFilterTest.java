@@ -37,38 +37,38 @@ public class AntStylePatternFileNameFilterTest {
     @Test
     public void matchesExactlyOnePropertyFiles() {
         FileFilter filter = AntStylePatternFileNameFilter.create("resources.properties");
-        assertTrue(filter.fileMatches("resources.properties"));
-        assertFalse(filter.fileMatches("resources.xml"));
+        assertTrue(filter.matches("resources.properties"));
+        assertFalse(filter.matches("resources.xml"));
     }
 
     @Test
     public void matchExactDirectoryAndWildCardFile() {
         FileFilter filter = AntStylePatternFileNameFilter.create("org/test/*.properties");
-        assertTrue(filter.fileMatches("org/test/resources.properties"));
-        assertTrue(filter.fileMatches("org/test/test.properties"));
-        assertFalse(filter.fileMatches("org/test/resources.xml"));
+        assertTrue(filter.matches("org/test/resources.properties"));
+        assertTrue(filter.matches("org/test/test.properties"));
+        assertFalse(filter.matches("org/test/resources.xml"));
     }
 
     @Test
     public void matchAntStyleWildCardDirectory() {
         FileFilter filter = AntStylePatternFileNameFilter.create("**/*.properties");
-        assertTrue(filter.fileMatches("org/test/resources.properties"));
-        assertTrue(filter.fileMatches("resources.properties"));
-        assertTrue(filter.fileMatches("nl/company/test/bundle.properties"));
-        assertFalse(filter.fileMatches("bundle.xml"));
-        assertFalse(filter.fileMatches("org/test/bundle.xml"));
+        assertTrue(filter.matches("org/test/resources.properties"));
+        assertTrue(filter.matches("resources.properties"));
+        assertTrue(filter.matches("nl/company/test/bundle.properties"));
+        assertFalse(filter.matches("bundle.xml"));
+        assertFalse(filter.matches("org/test/bundle.xml"));
     }
 
     @Test
     public void matchAntStyleWildCardMultipleDirectories() {
         FileFilter filter = AntStylePatternFileNameFilter.create("org/test/**/*.properties");
-        assertTrue(filter.fileMatches("org/test/resources.properties"));
-        assertTrue(filter.fileMatches("org/test/application/resources.properties"));
-        assertTrue(filter.fileMatches("org/test/application/test/resources.properties"));
-        assertFalse(filter.fileMatches("resources.properties"));
-        assertFalse(filter.fileMatches("bundle.xml"));
-        assertFalse(filter.fileMatches("org/test/bundle.xml"));
-        assertFalse(filter.fileMatches("nl/company/test/bundle.properties"));
+        assertTrue(filter.matches("org/test/resources.properties"));
+        assertTrue(filter.matches("org/test/application/resources.properties"));
+        assertTrue(filter.matches("org/test/application/test/resources.properties"));
+        assertFalse(filter.matches("resources.properties"));
+        assertFalse(filter.matches("bundle.xml"));
+        assertFalse(filter.matches("org/test/bundle.xml"));
+        assertFalse(filter.matches("nl/company/test/bundle.properties"));
 
     }
 }

@@ -29,5 +29,5 @@ public interface FileFilter {
      * @return true if the filename pass the filter, and that proceedFile should
      *         be called on this file later.
      */
-    boolean fileMatches(String name);
+    boolean matches(String name);
 }

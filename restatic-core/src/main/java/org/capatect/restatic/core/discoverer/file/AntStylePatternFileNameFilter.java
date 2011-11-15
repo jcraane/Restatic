@@ -48,7 +48,7 @@ public class AntStylePatternFileNameFilter implements FileFilter {
     }
 
     @Override
-    public boolean fileMatches(final String fileName) {
+    public boolean matches(final String fileName) {
         final AntPathMatcher antPathMatcher = new AntPathMatcher();
         for (String pattern : patterns) {
             if (antPathMatcher.match(pattern, fileName)) {

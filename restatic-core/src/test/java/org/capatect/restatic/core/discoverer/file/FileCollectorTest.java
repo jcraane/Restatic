@@ -64,18 +64,8 @@ public class FileCollectorTest {
     private static class DefaultFileFilter implements FileFilter {
 
         @Override
-        public boolean fileMatches(final String name) {
+        public boolean matches(final String name) {
             return false;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void startProcessing() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void endOfProcessing() {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 }
