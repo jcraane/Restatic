@@ -21,10 +21,12 @@ import org.springframework.core.util.AntPathMatcher;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Filter which matches filenames and directories by using Ant style patterns.
+ * This Filter supports one or more filters.
  *
  * This code uses Spring's AntPathMatcher class which is copied into this project to prevent a jar dependency on
  * the Spring project.
@@ -40,6 +42,12 @@ public class AntStylePatternFileNameFilter implements FileFilter {
         this.patterns.addAll(Arrays.asList(patterns));
     }
 
+    /**
+     * Creates an instance of the AntStylePatternFileNameFilter with the given patterns.
+     * @param patterns The Ant-style patterns to use in this filter.
+     * @return instance of AntStylePatternFileNameFilter with the given patterns.
+     * @throws if patterns is null or contains an null element.
+     */
     public static AntStylePatternFileNameFilter create(String... patterns) {
         Validate.notNull(patterns, "filter may not be null");
         Validate.noNullElements(patterns);
@@ -47,6 +55,18 @@ public class AntStylePatternFileNameFilter implements FileFilter {
         return new AntStylePatternFileNameFilter(patterns);
     }
 
+    /**
+     * @return An unmodifiable list of the patterns of this filter.
+     */
+    public List<String> getPatterns() {
+        return Collections.unmodifiableList(patterns);
+    }
+
+    /**
+     * Tests the given filename against the patterns.
+     * @param fileName The filename to test for.
+     * @return true if the given filename at least matches one pattern.
+     */
     @Override
     public boolean matches(final String fileName) {
         final AntPathMatcher antPathMatcher = new AntPathMatcher();

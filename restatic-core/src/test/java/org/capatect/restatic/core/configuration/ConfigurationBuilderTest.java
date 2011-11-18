@@ -15,33 +15,25 @@ package org.capatect.restatic.core.configuration;
  * limitations under the License.
  */
 
-import org.junit.Before;
+import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
+import org.capatect.restatic.core.discoverer.file.FileFilter;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
  */
 public class ConfigurationBuilderTest {
-    private List<File> sourceRootPaths;
-
-    @Before
-    public void before() {
-        sourceRootPaths = new ArrayList<File>();
-        sourceRootPaths.add(new File("/org/capatect/restatic/core/bundleone"));
-    }
-
     @Test
     public void buildWithSourceRootPaths() {
-        sourceRootPaths.add(new File("/org/capatect/restatic/core/bundletwo"));
-        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).build();
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundletwo")).
+                addSourceRootPath(new File("/org/capatect/restatic/core/bundletwo")).build();
         assertNotNull(configuration);
         assertNotNull(configuration.getSourceRootPaths());
         assertEquals(2, configuration.getSourceRootPaths().size());
@@ -53,66 +45,52 @@ public class ConfigurationBuilderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void buildWithNullSourceRootPathsInList() {
-        sourceRootPaths.add(null);
-        new Configuration.ConfigurationBuilder(sourceRootPaths).build();
-    }
-
-    @Test
-    public void testSafeCopySourceRootPaths() {
-        List<File> sourceRootPaths = new ArrayList<File>();
-        sourceRootPaths.add(new File("/org/capatect/restatic/core/bundleone"));
-        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).build();
-        sourceRootPaths.remove(0);
-        assertEquals(1, configuration.getSourceRootPaths().size());
+    public void buildWithNullSourceRootPath() {
+        new Configuration.ConfigurationBuilder(null).build();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testUnmodifiableSourceRootPaths() {
-        new Configuration.ConfigurationBuilder(sourceRootPaths).build().getSourceRootPaths().remove(0);
+        new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).build().getSourceRootPaths().remove(0);
     }
 
     @Test
-    public void buildWithResourceBundleFilter() {
-        List<String> filters = Arrays.asList("*.properties", "*.xml");
-        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).addFilters(filters).build();
-        assertNotNull(configuration.getFilters());
-        assertEquals(2, configuration.getFilters().size());
-        assertEquals("*.properties", filters.get(0));
-        assertEquals("*.xml", filters.get(1));
+    public void buildWithFilter() {
+        FileFilter fileFilter = AntStylePatternFileNameFilter.create("**/*.properties");
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).
+                addFileFilter(fileFilter).build();
+        assertNotNull(configuration.getFileFilter());
+        assertTrue(fileFilter == configuration.getFileFilter());
     }
 
+    @Test
     public void defaultFilters() {
-        assertEquals("*.properties", new Configuration.ConfigurationBuilder(sourceRootPaths).build().getFilters().get(0));
+        Assert.assertNotNull(new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).build());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void buildWithNullFilters() {
-        new Configuration.ConfigurationBuilder(sourceRootPaths).addFilters(null).build();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void buildWithNullFilterInList() {
-        List<String> filters = Arrays.asList("*.resources", null);
-        new Configuration.ConfigurationBuilder(sourceRootPaths).addFilters(filters).build();
+        new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).addFileFilter(null).build();
     }
 
     @Test
-    public void testSafeCopyFilters() {
-        // We cannot use Arrays.asList here as it returns an unmodifiable list. We want to test that the passed-in filters
-        // can NOT be modified.
-        List<String> filters = new ArrayList<String>(){{
-            add("*.properties");
-            add("*.xml");
-        }};
-        Configuration configuration = new Configuration.ConfigurationBuilder(sourceRootPaths).addFilters(filters).build();
-        filters.remove(0);
-        assertEquals(2, configuration.getFilters().size());
+    public void addAliases() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("rootpath"))
+                .aliasPackage("org.capatect.restatic").to("S")
+                .aliasPackage("org.capatect.restatic.core").to("C").build();
+
+        assertEquals(2, configuration.getPackageAliases().size());
+        assertEquals("S", configuration.getPackageAliases().get(new PackageName("org.capatect.restatic")).getAlias());
+        assertEquals("C", configuration.getPackageAliases().get(new PackageName("org.capatect.restatic.core")).getAlias());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testUnmodifiableFilters() {
-        List<String> filters = Arrays.asList("*.resources", "*.xml");
-        new Configuration.ConfigurationBuilder(sourceRootPaths).addFilters(filters).build().getFilters().remove(0);
+    @Test(expected = IllegalArgumentException.class)
+    public void buildWithNullPackage() {
+        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage(null).to("C").build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildWithNullPackageAlias() {
+        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("org.capatext.restatic").to(null).build();
     }
 }

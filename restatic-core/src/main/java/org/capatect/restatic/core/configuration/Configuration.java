@@ -16,12 +16,13 @@ package org.capatect.restatic.core.configuration;
  */
 
 import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
+import org.capatect.restatic.core.discoverer.file.FileFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents the configuration for the Restatic core module. Contains all the configuration that is needed for the
@@ -37,13 +38,16 @@ import java.util.List;
  * @author Jamie Craane
  */
 public final class Configuration {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
+
     private final List<File> sourceRootPaths;
-    // TODO: Change to FileFilter filter (one filter)
-    private final List<String> filters;
+    private final FileFilter fileFilter;
+    private final Map<PackageName, PackageAlias> packageAliases;
 
     private Configuration(final ConfigurationBuilder builder) {
         this.sourceRootPaths = new ArrayList<File>(builder.sourceRootPaths);
-        this.filters = new ArrayList<String>(builder.filters);
+        this.fileFilter = builder.fileFilter;
+        this.packageAliases = builder.aliases;
     }
 
     /**
@@ -55,42 +59,69 @@ public final class Configuration {
         return Collections.unmodifiableList(sourceRootPaths);
     }
 
-    /**
-     * @return The filters to use to search for resource bundles.
-     */
-    public List<String> getFilters() {
-        return Collections.unmodifiableList(filters);
+    public FileFilter getFileFilter() {
+        return fileFilter;
+    }
+
+    public Map<PackageName, PackageAlias> getPackageAliases() {
+        return Collections.unmodifiableMap(packageAliases);
     }
 
     /**
      * @author Jamie Craane
      */
-    public static final class ConfigurationBuilder {
-        private static final String DEFAULT_FILTER = "*.properties";
+    public static final class ConfigurationBuilder implements AliasTo {
+        private static final FileFilter DEFAULT_FILTER = AntStylePatternFileNameFilter.create("**/*.properties");
 
-        private final List<File> sourceRootPaths;
-        private List<String> filters = Arrays.asList(DEFAULT_FILTER);
+        private final List<File> sourceRootPaths = new ArrayList<File>();
+        private FileFilter fileFilter;
+        private Map<PackageName, PackageAlias> aliases = new HashMap<PackageName, PackageAlias>();
+
+        private PackageName lastAddedPackageName;
 
         /**
-         * @param sourceRootPaths The source paths to search for resource bundles.
+         * @param mandatorySourceRootPath The source paths to search for resource bundles.
          */
-        public ConfigurationBuilder(final List<File> sourceRootPaths) {
-            Validate.notNull(sourceRootPaths, "sourceRootPaths may not be null.");
-            Validate.noNullElements(sourceRootPaths, "No sourceRootPath in sourceRootPaths may be null.");
+        public ConfigurationBuilder(final File mandatorySourceRootPath) {
+            Validate.notNull(mandatorySourceRootPath, "mandatorySourceRootPath may not be null.");
 
-            this.sourceRootPaths = sourceRootPaths;
+            sourceRootPaths.add(mandatorySourceRootPath);
         }
 
         public Configuration build() {
             return new Configuration(this);
         }
 
-        public ConfigurationBuilder addFilters(final List<String> filters) {
-            Validate.notNull(filters, "filters may not be null.");
-            Validate.noNullElements(filters, "No filters in filters may be null.");
+        public ConfigurationBuilder addSourceRootPath(final File soureRootPath) {
+            Validate.notNull(soureRootPath, "sourceRootPath may not be null.");
 
-            this.filters = filters;
+            sourceRootPaths.add(soureRootPath);
             return this;
         }
+
+
+        public ConfigurationBuilder addFileFilter(final FileFilter fileFilter) {
+            Validate.notNull(fileFilter, "filters may not be null.");
+
+            this.fileFilter = fileFilter;
+            return this;
+        }
+
+        public AliasTo aliasPackage(final String packageName) {
+            this.lastAddedPackageName = new PackageName(packageName);
+
+            return this;
+        }
+
+        @Override
+        public ConfigurationBuilder to(final String alias) {
+            aliases.put(lastAddedPackageName, new PackageAlias(alias));
+
+            return this;
+        }
+    }
+
+    static interface AliasTo {
+        ConfigurationBuilder to(String name);
     }
 }
