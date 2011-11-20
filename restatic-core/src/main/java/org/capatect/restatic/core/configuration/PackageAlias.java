@@ -21,9 +21,11 @@ package org.capatect.restatic.core.configuration;
 import org.apache.commons.lang.Validate;
 
 /**
- * @author Jamie Craane
- *
+ * Represents an alias for a package.
+ * <p/>
  * This class is immutable.
+ *
+ * @author Jamie Craane
  */
 public final class PackageAlias {
     private final String alias;
@@ -34,6 +36,9 @@ public final class PackageAlias {
         this.alias = alias;
     }
 
+    /**
+     * @return The alias of the package.
+     */
     public String getAlias() {
         return alias;
     }

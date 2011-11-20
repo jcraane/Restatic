@@ -28,16 +28,22 @@ import java.util.*;
  * Represents the configuration for the Restatic core module. Contains all the configuration that is needed for the
  * core module to do its work. The configuration constists of:
  * <ul>
- * <li>sourceRootPaths: a list of source folder to scan for resource bundles.</li>
- * <li>FileFilter: the filefilter to use when searching for resourcebundles.</li>
+ * <li>sourceRootPaths: a list of source folder to scan for resource bundles. There must be at least one sourcerootpath present.</li>
+ * <li>FileFilter: the filefilter to use when searching for resourcebundles. Defaults to AntStylePatternFileNameFilter
+ * with a pattern of *
+ *//*.properties.</li>
  * <li>packageAliases: By default, generated classes from resource bundles have the camelcased package name
  * as class name. Sometimes this name is too long to be readable. The packageAliases can be used to use another
  * name for the generated classes than the package name.</li>
  * <li>resourceBundleValidationEnabled: if true validates the parsed resource bundles. When there are resource bundles
  * for different locales, validation tests if all keys are present in all resource bundles and if there are
  * no duplicate keys present.</li>
+ * <li>rootClassName: the name of the generated rootclass which is generated. Defaults to R.</li>
  * </ul>
  * <p/>
+ *
+ * In instance of this class is obtained by using the ConfigurationBuilder which ensures a valid Configuration object is created.
+ *
  * This class is immutable.
  *
  * @author Jamie Craane

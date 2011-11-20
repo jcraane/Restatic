@@ -21,9 +21,11 @@ package org.capatect.restatic.core.configuration;
 import org.apache.commons.lang.Validate;
 
 /**
- * @author Jamie Craane
- *
+ * Represenst the name of a package.
+ * <p/>
  * This class is immutable.
+ *
+ * @author Jamie Craane
  */
 public final class PackageName {
     private String name;
@@ -34,6 +36,9 @@ public final class PackageName {
         this.name = name;
     }
 
+    /**
+     * @return The name of the package.
+     */
     public String getName() {
         return name;
     }

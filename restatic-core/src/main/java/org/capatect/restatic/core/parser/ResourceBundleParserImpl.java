@@ -36,6 +36,11 @@ import java.util.List;
 public final class ResourceBundleParserImpl implements ResourceBundleParser {
     private final Configuration configuration;
 
+    /**
+     * Creates a instance of the ResourceBundleParserImpl.
+     *
+     * @param configuration The configuration object which the parser uses to control its behavior.
+     */
     public ResourceBundleParserImpl(final Configuration configuration) {
         this.configuration = configuration;
     }
