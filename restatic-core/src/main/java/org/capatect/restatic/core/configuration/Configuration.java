@@ -91,8 +91,7 @@ public final class Configuration {
         private static final FileFilter DEFAULT_FILTER = AntStylePatternFileNameFilter.create("**/*.properties");
 
         private final List<File> sourceRootPaths = new ArrayList<File>();
-        // TODO: test for default filter.
-        private FileFilter fileFilter;
+        private FileFilter fileFilter = DEFAULT_FILTER;
         private Map<PackageName, PackageAlias> aliases = new HashMap<PackageName, PackageAlias>();
         private boolean resourceBundleValidationEnabled = false;
 

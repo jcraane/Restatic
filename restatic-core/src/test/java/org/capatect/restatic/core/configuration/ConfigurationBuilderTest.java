@@ -22,13 +22,22 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
  */
 public class ConfigurationBuilderTest {
+    @Test
+    public void defaultFileFilter() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("test")).build();
+        assertNotNull(configuration.getFileFilter());
+        assertTrue(configuration.getFileFilter() instanceof AntStylePatternFileNameFilter);
+    }
+
     @Test
     public void buildWithSourceRootPaths() {
         Configuration configuration = new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundletwo")).
