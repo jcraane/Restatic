@@ -18,7 +18,6 @@ package org.capatect.restatic.core.discoverer.file;
 import org.apache.commons.lang.Validate;
 import org.springframework.core.util.AntPathMatcher;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,15 +26,13 @@ import java.util.List;
 /**
  * Filter which matches filenames and directories by using Ant style patterns.
  * This Filter supports one or more filters.
- *
+ * <p/>
  * This code uses Spring's AntPathMatcher class which is copied into this project to prevent a jar dependency on
  * the Spring project.
  *
  * @author Jamie Craane
  */
 public class AntStylePatternFileNameFilter implements FileFilter {
-    private static final String PATH_SEPERATOR = File.separator;
-
     private final List<String> patterns = new ArrayList<String>();
 
     private AntStylePatternFileNameFilter(String... patterns) {
@@ -44,6 +41,7 @@ public class AntStylePatternFileNameFilter implements FileFilter {
 
     /**
      * Creates an instance of the AntStylePatternFileNameFilter with the given patterns.
+     *
      * @param patterns The Ant-style patterns to use in this filter.
      * @return instance of AntStylePatternFileNameFilter with the given patterns.
      * @throws if patterns is null or contains an null element.
@@ -64,6 +62,7 @@ public class AntStylePatternFileNameFilter implements FileFilter {
 
     /**
      * Tests the given filename against the patterns.
+     *
      * @param fileName The filename to test for.
      * @return true if the given filename at least matches one pattern.
      */
