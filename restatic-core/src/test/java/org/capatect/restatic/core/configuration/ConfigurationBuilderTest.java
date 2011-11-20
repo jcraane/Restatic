@@ -17,7 +17,6 @@ package org.capatect.restatic.core.configuration;
 
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
 import org.capatect.restatic.core.discoverer.file.FileFilter;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,6 +35,8 @@ public class ConfigurationBuilderTest {
         Configuration configuration = new Configuration.ConfigurationBuilder(new File("test")).build();
         assertNotNull(configuration.getFileFilter());
         assertTrue(configuration.getFileFilter() instanceof AntStylePatternFileNameFilter);
+        assertEquals(1, ((AntStylePatternFileNameFilter) configuration.getFileFilter()).getPatterns().size());
+        assertEquals("**/*.properties", ((AntStylePatternFileNameFilter) configuration.getFileFilter()).getPatterns().get(0));
     }
 
     @Test
@@ -69,11 +70,6 @@ public class ConfigurationBuilderTest {
                 addFileFilter(fileFilter).build();
         assertNotNull(configuration.getFileFilter());
         assertTrue(fileFilter == configuration.getFileFilter());
-    }
-
-    @Test
-    public void defaultFilters() {
-        Assert.assertNotNull(new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).build());
     }
 
     @Test(expected = IllegalArgumentException.class)
