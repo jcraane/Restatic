@@ -28,11 +28,16 @@ import java.util.*;
  * Represents the configuration for the Restatic core module. Contains all the configuration that is needed for the
  * core module to do its work. The configuration constists of:
  * <ul>
- *     <li>sourceRootPaths: a list of source folder to scan for resource bundles.</li>
- *     <li>filters: the filters to use to search for resource bundles. Example: *.properties or just a list of resource
- *     bundles. Defaults to: *.properties</li>
+ * <li>sourceRootPaths: a list of source folder to scan for resource bundles.</li>
+ * <li>FileFilter: the filefilter to use when searching for resourcebundles.</li>
+ * <li>packageAliases: By default, generated classes from resource bundles have the camelcased package name
+ * as class name. Sometimes this name is too long to be readable. The packageAliases can be used to use another
+ * name for the generated classes than the package name.</li>
+ * <li>resourceBundleValidationEnabled: if true validates the parsed resource bundles. When there are resource bundles
+ * for different locales, validation tests if all keys are present in all resource bundles and if there are
+ * no duplicate keys present.</li>
  * </ul>
- *
+ * <p/>
  * This class is immutable.
  *
  * @author Jamie Craane
@@ -43,11 +48,13 @@ public final class Configuration {
     private final List<File> sourceRootPaths;
     private final FileFilter fileFilter;
     private final Map<PackageName, PackageAlias> packageAliases;
+    private boolean resourceBundleValidationEnabled;
 
     private Configuration(final ConfigurationBuilder builder) {
         this.sourceRootPaths = new ArrayList<File>(builder.sourceRootPaths);
         this.fileFilter = builder.fileFilter;
         this.packageAliases = builder.aliases;
+        resourceBundleValidationEnabled = builder.resourceBundleValidationEnabled;
     }
 
     /**
@@ -63,8 +70,18 @@ public final class Configuration {
         return fileFilter;
     }
 
+    /**
+     * @return The aliases for package names which are used as classnames in resource bundle generation.
+     */
     public Map<PackageName, PackageAlias> getPackageAliases() {
         return Collections.unmodifiableMap(packageAliases);
+    }
+
+    /**
+     * @return true if resource bundle validation is enabled, false otherwise.
+     */
+    public boolean isResourceBundleValidationEnabled() {
+        return resourceBundleValidationEnabled;
     }
 
     /**
@@ -74,8 +91,10 @@ public final class Configuration {
         private static final FileFilter DEFAULT_FILTER = AntStylePatternFileNameFilter.create("**/*.properties");
 
         private final List<File> sourceRootPaths = new ArrayList<File>();
+        // TODO: test for default filter.
         private FileFilter fileFilter;
         private Map<PackageName, PackageAlias> aliases = new HashMap<PackageName, PackageAlias>();
+        private boolean resourceBundleValidationEnabled = false;
 
         private PackageName lastAddedPackageName;
 
@@ -88,6 +107,11 @@ public final class Configuration {
             sourceRootPaths.add(mandatorySourceRootPath);
         }
 
+        /**
+         * Builds the configuration object based on the information in the ConfigurationBuilder.
+         *
+         * @return A fully usable and valid Configuration object.
+         */
         public Configuration build() {
             return new Configuration(this);
         }
@@ -117,6 +141,16 @@ public final class Configuration {
         public ConfigurationBuilder to(final String alias) {
             aliases.put(lastAddedPackageName, new PackageAlias(alias));
 
+            return this;
+        }
+
+        public ConfigurationBuilder enableResourceBundleValidation() {
+            resourceBundleValidationEnabled = true;
+            return this;
+        }
+
+        public ConfigurationBuilder disableResourceBundleValidation() {
+            resourceBundleValidationEnabled = false;
             return this;
         }
     }

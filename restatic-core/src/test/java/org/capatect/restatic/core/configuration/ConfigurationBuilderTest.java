@@ -22,8 +22,7 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -90,7 +89,35 @@ public class ConfigurationBuilderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void buildWithEmptyPackage() {
+        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("").to("C").build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void buildWithNullPackageAlias() {
         new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("org.capatext.restatic").to(null).build();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void buildWithEmptyPackageAlias() {
+        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("org.capatext.restatic").to("").build();
+    }
+
+    @Test
+    public void enableResourceBundleValidation() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).enableResourceBundleValidation().build();
+        assertTrue(configuration.isResourceBundleValidationEnabled());
+    }
+
+    @Test
+    public void disableResourceBundleValidation() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).disableResourceBundleValidation().build();
+        assertFalse(configuration.isResourceBundleValidationEnabled());
+    }
+
+    @Test
+    public void defaultResourceBundleValidationIsFalse() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).build();
+        assertFalse(configuration.isResourceBundleValidationEnabled());
     }
 }
