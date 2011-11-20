@@ -48,13 +48,15 @@ public final class Configuration {
     private final List<File> sourceRootPaths;
     private final FileFilter fileFilter;
     private final Map<PackageName, PackageAlias> packageAliases;
-    private boolean resourceBundleValidationEnabled;
+    private final boolean resourceBundleValidationEnabled;
+    private final String rootClassName;
 
     private Configuration(final ConfigurationBuilder builder) {
         this.sourceRootPaths = new ArrayList<File>(builder.sourceRootPaths);
         this.fileFilter = builder.fileFilter;
         this.packageAliases = builder.aliases;
         resourceBundleValidationEnabled = builder.resourceBundleValidationEnabled;
+        this.rootClassName = builder.rootClassName;
     }
 
     /**
@@ -84,16 +86,22 @@ public final class Configuration {
         return resourceBundleValidationEnabled;
     }
 
+    public String getRootClassName() {
+        return rootClassName;
+    }
+
     /**
      * @author Jamie Craane
      */
     public static final class ConfigurationBuilder implements AliasTo {
         private static final FileFilter DEFAULT_FILTER = AntStylePatternFileNameFilter.create("**/*.properties");
+        private static final String DEFAULT_ROOT_CLASS_NAME = "R";
 
         private final List<File> sourceRootPaths = new ArrayList<File>();
         private FileFilter fileFilter = DEFAULT_FILTER;
         private Map<PackageName, PackageAlias> aliases = new HashMap<PackageName, PackageAlias>();
         private boolean resourceBundleValidationEnabled = false;
+        private String rootClassName = DEFAULT_ROOT_CLASS_NAME;
 
         private PackageName lastAddedPackageName;
 
@@ -150,6 +158,12 @@ public final class Configuration {
 
         public ConfigurationBuilder disableResourceBundleValidation() {
             resourceBundleValidationEnabled = false;
+            return this;
+        }
+
+        public ConfigurationBuilder withRootClassName(final String rootClassName) {
+            this.rootClassName = rootClassName;
+
             return this;
         }
     }

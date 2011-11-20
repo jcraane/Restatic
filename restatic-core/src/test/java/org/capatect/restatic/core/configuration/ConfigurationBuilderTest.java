@@ -129,4 +129,16 @@ public class ConfigurationBuilderTest {
         Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).build();
         assertFalse(configuration.isResourceBundleValidationEnabled());
     }
+
+    @Test
+    public void defaultRootClassName() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).build();
+        assertEquals("R", configuration.getRootClassName());
+    }
+
+    @Test
+    public void rootClassName() {
+        Configuration configuration = new Configuration.ConfigurationBuilder(new File("path")).withRootClassName("RootClass").build();
+        assertEquals("RootClass", configuration.getRootClassName());
+    }
 }
