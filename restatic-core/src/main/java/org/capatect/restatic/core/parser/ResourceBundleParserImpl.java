@@ -47,6 +47,16 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
     @Override
     public ResourceModel parse(final List<File> resourceBundles) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        ResourceModel resourceModel = new ResourceModel();
+
+        for (File resourceBundle : resourceBundles) {
+            // TODO: Parse properties and xml resource bundles.
+        }
+
+        if (configuration.isResourceBundleValidationEnabled()) {
+            // TODO: Perform validation.
+        }
+
+        return resourceModel;
     }
 }
