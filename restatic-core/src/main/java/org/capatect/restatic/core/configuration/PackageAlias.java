@@ -59,4 +59,13 @@ public final class PackageAlias {
     public int hashCode() {
         return alias != null ? alias.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("PackageAlias");
+        sb.append("{alias='").append(alias).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

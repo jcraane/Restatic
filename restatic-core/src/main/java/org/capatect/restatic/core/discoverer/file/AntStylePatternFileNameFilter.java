@@ -77,4 +77,13 @@ public class AntStylePatternFileNameFilter implements FileFilter {
 
         return false;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("AntStylePatternFileNameFilter");
+        sb.append("{patterns=").append(patterns);
+        sb.append('}');
+        return sb.toString();
+    }
 }

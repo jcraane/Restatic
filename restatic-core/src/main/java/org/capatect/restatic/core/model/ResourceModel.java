@@ -15,10 +15,33 @@ package org.capatect.restatic.core.model;
  * limitations under the License.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * ResourceModel abstraction for Restatic.
+ * ResourceModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
+ * to the ResourceClassGenerator which generates source files from the ResourceModel.
  *
  * @author Jamie Craane
  */
-public class ResourceModel {
+public final class ResourceModel {
+    private final String rootClassName;
+
+    // Contains all the resource bundleRestatics in the application.
+    private List<RestaticResourceBundleContainer> bundleRestatics = new ArrayList<RestaticResourceBundleContainer>();
+
+    public ResourceModel(final String rootClassName) {
+        this.rootClassName = rootClassName;
+    }
+
+    public static ResourceModel create(final String rootClassName) {
+        return new ResourceModel(rootClassName);
+    }
+
+    /**
+     * @return The name of the root class to generate.
+     */
+    public String getRootClassName() {
+        return rootClassName;
+    }
 }

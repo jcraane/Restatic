@@ -267,7 +267,7 @@ public class AntPathMatcher implements PathMatcher {
 
     public Map<String, String> extractUriTemplateVariables(String pattern, String path) {
         Map<String, String> variables = new LinkedHashMap<String, String>();
-        boolean result = doMatch(pattern, path, true, variables);
+        doMatch(pattern, path, true, variables);
         return variables;
     }
 

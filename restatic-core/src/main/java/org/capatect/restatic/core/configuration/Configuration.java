@@ -63,6 +63,8 @@ public final class Configuration {
         this.packageAliases = builder.aliases;
         resourceBundleValidationEnabled = builder.resourceBundleValidationEnabled;
         this.rootClassName = builder.rootClassName;
+
+        LOGGER.info("Created Configuration object with the following parameters: " + this);
     }
 
     /**
@@ -94,6 +96,19 @@ public final class Configuration {
 
     public String getRootClassName() {
         return rootClassName;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Configuration");
+        sb.append("{fileFilter=").append(fileFilter);
+        sb.append(", sourceRootPaths=").append(sourceRootPaths);
+        sb.append(", packageAliases=").append(packageAliases);
+        sb.append(", resourceBundleValidationEnabled=").append(resourceBundleValidationEnabled);
+        sb.append(", rootClassName='").append(rootClassName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     /**

@@ -47,14 +47,16 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
     @Override
     public ResourceModel parse(final List<File> resourceBundles) {
-        ResourceModel resourceModel = new ResourceModel();
+        final ResourceModel resourceModel = ResourceModel.create(configuration.getRootClassName());
 
         for (File resourceBundle : resourceBundles) {
             // TODO: Parse properties and xml resource bundles.
+
         }
 
         if (configuration.isResourceBundleValidationEnabled()) {
             // TODO: Perform validation.
+            // TODO: Should we implement validation on the model itself?
         }
 
         return resourceModel;
