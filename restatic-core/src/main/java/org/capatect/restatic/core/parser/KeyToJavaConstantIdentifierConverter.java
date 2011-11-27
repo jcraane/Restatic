@@ -21,7 +21,7 @@ package org.capatect.restatic.core.parser;
 import org.apache.commons.lang.Validate;
 
 /**
- * Helper class for converting resource bundle keys to constant Java identifiers.
+ * Package private helper class for converting resource bundle keys to constant Java identifiers.
  *
  * @author Jamie Craane
  */
