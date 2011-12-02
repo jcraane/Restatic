@@ -18,17 +18,8 @@
 
 package org.capatect.restatic.core.model;
 
-import org.junit.Test;
-
-import static junit.framework.Assert.assertEquals;
-
 /**
  * @author Jamie Craane
  */
-public class RestaticResourceBundleContainerTest {
-    @Test
-    public void create() {
-        RestaticResourceBundleContainer restaticResourceBundleContainer = new RestaticResourceBundleContainer("OrgCapatectBundle");
-        assertEquals("OrgCapatectBundle", restaticResourceBundleContainer.getName());
-    }
+public class ResBundleTest {
 }

@@ -30,7 +30,7 @@ import static junit.framework.Assert.assertNotNull;
 /**
  * @author Jamie Craane
  */
-public class ResourceModelTest {
+public class ResModelTest {
     private Configuration defaultConfiguration;
 
     @Before
@@ -40,15 +40,15 @@ public class ResourceModelTest {
 
     @Test
     public void create() {
-        ResourceModel resourceModel = ResourceModel.create(defaultConfiguration.getRootClassName());
-        assertNotNull(resourceModel);
-        assertEquals("R", resourceModel.getRootClassName());
+        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName());
+        assertNotNull(resModel);
+        assertEquals("R", resModel.getRootClassName());
     }
 
     @Test
     public void modelWithOneResourceBundle() {
-        ResourceModel resourceModel = ResourceModel.create(defaultConfiguration.getRootClassName());
+        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName());
 //        RestaticResourceBundleContainer restaticResourceBundleContainer = new RestaticResourceBundleContainer();
-//        resourceModel.addResourceBundle("OrgCapatectBundle", "Resources", restaticResourceBundleContainer);
+//        resModel.addResourceBundle("OrgCapatectBundle", "Resources", restaticResourceBundleContainer);
     }
 }

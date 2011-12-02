@@ -19,13 +19,15 @@
 package org.capatect.restatic.core.parser;
 
 import org.capatect.restatic.core.configuration.Configuration;
-import org.capatect.restatic.core.model.ResourceModel;
+import org.capatect.restatic.core.model.ResModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
 
 /**
- * Class responssible for reading the resourcebundles and transforming it into a ResourceModel which
+ * Class responssible for reading the resourcebundles and transforming it into a ResModel which
  * is later used by the generator for the generation of classes from the resource bundles.
  * <p/>
  * This class optionally validate the resource bundles for correctness when the Configuration.isResourceBundleValidationEnabled
@@ -34,6 +36,8 @@ import java.util.List;
  * @author Jamie Craane
  */
 public final class ResourceBundleParserImpl implements ResourceBundleParser {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResourceBundleParserImpl.class);
+
     private final Configuration configuration;
 
     /**
@@ -46,10 +50,12 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
     }
 
     @Override
-    public ResourceModel parse(final List<File> resourceBundles) {
-        final ResourceModel resourceModel = ResourceModel.create(configuration.getRootClassName());
+    public ResModel parse(final List<File> resourceBundles) {
+        LOGGER.trace("Start parsing the resource bundles");
+        final ResModel resModel = ResModel.create(configuration.getRootClassName());
 
         for (File resourceBundle : resourceBundles) {
+            LOGGER.info("Parsing resource bundle {1}", resourceBundle.getAbsolutePath());
             // TODO: Parse properties and xml resource bundles.
 
         }
@@ -59,6 +65,6 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
             // TODO: Should we implement validation on the model itself?
         }
 
-        return resourceModel;
+        return resModel;
     }
 }
