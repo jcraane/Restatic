@@ -18,8 +18,39 @@
 
 package org.capatect.restatic.core.model;
 
+import org.junit.Test;
+
 /**
  * @author Jamie Craane
  */
 public class ResBundleTest {
+    @Test(expected = IllegalArgumentException.class)
+    public void createWithNullName() {
+        ResBundle.createAndConvertToJavaClassIdentifier("path", null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createWithEmptyName() {
+        ResBundle.createAndConvertToJavaClassIdentifier("path", "");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createWithNullPath() {
+        ResBundle.createAndConvertToJavaClassIdentifier(null, "name");
+    }
+
+    @Test
+    public void createWithDefaultLocale() {
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources.properties");
+    }
+
+    @Test
+    public void createWithLocale() {
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources_nl_NL.properties");
+    }
+
+    @Test
+    public void createWithPackage() {
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("org.capatect.resources", "resources.properties");
+    }
 }

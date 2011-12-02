@@ -18,8 +18,50 @@
 
 package org.capatect.restatic.core.model;
 
+import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
+
 /**
  * @author Jamie Craane
  */
 public class ResLocaleTest {
+    @Test(expected = IllegalArgumentException.class)
+    public void createNullLocale() {
+        new ResLocale(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createEmptyLocale() {
+        new ResLocale("");
+    }
+
+    @Test
+    public void create() {
+        ResLocale resLocale = new ResLocale("nl_NL");
+        assertEquals("nl_NL", resLocale.getLocale());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addNullKey() {
+        ResLocale resLocale = new ResLocale("nl_NL");
+        resLocale.addKey(null);
+    }
+
+    @Test
+    public void addKeys() {
+        ResLocale resLocale = new ResLocale("nl_NL");
+        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
+        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key1"));
+        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key2"));
+        assertEquals(3, resLocale.getKeys().size());
+    }
+
+    @Test
+    public void addDuplicateKey() {
+        ResLocale resLocale = new ResLocale("nl_NL");
+        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
+        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
+        assertEquals(1, resLocale.getKeys().size());
+    }
 }

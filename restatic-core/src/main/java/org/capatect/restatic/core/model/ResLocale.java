@@ -18,8 +18,45 @@
 
 package org.capatect.restatic.core.model;
 
+import org.apache.commons.lang.Validate;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Jamie Craane
  */
-public class ResLocale {
+public final class ResLocale {
+    private final String locale;
+
+    private final Set<ResKey> keys = new HashSet<ResKey>();
+
+    public ResLocale(final String locale) {
+        Validate.notEmpty(locale, "The locale may not be null or empty.");
+
+        this.locale = locale;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    /**
+     * Adds a key to this locale.
+     *
+     * @param key The key to add. When the key already exists, the existing key is replaced.
+     */
+    public void addKey(final ResKey key) {
+        Validate.notNull(key, "The key may not be null.");
+
+        keys.add(key);
+    }
+
+    /**
+     * @return The keys beloning to this locale.
+     */
+    public Set<ResKey> getKeys() {
+        return Collections.unmodifiableSet(keys);
+    }
 }
