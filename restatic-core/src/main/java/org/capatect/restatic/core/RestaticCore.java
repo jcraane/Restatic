@@ -1,4 +1,3 @@
-package org.capatect.restatic.core;
 /*
  * Copyright 2002-2011 the original author or authors.
  *
@@ -14,6 +13,9 @@ package org.capatect.restatic.core;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.capatect.restatic.core;
+
+import org.capatect.restatic.core.configuration.Configuration;
 
 /**
  * Provides the core functionality of the restatic module.
@@ -21,4 +23,6 @@ package org.capatect.restatic.core;
  * @author Jamie Craane
  */
 public interface RestaticCore {
+
+    void generateSources(Configuration configuration);
 }
