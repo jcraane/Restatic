@@ -39,7 +39,7 @@ public final class ResModel {
     private final List<File> sourceRootPaths;
     private final List<ResBundle> bundles = new ArrayList<ResBundle>();
 
-    public ResModel(final String rootClassName, final List<File> sourceRootPaths) {
+    private ResModel(final String rootClassName, final List<File> sourceRootPaths) {
         LOGGER.trace("ResModel({})", rootClassName);
 
         Validate.notEmpty(rootClassName, "The rootClassName may not be null.");
@@ -49,6 +49,14 @@ public final class ResModel {
         this.sourceRootPaths = Collections.unmodifiableList(sourceRootPaths);
     }
 
+    /**
+     * Creates a new instance of a ResModel.
+     *
+     * @param rootClassName   The rootClassName which is used in source generation to name the top-level class in the hierarchy.
+     * @param sourceRootPaths The sourceRootPaths where to look for resource bundles. This is needed to strip the source root paths
+     *                        from the actual resource bundles path to determine the actual Java package of the
+     *                        resource bundle.
+     */
     public static ResModel create(final String rootClassName, final List<File> sourceRootPaths) {
         return new ResModel(rootClassName, sourceRootPaths);
     }
@@ -60,6 +68,11 @@ public final class ResModel {
         return rootClassName;
     }
 
+    /**
+     * Addes a resource bundle to the resource model.
+     *
+     * @param resourceBundle The resource bundle to add to the resource model.
+     */
     public void addResourceBundle(final File resourceBundle) {
         String bundlePackage = extractResourceBundlePackage(resourceBundle);
         ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(bundlePackage, resourceBundle.getName());
@@ -82,7 +95,7 @@ public final class ResModel {
     }
 
     /**
-     * @return List of ResBundles beloning to this model.
+     * @return List of ResBundles belonging to this model.
      */
     public List<ResBundle> getBundles() {
         return Collections.unmodifiableList(bundles);

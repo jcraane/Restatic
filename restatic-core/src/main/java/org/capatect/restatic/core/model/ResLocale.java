@@ -18,6 +18,7 @@
 
 package org.capatect.restatic.core.model;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
 import java.util.Collections;
@@ -25,19 +26,30 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Represents a locale in the ResModel.
+ *
  * @author Jamie Craane
  */
 public final class ResLocale {
+    public static final String DEFAULT_LOCALE = "";
+
     private final String locale;
 
     private final Set<ResKey> keys = new HashSet<ResKey>();
+    private boolean defaultLocale;
 
-    public ResLocale(final String locale) {
-        Validate.notEmpty(locale, "The locale may not be null or empty.");
+    public ResLocale(String locale) {
+        if (locale == null) {
+            locale = DEFAULT_LOCALE;
+        }
 
+        defaultLocale = StringUtils.isEmpty(locale);
         this.locale = locale;
     }
 
+    /**
+     * @return The locale, for example nl_NL, en_US, en or an empty String for the default locale.
+     */
     public String getLocale() {
         return locale;
     }
@@ -58,5 +70,9 @@ public final class ResLocale {
      */
     public Set<ResKey> getKeys() {
         return Collections.unmodifiableSet(keys);
+    }
+
+    public boolean isDefaultLocale() {
+        return defaultLocale;
     }
 }
