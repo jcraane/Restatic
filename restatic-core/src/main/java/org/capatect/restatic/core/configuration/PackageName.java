@@ -60,4 +60,13 @@ public final class PackageName {
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("PackageName");
+        sb.append("{name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

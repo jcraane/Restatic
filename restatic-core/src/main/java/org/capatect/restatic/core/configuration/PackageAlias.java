@@ -83,4 +83,13 @@ public final class PackageAlias {
                 .append("alias", alias)
                 .toString();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("PackageAlias");
+        sb.append("{alias='").append(alias).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -17,9 +17,9 @@ package org.capatect.restatic.core.configuration.builder;
 
 import java.io.File;
 
+import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
-import org.capatect.restatic.core.discoverer.file.FileFilter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -33,11 +33,9 @@ import static org.junit.Assert.assertTrue;
 public class ConfigurationBuilderTest {
 
     private static final String rootClassName = "Abc";
-    private static final File sourceDirectory = new File(System.getProperty("user.dir") + "/restatic-core/src/main/java");
-    private static final File sourceDirectory2 = new File(System.getProperty("user.dir") + "/restatic-core/src/test/java");
-    private static final File outputDirectory = new File(System.getProperty("user.dir") + "/restatic-core/target");
-    private static final FileFilter fileFilter = AntStylePatternFileNameFilter.create("**/*.properties");
-
+    private static final File sourceDirectory = FileTestUtils.getRootPath("src/main/java");
+    private static final File sourceDirectory2 = FileTestUtils.getRootPath("src/test/java");
+    private static final File outputDirectory = FileTestUtils.getRootPath("target/generated-sources/restatic");
 
     @Test
     public void testDefaultFileFilter() {

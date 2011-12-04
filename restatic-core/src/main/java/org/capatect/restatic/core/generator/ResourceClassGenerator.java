@@ -1,21 +1,21 @@
 package org.capatect.restatic.core.generator;
 
-import org.capatect.restatic.core.model.ResourceModel;
+import org.capatect.restatic.core.model.ResModel;
 
 import java.io.File;
 
 /**
- * Generator which generates source files from a ResourceModel.
+ * Generator which generates source files from a ResModel.
  *
  * @author Jamie Craane
  */
 public interface ResourceClassGenerator {
     /**
-     * Generates Java source files from the given ResourceModel to the given destination.
+     * Generates Java source files from the given ResModel to the given destination.
      *
-     * @param destination   The destination to put the generated source files in.
-     * @param resourceModel The ResourceModel to generate source files from.
+     * @param destination The destination to put the generated source files in.
+     * @param resModel    The ResModel to generate source files from.
      */
-    void generate(File destination, ResourceModel resourceModel);
+    void generate(File destination, ResModel resModel);
 
 }
