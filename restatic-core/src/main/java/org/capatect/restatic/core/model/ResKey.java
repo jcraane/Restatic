@@ -73,7 +73,7 @@ public final class ResKey {
      *
      * @author Jamie Craane
      */
-    public static final class KeyToJavaConstantIdentifierConverter {
+    static final class KeyToJavaConstantIdentifierConverter {
         private static final String REPLACE_CHAR = "_";
 
         private KeyToJavaConstantIdentifierConverter() {

@@ -52,12 +52,11 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
     @Override
     public ResModel parse(final List<File> resourceBundles) {
         LOGGER.trace("Start parsing the resource bundles");
-        final ResModel resModel = ResModel.create(configuration.getRootClassName());
+
+        final ResModel resModel = ResModel.create(configuration.getRootClassName(), configuration.getSourceRootPaths());
 
         for (File resourceBundle : resourceBundles) {
             LOGGER.info("Parsing resource bundle {1}", resourceBundle.getAbsolutePath());
-            // TODO: Parse properties and xml resource bundles.
-
         }
 
         if (configuration.isResourceBundleValidationEnabled()) {

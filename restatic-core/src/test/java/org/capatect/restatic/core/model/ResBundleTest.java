@@ -20,6 +20,8 @@ package org.capatect.restatic.core.model;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
+
 /**
  * @author Jamie Craane
  */
@@ -42,15 +44,42 @@ public class ResBundleTest {
     @Test
     public void createWithDefaultLocale() {
         ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources.properties");
+        assertEquals("Resources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithLocale() {
         ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources_nl_NL.properties");
+        assertEquals("Resources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithPackage() {
         ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("org.capatect.resources", "resources.properties");
+        assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
+    }
+
+    @Test
+    public void createWithPackageAlias() {
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("org.capatect.resources", "resources.properties");
+        assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
+    }
+
+    @Test
+    public void convertResourceBundleToJavaClassIdentifier() {
+        String className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.capatect.resources", "resources.properties");
+        assertEquals("OrgCapatectResourcesResources", className);
+
+        className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("", "resources.properties");
+        assertEquals("Resources", className);
+
+        className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources.properties");
+        assertEquals("OrgTestResources", className);
+
+        className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_nl_NL.properties");
+        assertEquals("OrgTestResources", className);
+
+        className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_en.properties");
+        assertEquals("OrgTestResources", className);
     }
 }

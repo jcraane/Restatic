@@ -28,4 +28,10 @@ public final class FileTestUtils {
     public static String getSystemIndependentPath(final String path) {
         return path.replaceAll("/", File.separator);
     }
+
+    public static File getRootPath(String testDir) {
+        File baseDir = new File(System.getProperty("basedir", "restatic-core"));
+        File rootPath = new File(baseDir, testDir);
+        return rootPath;
+    }
 }

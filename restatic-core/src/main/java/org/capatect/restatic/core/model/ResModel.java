@@ -15,6 +15,15 @@ package org.capatect.restatic.core.model;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
  * to the ResourceClassGenerator which generates source files from the ResModel.
@@ -22,14 +31,26 @@ package org.capatect.restatic.core.model;
  * @author Jamie Craane
  */
 public final class ResModel {
-    private final String rootClassName;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
+    private static final String PATH_SEPARATOR = File.separator;
+    private static final String PACKAGE_SEPERATOR = ".";
 
-    public ResModel(final String rootClassName) {
+    private final String rootClassName;
+    private final List<File> sourceRootPaths;
+    private final List<ResBundle> bundles = new ArrayList<ResBundle>();
+
+    public ResModel(final String rootClassName, final List<File> sourceRootPaths) {
+        LOGGER.trace("ResModel({})", rootClassName);
+
+        Validate.notEmpty(rootClassName, "The rootClassName may not be null.");
+        Validate.noNullElements(sourceRootPaths, "sourceRootPaths may not be null.");
+
         this.rootClassName = rootClassName;
+        this.sourceRootPaths = Collections.unmodifiableList(sourceRootPaths);
     }
 
-    public static ResModel create(final String rootClassName) {
-        return new ResModel(rootClassName);
+    public static ResModel create(final String rootClassName, final List<File> sourceRootPaths) {
+        return new ResModel(rootClassName, sourceRootPaths);
     }
 
     /**
@@ -37,5 +58,33 @@ public final class ResModel {
      */
     public String getRootClassName() {
         return rootClassName;
+    }
+
+    public void addResourceBundle(final File resourceBundle) {
+        String bundlePackage = extractResourceBundlePackage(resourceBundle);
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(bundlePackage, resourceBundle.getName());
+        bundles.add(resBundle);
+    }
+
+    private String extractResourceBundlePackage(final File resourceBundle) {
+        String resourceBundlePath = resourceBundle.getPath();
+        String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
+
+        for (File sourceRootPath : sourceRootPaths) {
+            if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
+                bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
+                break;
+            }
+        }
+
+        bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
+        return bundlePackage;
+    }
+
+    /**
+     * @return List of ResBundles beloning to this model.
+     */
+    public List<ResBundle> getBundles() {
+        return Collections.unmodifiableList(bundles);
     }
 }
