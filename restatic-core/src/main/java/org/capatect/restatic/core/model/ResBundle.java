@@ -25,11 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Represents a resource bundle which contains a Set of locales.
+ *
  * @author Jamie Craane
  */
 public final class ResBundle {
@@ -39,8 +40,8 @@ public final class ResBundle {
     private static final String PACKAGE_SEPERATOR = ".";
     private static final String RESOURCE_BUNDLE_NAME_SEPARATOR = "_";
 
-    private final List<ResLocale> locales = new ArrayList<ResLocale>();
-    private String bundleClassName;
+    private final Set<ResLocale> locales = new HashSet<ResLocale>();
+    private final String bundleClassName;
 
     private ResBundle(final String name) {
         this.bundleClassName = name;
