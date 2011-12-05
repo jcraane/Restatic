@@ -24,9 +24,21 @@ package org.capatect.restatic.core;
  * @author Jamie Craane
  */
 final public class Util {
+    private static final String REPLACE_CHAR = "_";
+
     private Util() {
         // Prevent instantiation.
     }
 
-
+    /**
+     * Replaces all characters in the given text which are invalid in Java identifiers and
+     * replaces those occurences with an underscore (_).
+     *
+     * @param text The text to replace the invalid characters for Java identifiers with an underscore.
+     * @return The text with the invalid characters for Java identifiers replaced with an underscore.
+     */
+    public static String replaceInvalidJavaIdentifierCharsWithUnderscore(String text) {
+        text = text.replaceAll("[\\/\\.@#!`~$%^&*()+={}:;'><?,\\[\\]\"-]+", REPLACE_CHAR);
+        return text.trim();
+    }
 }

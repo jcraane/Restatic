@@ -89,6 +89,7 @@ public class ResKeyTest {
         assertEquals("PERSON_FIRSTNAME", ResKey.KeyToJavaConstantIdentifierConverter.convert("person?firstname"));
         assertEquals("PERSON_FIRSTNAME", ResKey.KeyToJavaConstantIdentifierConverter.convert("person/firstname"));
         assertEquals("PERSON_FIRSTNAME", ResKey.KeyToJavaConstantIdentifierConverter.convert("person,firstname"));
+        assertEquals("PERSON_FIRSTNAME", ResKey.KeyToJavaConstantIdentifierConverter.convert("person-firstname"));
         assertEquals("ORG_BUTTON_TITLE", ResKey.KeyToJavaConstantIdentifierConverter.convert("org.button.title"));
     }
 

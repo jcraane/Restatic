@@ -19,6 +19,7 @@
 package org.capatect.restatic.core.model;
 
 import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.Util;
 
 /**
  * Represents a key in a ResBundle.
@@ -90,10 +91,7 @@ public final class ResKey {
         public static String convert(String resourceBundleKey) {
             Validate.notEmpty(resourceBundleKey, "The key may not be null or empty.");
 
-            resourceBundleKey = resourceBundleKey.replaceAll("[\\/\\.@#!`~$%^&*()+={}:;'><?,\\[\\]\"]+", REPLACE_CHAR);
-            resourceBundleKey = resourceBundleKey.trim();
-
-            return resourceBundleKey.toUpperCase();
+            return Util.replaceInvalidJavaIdentifierCharsWithUnderscore(resourceBundleKey).toUpperCase();
         }
     }
 }

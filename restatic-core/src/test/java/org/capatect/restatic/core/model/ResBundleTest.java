@@ -20,12 +20,13 @@ package org.capatect.restatic.core.model;
 
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -39,12 +40,12 @@ public class ResBundleTest {
     @Before
     public void setup() {
         rootPath = FileTestUtils.getRootPath("src/test/resbundle-test");
-        defaultConfiguration = new Configuration.ConfigurationBuilder(rootPath).build();
+        defaultConfiguration = new ConfigurationBuilder().addSourceDirectory(rootPath).toOutputDirectory(new File("target/generated-sources")).getConfiguration();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void noNullResourceBundle() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, new ArrayList<File>() {{
+        ResBundle.createAndConvertToJavaClassIdentifier(null, new HashSet<File>() {{
             add(new File("test"));
         }});
     }
@@ -56,12 +57,12 @@ public class ResBundleTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void noEmptySourceRootPaths() {
-        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), new ArrayList<File>());
+        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), new HashSet<File>());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void noNullSourceRootPathElements() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, new ArrayList<File>() {{
+        ResBundle.createAndConvertToJavaClassIdentifier(null, new HashSet<File>() {{
             add(null);
         }});
     }
@@ -69,14 +70,14 @@ public class ResBundleTest {
     @Test
     public void createWithDefaultLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
@@ -84,7 +85,7 @@ public class ResBundleTest {
     @Ignore
     public void createWithDefaultPackage() {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
         assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
     }
 
@@ -93,7 +94,7 @@ public class ResBundleTest {
     public void createWithPackageAlias() {
         // TODO: Add package aliases
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
         assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
     }
 

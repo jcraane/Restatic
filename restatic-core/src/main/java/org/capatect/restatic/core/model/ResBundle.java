@@ -20,12 +20,14 @@ package org.capatect.restatic.core.model;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Jamie Craane
@@ -35,6 +37,7 @@ public final class ResBundle {
 
     private static final String PATH_SEPARATOR = File.separator;
     private static final String PACKAGE_SEPERATOR = ".";
+    private static final String RESOURCE_BUNDLE_NAME_SEPARATOR = "_";
 
     private final List<ResLocale> locales = new ArrayList<ResLocale>();
     private String bundleClassName;
@@ -50,7 +53,7 @@ public final class ResBundle {
      *                        or resources_nl_NL.properties for the nl_NL locale.
      * @return
      */
-    public static ResBundle createAndConvertToJavaClassIdentifier(final File resourceBundle, final List<File> sourceRootPaths) {
+    public static ResBundle createAndConvertToJavaClassIdentifier(final File resourceBundle, final Set<File> sourceRootPaths) {
         Validate.notNull(resourceBundle, "The resourceBundle may not be null.");
         Validate.noNullElements(sourceRootPaths, "The sourceRootPaths may not be null or contain null elements.");
         Validate.notEmpty(sourceRootPaths, "The sourceRootPaths may not be empty.");
@@ -64,7 +67,7 @@ public final class ResBundle {
         return bundle;
     }
 
-    private static String extractResourceBundlePackage(final File resourceBundle, final List<File> sourceRootPaths) {
+    private static String extractResourceBundlePackage(final File resourceBundle, final Set<File> sourceRootPaths) {
         String resourceBundlePath = resourceBundle.getPath();
         String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
 
@@ -103,7 +106,6 @@ public final class ResBundle {
         public static String convert(String packageName, String resourceBundleFileName) {
             LOGGER.trace("convert({}, {})", packageName, resourceBundleFileName);
 
-            // TODO: Strip name from invalid Java class name tokens.
             StringBuilder nameBuilder = new StringBuilder(32);
             String[] pathParts = packageName.split("\\.");
             for (String pathPart : pathParts) {
@@ -111,8 +113,13 @@ public final class ResBundle {
                 nameBuilder.append(pathPart);
             }
 
-            resourceBundleFileName = stripLocaleInformationAndExtension(resourceBundleFileName);
-            return nameBuilder.append(capitalizeFirstLetter(resourceBundleFileName)).toString();
+            final String nameWithoutExtensionAndLocale = stripLocaleInformationAndExtension(resourceBundleFileName);
+            final String validJavaIdentifierName = Util.replaceInvalidJavaIdentifierCharsWithUnderscore(nameWithoutExtensionAndLocale);
+            final String className = capitalizeNameParts(validJavaIdentifierName);
+
+            String resourceBundleClassName = nameBuilder.append(capitalizeFirstLetter(className)).toString();
+            LOGGER.trace("Resourcebundle classname: {}", resourceBundleClassName);
+            return resourceBundleClassName;
         }
 
         private static String stripLocaleInformationAndExtension(String name) {
@@ -137,12 +144,23 @@ public final class ResBundle {
             return name;
         }
 
-        private static String capitalizeFirstLetter(String pathPart) {
-            if (StringUtils.isEmpty(pathPart)) {
-                return pathPart;
+        private static String capitalizeNameParts(String name) {
+            String[] parts = name.split(RESOURCE_BUNDLE_NAME_SEPARATOR);
+
+            StringBuilder nameBuilder = new StringBuilder(32);
+            for (String part : parts) {
+                nameBuilder.append(capitalizeFirstLetter(part));
             }
 
-            return Character.toUpperCase(pathPart.charAt(0)) + pathPart.substring(1);
+            return nameBuilder.toString();
+        }
+
+        private static String capitalizeFirstLetter(String text) {
+            if (StringUtils.isEmpty(text)) {
+                return text;
+            }
+
+            return Character.toUpperCase(text.charAt(0)) + text.substring(1);
         }
     }
 }
