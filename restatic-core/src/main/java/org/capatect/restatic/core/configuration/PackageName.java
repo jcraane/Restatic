@@ -15,15 +15,16 @@
  *  * limitations under the License.
  *
  */
-
 package org.capatect.restatic.core.configuration;
 
 import org.apache.commons.lang.Validate;
 
 /**
- * Represenst the name of a package.
+ * Represents the name of a package.
  * <p/>
  * This class is immutable.
+ *
+ * TODO Remove, class is obsolete (merged with PackageAlias class).
  *
  * @author Jamie Craane
  */

@@ -1,4 +1,3 @@
-package org.capatect.restatic.core;
 /*
  * Copyright 2002-2011 the original author or authors.
  *
@@ -14,11 +13,29 @@ package org.capatect.restatic.core;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.capatect.restatic.core;
+
+import org.capatect.restatic.core.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides the core functionality of the Restatic module.
  *
  * @author Jamie Craane
+ * @author Jeroen Post
  */
 public final class RestaticCoreImpl implements RestaticCore {
+
+    /**
+     * The Logger instance for this class.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestaticCoreImpl.class);
+
+    @Override
+    public void generateSources(final Configuration configuration) {
+        LOGGER.debug("generateSources(configuration={})", configuration);
+
+        // TODO implement the generation process.
+    }
 }

@@ -14,14 +14,17 @@ package org.capatect.restatic.core.discoverer.file;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import org.apache.commons.lang.Validate;
-import org.springframework.core.util.AntPathMatcher;
+package org.capatect.restatic.core.discoverer.file;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.core.util.AntPathMatcher;
 
 /**
  * Filter which matches filenames and directories by using Ant style patterns.
@@ -69,7 +72,7 @@ public class AntStylePatternFileNameFilter implements FileFilter {
     @Override
     public boolean matches(final String fileName) {
         final AntPathMatcher antPathMatcher = new AntPathMatcher();
-        for (String pattern : patterns) {
+        for (final String pattern : patterns) {
             if (antPathMatcher.match(pattern, fileName)) {
                 return true;
             }
@@ -80,10 +83,8 @@ public class AntStylePatternFileNameFilter implements FileFilter {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("AntStylePatternFileNameFilter");
-        sb.append("{patterns=").append(patterns);
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("patterns", patterns)
+                .toString();
     }
 }

@@ -53,7 +53,7 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
     public ResModel parse(final List<File> resourceBundles) {
         LOGGER.trace("Start parsing the resource bundles");
 
-        final ResModel resModel = ResModel.create(configuration.getRootClassName(), configuration.getSourceRootPaths());
+        final ResModel resModel = ResModel.create(configuration.getRootClassName(), configuration.getSourceDirectories());
 
         for (File resourceBundle : resourceBundles) {
             LOGGER.info("Parsing resource bundle {1}", resourceBundle.getAbsolutePath());

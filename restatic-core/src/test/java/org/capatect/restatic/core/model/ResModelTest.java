@@ -18,13 +18,14 @@
 
 package org.capatect.restatic.core.model;
 
+import java.io.File;
+import java.util.HashSet;
+
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.File;
-import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -39,24 +40,27 @@ public class ResModelTest {
     @Before
     public void setup() {
         rootPath = FileTestUtils.getRootPath("src/test/resmodel-test");
-        defaultConfiguration = new Configuration.ConfigurationBuilder(rootPath).build();
+        defaultConfiguration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .getConfiguration();
     }
 
     @Test
     public void create() {
-        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceRootPaths());
+        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceDirectories());
         assertNotNull(resModel);
         assertEquals("R", resModel.getRootClassName());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createNullRootClassName() {
-        ResModel.create(null, defaultConfiguration.getSourceRootPaths());
+        ResModel.create(null, defaultConfiguration.getSourceDirectories());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void createEmptyRootClassName() {
-        ResModel.create("", defaultConfiguration.getSourceRootPaths());
+        ResModel.create("", defaultConfiguration.getSourceDirectories());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -66,7 +70,7 @@ public class ResModelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void createNullSourceRootPathElement() {
-        ResModel.create("R", new ArrayList<File>() {{
+        ResModel.create("R", new HashSet<File>() {{
             add(null);
         }});
     }
@@ -75,7 +79,7 @@ public class ResModelTest {
     public void addOneResourceBundleWithOneLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
 
-        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceRootPaths());
+        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceDirectories());
         resModel.addResourceBundle(resourceBundle);
         assertEquals(1, resModel.getBundles().size());
         assertEquals("OrgCapatectTestResources", resModel.getBundles().get(0).getBundleClassName());

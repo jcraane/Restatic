@@ -15,14 +15,15 @@ package org.capatect.restatic.core.model;
  * limitations under the License.
  */
 
-import org.apache.commons.lang.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
@@ -34,17 +35,17 @@ public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
 
     private final String rootClassName;
-    private final List<File> sourceRootPaths;
+    private final Set<File> sourceRootPaths;
     private final List<ResBundle> bundles = new ArrayList<ResBundle>();
 
-    private ResModel(final String rootClassName, final List<File> sourceRootPaths) {
+    private ResModel(final String rootClassName, final Set<File> sourceRootPaths) {
         LOGGER.trace("ResModel({})", rootClassName);
 
         Validate.notEmpty(rootClassName, "The rootClassName may not be null.");
         Validate.noNullElements(sourceRootPaths, "sourceRootPaths may not be null.");
 
         this.rootClassName = rootClassName;
-        this.sourceRootPaths = Collections.unmodifiableList(sourceRootPaths);
+        this.sourceRootPaths = Collections.unmodifiableSet(sourceRootPaths);
     }
 
     /**
@@ -55,7 +56,7 @@ public final class ResModel {
      *                        from the actual resource bundles path to determine the actual Java package of the
      *                        resource bundle.
      */
-    public static ResModel create(final String rootClassName, final List<File> sourceRootPaths) {
+    public static ResModel create(final String rootClassName, final Set<File> sourceRootPaths) {
         return new ResModel(rootClassName, sourceRootPaths);
     }
 

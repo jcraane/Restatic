@@ -18,13 +18,14 @@
 
 package org.capatect.restatic.core.parser;
 
+import java.io.File;
+
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.discoverer.file.FileCollector;
 import org.capatect.restatic.core.model.ResModel;
 import org.junit.Test;
-
-import java.io.File;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -35,7 +36,10 @@ public class ResourceBundleParserImplTest {
     @Test
     public void parseProperiesResourceBundles() {
         File rootPath = FileTestUtils.getRootPath("src/test/parse-test");
-        Configuration configuration = new Configuration.ConfigurationBuilder(rootPath).build();
+        Configuration configuration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .getConfiguration();
         ResourceBundleParser parser = new ResourceBundleParserImpl(configuration);
 
         FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, configuration.getFileFilter());
