@@ -32,8 +32,6 @@ import java.util.List;
  */
 public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
-    private static final String PATH_SEPARATOR = File.separator;
-    private static final String PACKAGE_SEPERATOR = ".";
 
     private final String rootClassName;
     private final List<File> sourceRootPaths;
@@ -74,24 +72,8 @@ public final class ResModel {
      * @param resourceBundle The resource bundle to add to the resource model.
      */
     public void addResourceBundle(final File resourceBundle) {
-        String bundlePackage = extractResourceBundlePackage(resourceBundle);
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(bundlePackage, resourceBundle.getName());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, sourceRootPaths);
         bundles.add(resBundle);
-    }
-
-    private String extractResourceBundlePackage(final File resourceBundle) {
-        String resourceBundlePath = resourceBundle.getPath();
-        String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
-
-        for (File sourceRootPath : sourceRootPaths) {
-            if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
-                bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
-                break;
-            }
-        }
-
-        bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
-        return bundlePackage;
     }
 
     /**

@@ -23,6 +23,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,9 @@ import java.util.List;
 public final class ResBundle {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResBundle.class);
 
+    private static final String PATH_SEPARATOR = File.separator;
+    private static final String PACKAGE_SEPERATOR = ".";
+
     private final List<ResLocale> locales = new ArrayList<ResLocale>();
     private String bundleClassName;
 
@@ -40,20 +44,39 @@ public final class ResBundle {
     }
 
     /**
-     * @param packageName The package where the resource bundle resides, for example org.capatect.resources. An empty String if
-     *                    the resource bundle resides at the root package.
-     * @param name        The name of the resource bundle, for example resources.properties for the default locale
-     *                    or resources_nl_NL.properties for the nl_NL locale.
+     * @param resourceBundle  The package where the resource bundle resides, for example org.capatect.resources. An empty String if
+     *                        the resource bundle resides at the root package.
+     * @param sourceRootPaths The name of the resource bundle, for example resources.properties for the default locale
+     *                        or resources_nl_NL.properties for the nl_NL locale.
      * @return
      */
-    public static ResBundle createAndConvertToJavaClassIdentifier(final String packageName, final String name) {
-        Validate.notEmpty(name, "The name may not be null.");
-        Validate.notNull(packageName, "The packageName may not be null.");
+    public static ResBundle createAndConvertToJavaClassIdentifier(final File resourceBundle, final List<File> sourceRootPaths) {
+        Validate.notNull(resourceBundle, "The resourceBundle may not be null.");
+        Validate.noNullElements(sourceRootPaths, "The sourceRootPaths may not be null or contain null elements.");
+        Validate.notEmpty(sourceRootPaths, "The sourceRootPaths may not be empty.");
 
-        String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(packageName, name);
+
+        String packageName = extractResourceBundlePackage(resourceBundle, sourceRootPaths);
+        // TODO: The locale should be taken into account (or default locale if none specified).
+        String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(packageName, resourceBundle.getName());
         ResBundle bundle = new ResBundle(javaClassIdentifier);
 
         return bundle;
+    }
+
+    private static String extractResourceBundlePackage(final File resourceBundle, final List<File> sourceRootPaths) {
+        String resourceBundlePath = resourceBundle.getPath();
+        String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
+
+        for (File sourceRootPath : sourceRootPaths) {
+            if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
+                bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
+                break;
+            }
+        }
+
+        bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
+        return bundlePackage;
     }
 
     /**
@@ -69,16 +92,18 @@ public final class ResBundle {
      */
     static class ResourceBundleToJavaClassIdentifierConverter {
         /**
-         * See class description.
+         * Converts the specified packageName and resourceBundleFileName to a valid Java class identifier. The resourceBundleFileName is
+         * stripped form any characters that are not valid in a Java classname.
          *
-         * @param packageName The relative packageName of the resource bundle based on the package where the resource bundle resides.
-         *                    Example: org.capatect.resources.
-         * @param name        The name of the resource bundle, for example resources.properties or resources_nl_NL.properties.
-         * @return A Java class name based on the packageName and name of the resource bundle.
+         * @param packageName            The relative packageName of the resource bundle based on the package where the resource bundle resides.
+         *                               Example: org.capatect.resources.
+         * @param resourceBundleFileName The resourceBundleFileName of the resource bundle, for example resources.properties or resources_nl_NL.properties.
+         * @return A Java class resourceBundleFileName based on the packageName and resourceBundleFileName of the resource bundle.
          */
-        public static String convert(String packageName, String name) {
-            LOGGER.trace("convert({}, {})", packageName, name);
+        public static String convert(String packageName, String resourceBundleFileName) {
+            LOGGER.trace("convert({}, {})", packageName, resourceBundleFileName);
 
+            // TODO: Strip name from invalid Java class name tokens.
             StringBuilder nameBuilder = new StringBuilder(32);
             String[] pathParts = packageName.split("\\.");
             for (String pathPart : pathParts) {
@@ -86,8 +111,8 @@ public final class ResBundle {
                 nameBuilder.append(pathPart);
             }
 
-            name = stripLocaleInformationAndExtension(name);
-            return nameBuilder.append(capitalizeFirstLetter(name)).toString();
+            resourceBundleFileName = stripLocaleInformationAndExtension(resourceBundleFileName);
+            return nameBuilder.append(capitalizeFirstLetter(resourceBundleFileName)).toString();
         }
 
         private static String stripLocaleInformationAndExtension(String name) {

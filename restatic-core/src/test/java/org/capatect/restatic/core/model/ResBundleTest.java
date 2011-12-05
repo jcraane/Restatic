@@ -18,7 +18,14 @@
 
 package org.capatect.restatic.core.model;
 
+import org.capatect.restatic.core.FileTestUtils;
+import org.capatect.restatic.core.configuration.Configuration;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -26,42 +33,67 @@ import static junit.framework.Assert.assertEquals;
  * @author Jamie Craane
  */
 public class ResBundleTest {
-    @Test(expected = IllegalArgumentException.class)
-    public void createWithNullName() {
-        ResBundle.createAndConvertToJavaClassIdentifier("path", null);
+    private Configuration defaultConfiguration;
+    private File rootPath;
+
+    @Before
+    public void setup() {
+        rootPath = FileTestUtils.getRootPath("src/test/resbundle-test");
+        defaultConfiguration = new Configuration.ConfigurationBuilder(rootPath).build();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createWithEmptyName() {
-        ResBundle.createAndConvertToJavaClassIdentifier("path", "");
+    public void noNullResourceBundle() {
+        ResBundle.createAndConvertToJavaClassIdentifier(null, new ArrayList<File>() {{
+            add(new File("test"));
+        }});
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createWithNullPath() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, "name");
+    public void noNullSourceRootPaths() {
+        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void noEmptySourceRootPaths() {
+        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), new ArrayList<File>());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void noNullSourceRootPathElements() {
+        ResBundle.createAndConvertToJavaClassIdentifier(null, new ArrayList<File>() {{
+            add(null);
+        }});
     }
 
     @Test
     public void createWithDefaultLocale() {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources.properties");
-        assertEquals("Resources", resBundle.getBundleClassName());
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithLocale() {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("", "resources_nl_NL.properties");
-        assertEquals("Resources", resBundle.getBundleClassName());
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
     @Test
-    public void createWithPackage() {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("org.capatect.resources", "resources.properties");
-        assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
+    @Ignore
+    public void createWithDefaultPackage() {
+        File resourceBundle = new File(rootPath, "default-package-resources.properties");
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
+        assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
     }
 
     @Test
+    @Ignore
     public void createWithPackageAlias() {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier("org.capatect.resources", "resources.properties");
+        // TODO: Add package aliases
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceRootPaths());
         assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
     }
 
@@ -81,5 +113,9 @@ public class ResBundleTest {
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_en.properties");
         assertEquals("OrgTestResources", className);
+
+        // TODO: Fix this.
+        className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("", "default-resources.properties");
+        assertEquals("DefaultResources", className);
     }
 }
