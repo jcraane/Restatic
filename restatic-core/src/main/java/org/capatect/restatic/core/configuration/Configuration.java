@@ -21,6 +21,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.capatect.restatic.core.discoverer.file.FileFilter;
 import org.capatect.restatic.core.util.CollectionFilter;
 import org.capatect.restatic.core.util.Predicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Collections;
@@ -56,7 +58,7 @@ public final class Configuration {
     /**
      * The logger instance for this class.
      */
-//    private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Configuration.class);
 
 
     private final FileFilter fileFilter;
@@ -115,8 +117,6 @@ public final class Configuration {
         return Collections.unmodifiableSet(packageAliases);
     }
 
-    // TODO: Add predicate to get an alias for a given package.
-
     /**
      * @return true if resource bundle validation is enabled, false otherwise.
      */
@@ -166,11 +166,20 @@ public final class Configuration {
             ;
         };
 
+        String alias = getAliasOrPackage(javaPackage, packagePredicate);
+        LOGGER.debug("Returning alias {} for package {}.", javaPackage, alias);
+        return alias;
+    }
+
+    private String getAliasOrPackage(final String javaPackage, final Predicate<PackageAlias> packagePredicate) {
         List<PackageAlias> aliases = CollectionFilter.filter(packageAliases, packagePredicate);
+        String alias = javaPackage;
         if (aliases.isEmpty()) {
-            return javaPackage;
+            LOGGER.debug("No alias found for {}, returning {}.", javaPackage, alias);
+        } else {
+            alias = aliases.get(0).getAlias();
         }
 
-        return aliases.get(0).getAlias();
+        return alias;
     }
 }
