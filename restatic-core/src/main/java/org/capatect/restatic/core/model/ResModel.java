@@ -67,7 +67,7 @@ public final class ResModel {
      * @param resourceBundle The resource bundle to add to the resource model.
      */
     public void addResourceBundle(final File resourceBundle) {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, configuration);
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configuration);
         bundles.add(resBundle);
     }
 

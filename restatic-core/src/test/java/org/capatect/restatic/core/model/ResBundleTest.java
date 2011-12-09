@@ -28,6 +28,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
@@ -44,25 +45,25 @@ public class ResBundleTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void noNullConfiguration() {
-        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), null);
+        ResBundle.createOrReturn(new File("Test"), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullResourceBundle() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, defaultConfiguration);
+        ResBundle.createOrReturn(null, defaultConfiguration);
     }
 
     @Test
     public void createWithDefaultLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
@@ -70,7 +71,7 @@ public class ResBundleTest {
     @Ignore
     public void createWithDefaultPackage() {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
     }
 
@@ -80,8 +81,23 @@ public class ResBundleTest {
                 toOutputDirectory(new File("test")).aliasPackage("org.capatect.test").to("test").getConfiguration();
 
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, configurationWithAliases);
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
         assertEquals("TestResources", resBundle.getBundleClassName());
+    }
+
+    @Test
+    public void createBundleAndAddLocales() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals(1, resBundle.getLocales().size());
+        assertTrue(resBundle.getLocales().contains(new ResLocale("nl_NL")));
+
+        resourceBundle = new File(rootPath, "org/capatect/test/resources_en_US.properties");
+        resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals(2, resBundle.getLocales().size());
+        assertTrue(resBundle.getLocales().contains(new ResLocale("en_US")));
     }
 
     @Test
