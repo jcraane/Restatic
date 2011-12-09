@@ -26,7 +26,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.HashSet;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -44,40 +43,26 @@ public class ResBundleTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void noNullResourceBundle() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, new HashSet<File>() {{
-            add(new File("test"));
-        }});
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void noNullSourceRootPaths() {
+    public void noNullConfiguration() {
         ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void noEmptySourceRootPaths() {
-        ResBundle.createAndConvertToJavaClassIdentifier(new File("Test"), new HashSet<File>());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void noNullSourceRootPathElements() {
-        ResBundle.createAndConvertToJavaClassIdentifier(null, new HashSet<File>() {{
-            add(null);
-        }});
+    public void nullResourceBundle() {
+        ResBundle.createAndConvertToJavaClassIdentifier(null, defaultConfiguration);
     }
 
     @Test
     public void createWithDefaultLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
     @Test
     public void createWithLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
     }
 
@@ -85,17 +70,18 @@ public class ResBundleTest {
     @Ignore
     public void createWithDefaultPackage() {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration);
         assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
     }
 
     @Test
-    @Ignore
     public void createWithPackageAlias() {
-        // TODO: Add package aliases
+        Configuration configurationWithAliases = new ConfigurationBuilder().addSourceDirectory(rootPath).
+                toOutputDirectory(new File("test")).aliasPackage("org.capatect.test").to("test").getConfiguration();
+
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, defaultConfiguration.getSourceDirectories());
-        assertEquals("OrgCapatectResourcesResources", resBundle.getBundleClassName());
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, configurationWithAliases);
+        assertEquals("TestResources", resBundle.getBundleClassName());
     }
 
     @Test
@@ -115,7 +101,6 @@ public class ResBundleTest {
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_en.properties");
         assertEquals("OrgTestResources", className);
 
-        // TODO: Fix this.
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("", "default-resources.properties");
         assertEquals("DefaultResources", className);
     }

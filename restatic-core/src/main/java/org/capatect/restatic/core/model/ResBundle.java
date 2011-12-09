@@ -21,6 +21,7 @@ package org.capatect.restatic.core.model;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.capatect.restatic.core.Util;
+import org.capatect.restatic.core.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,27 +49,32 @@ public final class ResBundle {
     }
 
     /**
-     * @param resourceBundle  The package where the resource bundle resides, for example org.capatect.resources. An empty String if
-     *                        the resource bundle resides at the root package.
-     * @param sourceRootPaths The name of the resource bundle, for example resources.properties for the default locale
-     *                        or resources_nl_NL.properties for the nl_NL locale.
+     * @param resourceBundle The package where the resource bundle resides, for example org.capatect.resources. An empty String if
+     *                       the resource bundle resides at the root package.
+     * @param configuration  The configuration to use when adding resource bundles. The parts from the confiuration that are needed
+     *                       are: sourceDirectories and the package aliases.
      * @return
      */
-    public static ResBundle createAndConvertToJavaClassIdentifier(final File resourceBundle, final Set<File> sourceRootPaths) {
+    public static ResBundle createAndConvertToJavaClassIdentifier(final File resourceBundle, final Configuration configuration) {
         Validate.notNull(resourceBundle, "The resourceBundle may not be null.");
-        Validate.noNullElements(sourceRootPaths, "The sourceRootPaths may not be null or contain null elements.");
-        Validate.notEmpty(sourceRootPaths, "The sourceRootPaths may not be empty.");
+        Validate.notNull(configuration, "The configuration may not be null.");
 
+        String packageName = extractResourceBundlePackage(
+                resourceBundle,
+                configuration.getSourceDirectories());
 
-        String packageName = extractResourceBundlePackage(resourceBundle, sourceRootPaths);
         // TODO: The locale should be taken into account (or default locale if none specified).
-        String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(packageName, resourceBundle.getName());
+
+        String aliasPackage = configuration.getAliasFor(packageName);
+        String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(aliasPackage, resourceBundle.getName());
         ResBundle bundle = new ResBundle(javaClassIdentifier);
 
         return bundle;
     }
 
-    private static String extractResourceBundlePackage(final File resourceBundle, final Set<File> sourceRootPaths) {
+    private static String extractResourceBundlePackage(
+            final File resourceBundle,
+            final Set<File> sourceRootPaths) {
         String resourceBundlePath = resourceBundle.getPath();
         String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
 
@@ -118,7 +124,7 @@ public final class ResBundle {
             final String validJavaIdentifierName = Util.replaceInvalidJavaIdentifierCharsWithUnderscore(nameWithoutExtensionAndLocale);
             final String className = capitalizeNameParts(validJavaIdentifierName);
 
-            String resourceBundleClassName = nameBuilder.append(capitalizeFirstLetter(className)).toString();
+            String resourceBundleClassName = nameBuilder.append(className).toString();
             LOGGER.trace("Resourcebundle classname: {}", resourceBundleClassName);
             return resourceBundleClassName;
         }

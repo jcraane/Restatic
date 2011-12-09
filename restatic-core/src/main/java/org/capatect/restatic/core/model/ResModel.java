@@ -15,15 +15,15 @@ package org.capatect.restatic.core.model;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.configuration.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
@@ -35,29 +35,23 @@ public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
 
     private final String rootClassName;
-    private final Set<File> sourceRootPaths;
+    private final Configuration configuration;
     private final List<ResBundle> bundles = new ArrayList<ResBundle>();
 
-    private ResModel(final String rootClassName, final Set<File> sourceRootPaths) {
-        LOGGER.trace("ResModel({})", rootClassName);
+    private ResModel(final Configuration configuration) {
+        Validate.notNull(configuration, "configuration may not be null.");
 
-        Validate.notEmpty(rootClassName, "The rootClassName may not be null.");
-        Validate.noNullElements(sourceRootPaths, "sourceRootPaths may not be null.");
-
-        this.rootClassName = rootClassName;
-        this.sourceRootPaths = Collections.unmodifiableSet(sourceRootPaths);
+        this.rootClassName = configuration.getRootClassName();
+        this.configuration = configuration;
     }
 
     /**
      * Creates a new instance of a ResModel.
      *
-     * @param rootClassName   The rootClassName which is used in source generation to name the top-level class in the hierarchy.
-     * @param sourceRootPaths The sourceRootPaths where to look for resource bundles. This is needed to strip the source root paths
-     *                        from the actual resource bundles path to determine the actual Java package of the
-     *                        resource bundle.
+     * @param configuration The Configuration object which holds the configuration used in resource bundle parsing.
      */
-    public static ResModel create(final String rootClassName, final Set<File> sourceRootPaths) {
-        return new ResModel(rootClassName, sourceRootPaths);
+    public static ResModel create(final Configuration configuration) {
+        return new ResModel(configuration);
     }
 
     /**
@@ -73,7 +67,7 @@ public final class ResModel {
      * @param resourceBundle The resource bundle to add to the resource model.
      */
     public void addResourceBundle(final File resourceBundle) {
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, sourceRootPaths);
+        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(resourceBundle, configuration);
         bundles.add(resBundle);
     }
 
