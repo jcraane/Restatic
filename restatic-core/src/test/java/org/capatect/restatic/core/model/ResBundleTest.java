@@ -28,7 +28,6 @@ import org.junit.Test;
 import java.io.File;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
@@ -91,13 +90,11 @@ public class ResBundleTest {
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(1, resBundle.getLocales().size());
-        assertTrue(resBundle.getLocales().contains(ResLocale.createFromResourceBundle(null)));
 
         resourceBundle = new File(rootPath, "org/capatect/test/locale_en_US.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
-        assertTrue(resBundle.getLocales().contains(ResLocale.createFromResourceBundle(null)));
     }
 
     @Test

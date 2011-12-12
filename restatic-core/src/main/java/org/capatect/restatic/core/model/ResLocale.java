@@ -58,12 +58,12 @@ public final class ResLocale {
         String localeInformation = extractLocale(resourceBundle.getName());
         ResLocale resLocale = new ResLocale(localeInformation);
 
-        extractKeysFromAndAddToLocale(resourceBundle, resLocale);
+        extractKeysFromResourceBundleAndAddToLocale(resourceBundle, resLocale);
 
         return resLocale;
     }
 
-    private static void extractKeysFromAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
+    private static void extractKeysFromResourceBundleAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
         Properties properties = new Properties();
         BufferedInputStream bis = null;
         try {

@@ -20,6 +20,7 @@ package org.capatect.restatic.core.model;
 
 import org.capatect.restatic.core.FileTestUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -68,9 +69,15 @@ public class ResLocaleTest {
 
     }
 
-    /* TODO: Create test for:
-     add 1 bundle with locale
-     validate (returns ValidationResult)
-     isValid
-    */
+    @Ignore
+    @Test
+    public void isValid() {
+
+    }
+
+    @Ignore
+    @Test
+    public void validate() {
+
+    }
 }
