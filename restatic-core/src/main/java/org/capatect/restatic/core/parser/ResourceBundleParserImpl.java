@@ -55,10 +55,6 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
         final ResModel resModel = ResModel.create(configuration);
 
-        for (File resourceBundle : resourceBundles) {
-            LOGGER.info("Parsing resource bundle {1}", resourceBundle.getAbsolutePath());
-        }
-
         if (configuration.isResourceBundleValidationEnabled()) {
             // TODO: Perform validation.
             // TODO: Should we implement validation on the model itself?

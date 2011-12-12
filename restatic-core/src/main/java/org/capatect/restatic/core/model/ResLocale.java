@@ -20,6 +20,8 @@ package org.capatect.restatic.core.model;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -30,6 +32,8 @@ import java.util.*;
  * @author Jamie Craane
  */
 public final class ResLocale {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResLocale.class);
+
     private static final String LOCALE_SEPARATOR = "_";
     private static final String EXTENSION_SEPERATOR = ".";
 
@@ -67,6 +71,10 @@ public final class ResLocale {
         Properties properties = new Properties();
         BufferedInputStream bis = null;
         try {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Reading resource bundle {} and locale {}.", resourceBundle.getAbsolutePath(), resLocale);
+            }
+
             bis = new BufferedInputStream(new FileInputStream(resourceBundle));
             properties.load(new BufferedInputStream(bis));
             Set<Object> keySet = properties.keySet();
@@ -143,5 +151,16 @@ public final class ResLocale {
 
     public boolean isDefaultLocale() {
         return defaultLocale;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ResLocale");
+        sb.append("{defaultLocale=").append(defaultLocale);
+        sb.append(", locale='").append(locale).append('\'');
+        sb.append(", keys=").append(keys);
+        sb.append('}');
+        return sb.toString();
     }
 }
