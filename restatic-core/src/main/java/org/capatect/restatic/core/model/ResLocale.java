@@ -21,9 +21,8 @@ package org.capatect.restatic.core.model;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
 /**
  * Represents a locale in the ResModel.
@@ -31,21 +30,84 @@ import java.util.Set;
  * @author Jamie Craane
  */
 public final class ResLocale {
+    private static final String LOCALE_SEPARATOR = "_";
+    private static final String EXTENSION_SEPERATOR = ".";
+
     public static final String DEFAULT_LOCALE = "";
 
     private final String locale;
 
-    private final Set<ResKey> keys = new HashSet<ResKey>();
+    private final List<ResKey> keys = new ArrayList<ResKey>();
     private boolean defaultLocale;
 
-    public ResLocale(String locale) {
-        if (locale == null) {
-            locale = DEFAULT_LOCALE;
+    private ResLocale(String locale) {
+        defaultLocale = StringUtils.isEmpty(locale);
+        this.locale = defaultLocale ? DEFAULT_LOCALE : locale;
+    }
+
+    /**
+     * Creates a new instance of ResLocale. Populate the keys of the created ResLocale with the keys
+     * form the passed-in resource bundle. The keys are converted to valid Java constant identifiers.
+     *
+     * @param resourceBundle
+     * @return
+     */
+    public static ResLocale createFromResourceBundle(final File resourceBundle) {
+        Validate.notNull(resourceBundle, "The resourceBundle may not be null.");
+
+        String localeInformation = extractLocale(resourceBundle.getName());
+        ResLocale resLocale = new ResLocale(localeInformation);
+
+        extractKeysFromAndAddToLocale(resourceBundle, resLocale);
+
+        return resLocale;
+    }
+
+    private static void extractKeysFromAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
+        Properties properties = new Properties();
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(new FileInputStream(resourceBundle));
+            properties.load(new BufferedInputStream(bis));
+            Set<Object> keySet = properties.keySet();
+            for (Object key : keySet) {
+                resLocale.keys.add(ResKey.createAndConvertConstantIdentifier((String) key));
+            }
+        } catch (FileNotFoundException e) {
+            throw new ParseException(String.format("Parsing of %s failed.", resourceBundle.getAbsolutePath()), e, resourceBundle.getAbsolutePath());
+        } catch (IOException e) {
+            throw new ParseException(String.format("Parsing of %s failed.", resourceBundle.getAbsolutePath()), e, resourceBundle.getAbsolutePath());
+        } finally {
+            closeInputStream(bis);
+        }
+    }
+
+    private static void closeInputStream(final BufferedInputStream bis) {
+        if (bis != null) {
+            try {
+                bis.close();
+            } catch (IOException e) {
+                // Ignored
+            }
+        }
+    }
+
+    /**
+     * Extracts the locale information for the given resource bundle name.
+     *
+     * @param name Example: resources_nl_NL.properties where nl_NL is the locale information.
+     * @return The locale information.
+     */
+    private static String extractLocale(final String name) {
+        int localeIndex = name.indexOf(LOCALE_SEPARATOR);
+        String locale = ResLocale.DEFAULT_LOCALE;
+        if (localeIndex != -1) {
+            locale = name.substring(localeIndex + 1, name.indexOf(EXTENSION_SEPERATOR));
         }
 
-        defaultLocale = StringUtils.isEmpty(locale);
-        this.locale = locale;
+        return locale;
     }
+
 
     /**
      * @return The locale, for example nl_NL, en_US, en or an empty String for the default locale.
@@ -55,25 +117,10 @@ public final class ResLocale {
     }
 
     /**
-     * Adds a key to this locale.
-     *
-     * @param key The key to add. When the key already exists, the existing key is replaced.
-     */
-    public void addKey(final ResKey key) {
-        Validate.notNull(key, "The key may not be null.");
-
-        keys.add(key);
-    }
-
-    /**
      * @return The keys beloning to this locale.
      */
-    public Set<ResKey> getKeys() {
-        return Collections.unmodifiableSet(keys);
-    }
-
-    public boolean isDefaultLocale() {
-        return defaultLocale;
+    public List<ResKey> getKeys() {
+        return Collections.unmodifiableList(keys);
     }
 
     @Override
@@ -83,7 +130,6 @@ public final class ResLocale {
 
         ResLocale resLocale = (ResLocale) o;
 
-        if (defaultLocale != resLocale.defaultLocale) return false;
         if (locale != null ? !locale.equals(resLocale.locale) : resLocale.locale != null) return false;
 
         return true;
@@ -92,7 +138,10 @@ public final class ResLocale {
     @Override
     public int hashCode() {
         int result = locale != null ? locale.hashCode() : 0;
-        result = 31 * result + (defaultLocale ? 1 : 0);
         return result;
+    }
+
+    public boolean isDefaultLocale() {
+        return defaultLocale;
     }
 }

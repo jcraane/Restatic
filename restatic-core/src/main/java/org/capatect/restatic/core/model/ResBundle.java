@@ -88,7 +88,8 @@ public final class ResBundle {
         String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(aliasPackage, resourceBundle.getName());
 
         ResBundle resBundle = getExistingOrCreateNew(javaClassIdentifier);
-        resBundle.addLocale(resourceBundle);
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        resBundle.locales.add(resLocale);
 
         return resBundle;
     }
@@ -117,27 +118,6 @@ public final class ResBundle {
 
         bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
         return bundlePackage;
-    }
-
-    /**
-     * Extracts the locale from the given resource bundle and adds the locale to this bundle.
-     *
-     * @param resourceBundle The resource bundle to extract the locale from.
-     */
-    private void addLocale(final File resourceBundle) {
-        final String locale = extractLocale(resourceBundle.getName());
-        ResLocale resLocale = new ResLocale(locale);
-        locales.add(resLocale);
-    }
-
-    private String extractLocale(final String name) {
-        int localeIndex = name.indexOf(LOCALE_SEPARATOR);
-        String locale = ResLocale.DEFAULT_LOCALE;
-        if (localeIndex != -1) {
-            locale = name.substring(localeIndex + 1, name.indexOf(EXTENSION_SEPERATOR));
-        }
-
-        return locale;
     }
 
     /**

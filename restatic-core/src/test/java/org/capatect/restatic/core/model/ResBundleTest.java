@@ -87,17 +87,17 @@ public class ResBundleTest {
 
     @Test
     public void createBundleAndAddLocales() {
-        File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        File resourceBundle = new File(rootPath, "org/capatect/test/locale_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(1, resBundle.getLocales().size());
-        assertTrue(resBundle.getLocales().contains(new ResLocale("nl_NL")));
+        assertTrue(resBundle.getLocales().contains(ResLocale.createFromResourceBundle(null)));
 
-        resourceBundle = new File(rootPath, "org/capatect/test/resources_en_US.properties");
+        resourceBundle = new File(rootPath, "org/capatect/test/locale_en_US.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
-        assertTrue(resBundle.getLocales().contains(new ResLocale("en_US")));
+        assertTrue(resBundle.getLocales().contains(ResLocale.createFromResourceBundle(null)));
     }
 
     @Test
