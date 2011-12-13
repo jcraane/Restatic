@@ -133,6 +133,11 @@ public final class ResBundle {
         return bundlePackage;
     }
 
+    /**
+     * See class documentation.
+     *
+     * @return True if all locales contain the same amount of keys, false otherwise.
+     */
     public boolean isValid() {
         ResLocale previousLocale = null;
         for (ResLocale locale : locales) {

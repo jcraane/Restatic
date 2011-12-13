@@ -141,6 +141,7 @@ public final class ResLocale {
 
         ResLocale resLocale = (ResLocale) o;
 
+        if (defaultLocale != resLocale.defaultLocale) return false;
         if (locale != null ? !locale.equals(resLocale.locale) : resLocale.locale != null) return false;
 
         return true;
@@ -149,6 +150,7 @@ public final class ResLocale {
     @Override
     public int hashCode() {
         int result = locale != null ? locale.hashCode() : 0;
+        result = 31 * result + (defaultLocale ? 1 : 0);
         return result;
     }
 

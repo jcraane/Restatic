@@ -26,6 +26,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -39,9 +41,14 @@ public class ResBundleTest {
     private File rootPath;
 
     @Before
-    public void setup() {
+    public void setup() throws NoSuchFieldException, IllegalAccessException {
+        Field bundles = ResBundle.class.getDeclaredField("bundles");
+        bundles.setAccessible(true);
+        bundles.set(null, new HashMap<String, ResBundle>());
+
         rootPath = FileTestUtils.getRootPath("src/test/resbundle-test");
         defaultConfiguration = new ConfigurationBuilder().addSourceDirectory(rootPath).toOutputDirectory(new File("target/generated-sources")).getConfiguration();
+
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -114,7 +121,15 @@ public class ResBundleTest {
         assertFalse(resBundle.isValid());
     }
 
-    // TODO: Test add same resource bundle more than once. Should not happen but this should not fail in any way to make this API robust.
+    @Test
+    public void addSameResourceBundleTwice() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals(1, resBundle.getLocales().size());
+        assertTrue(resBundle.isValid());
+    }
 
     @Test
     public void convertResourceBundleToJavaClassIdentifier() {
