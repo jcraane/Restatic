@@ -30,6 +30,19 @@ import java.util.*;
 
 /**
  * Represents a resource bundle which contains a Set of locales.
+ * <p/>
+ * Resource bundle validation:
+ * Consider the following resource bundles:
+ * <uL>
+ * <li>resources.properties</li>
+ * <li>resources_nl_NL.properties</li>
+ * <li>resources.en_US.properties</li>
+ * </uL>
+ * <p/>
+ * Some project standards may require that all resource bundles contain the same keys. If those stadards apply, the
+ * resourceBundleValidationEnabled property of the Configuration object triggers validation. A ResBundle is considered valid
+ * if the resource bundles all contain the same key/value pairs. Please note that this is actual valid from the Java language
+ * so validation is disabled by default.
  *
  * @author Jamie Craane
  */
@@ -118,6 +131,21 @@ public final class ResBundle {
 
         bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
         return bundlePackage;
+    }
+
+    public boolean isValid() {
+        ResLocale previousLocale = null;
+        for (ResLocale locale : locales) {
+            if (previousLocale != null) {
+                if (previousLocale.getKeys().size() != locale.getKeys().size()) {
+                    return false;
+                }
+            }
+
+            previousLocale = locale;
+        }
+
+        return true;
     }
 
     /**

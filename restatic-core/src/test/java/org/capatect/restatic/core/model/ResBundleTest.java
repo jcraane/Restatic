@@ -28,6 +28,8 @@ import org.junit.Test;
 import java.io.File;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
@@ -57,6 +59,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertTrue(resBundle.isValid());
     }
 
     @Test
@@ -64,6 +67,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertTrue(resBundle.isValid());
     }
 
     @Test
@@ -72,6 +76,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
+        assertTrue(resBundle.isValid());
     }
 
     @Test
@@ -82,6 +87,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
         assertEquals("TestResources", resBundle.getBundleClassName());
+        assertTrue(resBundle.isValid());
     }
 
     @Test
@@ -95,7 +101,20 @@ public class ResBundleTest {
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
+        assertTrue(resBundle.isValid());
     }
+
+    @Test
+    public void isValid() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/invalid.properties");
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        resourceBundle = new File(rootPath, "org/capatect/test/invalid_en_US.properties");
+        resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+
+        assertFalse(resBundle.isValid());
+    }
+
+    // TODO: Test add same resource bundle more than once. Should not happen but this should not fail in any way to make this API robust.
 
     @Test
     public void convertResourceBundleToJavaClassIdentifier() {
