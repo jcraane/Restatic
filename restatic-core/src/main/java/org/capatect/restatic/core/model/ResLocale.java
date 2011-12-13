@@ -24,7 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Represents a locale in the ResModel.
@@ -41,7 +44,7 @@ public final class ResLocale {
 
     private final String locale;
 
-    private final List<ResKey> keys = new ArrayList<ResKey>();
+    private final Set<ResKey> keys = new HashSet<ResKey>();
     private boolean defaultLocale;
 
     private ResLocale(String locale) {
@@ -127,8 +130,8 @@ public final class ResLocale {
     /**
      * @return The keys beloning to this locale.
      */
-    public List<ResKey> getKeys() {
-        return Collections.unmodifiableList(keys);
+    public Set<ResKey> getKeys() {
+        return Collections.unmodifiableSet(keys);
     }
 
     @Override

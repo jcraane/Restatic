@@ -20,7 +20,6 @@ package org.capatect.restatic.core.model;
 
 import org.capatect.restatic.core.FileTestUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -52,9 +51,9 @@ public class ResLocaleTest {
         assertEquals("", resLocale.getLocale());
         assertTrue(resLocale.isDefaultLocale());
         assertEquals(3, resLocale.getKeys().size());
-        assertEquals("BUTTON_LABEL", resLocale.getKeys().get(0).getName());
-        assertEquals("PERSON_LASTNAME", resLocale.getKeys().get(1).getName());
-        assertEquals("PERSON_FIRSTNAME", resLocale.getKeys().get(2).getName());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_lastname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_firstname")));
     }
 
     @Test
@@ -64,20 +63,7 @@ public class ResLocaleTest {
         assertEquals("nl_NL", resLocale.getLocale());
         assertFalse(resLocale.isDefaultLocale());
         assertEquals(2, resLocale.getKeys().size());
-        assertEquals("BUTTON_LABEL", resLocale.getKeys().get(0).getName());
-        assertEquals("PERSON_FIRSTNAME", resLocale.getKeys().get(1).getName());
-
-    }
-
-    @Ignore
-    @Test
-    public void isValid() {
-
-    }
-
-    @Ignore
-    @Test
-    public void validate() {
-
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
     }
 }
