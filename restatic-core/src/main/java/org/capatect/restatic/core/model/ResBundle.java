@@ -61,6 +61,7 @@ public final class ResBundle {
      */
     private static Map<String, ResBundle> bundles = new HashMap<String, ResBundle>();
     private static final String EXTENSION_SEPERATOR = ".";
+    private static final String DEFAULT_PACKAGE = "";
 
     private final Set<ResLocale> locales = new HashSet<ResLocale>();
     private final String bundleClassName;
@@ -124,8 +125,13 @@ public final class ResBundle {
 
         for (File sourceRootPath : sourceRootPaths) {
             if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
-                bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
-                break;
+                if (bundlePackage.length() > sourceRootPath.getPath().length()) {
+                    bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
+                    break;
+                } else {
+                    bundlePackage = DEFAULT_PACKAGE;
+                    break;
+                }
             }
         }
 

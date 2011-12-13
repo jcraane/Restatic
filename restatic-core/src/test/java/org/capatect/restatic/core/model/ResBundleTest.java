@@ -22,7 +22,6 @@ import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -78,11 +77,10 @@ public class ResBundleTest {
     }
 
     @Test
-    @Ignore
     public void createWithDefaultPackage() {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("DefaultPackageResource", resBundle.getBundleClassName());
+        assertEquals("DefaultPackageResources", resBundle.getBundleClassName());
         assertTrue(resBundle.isValid());
     }
 
