@@ -16,23 +16,21 @@
  *
  */
 
-package org.capatect.restatic.core.model;
+package org.capatect.restatic.core.generator;
 
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
+import org.capatect.restatic.core.model.ResModel;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
 /**
  * @author Jamie Craane
  */
-public class ResModelTest {
+public class ResourceClassGeneratorImplTest {
     private Configuration defaultConfiguration;
     private File rootPath;
 
@@ -46,26 +44,17 @@ public class ResModelTest {
     }
 
     @Test
-    public void create() {
-        ResModel resModel = ResModel.create(defaultConfiguration);
-        assertNotNull(resModel);
-        assertEquals("R", resModel.getRootClassName());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createNullConfiguration() {
-        ResModel.create(null);
-    }
-
-    @Test
     public void addOneResourceBundleWithOneLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
 
         ResModel resModel = ResModel.create(defaultConfiguration);
         resModel.addResourceBundle(resourceBundle);
-        assertEquals(1, resModel.getBundles().size());
-        assertEquals("OrgCapatectTestResources", resModel.getBundles().get(0).getBundleClassName());
+
+        resourceBundle = new File(rootPath, "org/capatect/test/labels.properties");
+        resModel.addResourceBundle(resourceBundle);
+
+        ResourceClassGenerator generator = new ResourceClassGeneratorImpl();
+        generator.generate(FileTestUtils.getRootPath("target/generated-testcode"), resModel);
     }
 
-    // TODO: Add test for resource bundle validation.
 }

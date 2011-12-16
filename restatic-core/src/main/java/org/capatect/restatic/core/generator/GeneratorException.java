@@ -18,25 +18,11 @@
 
 package org.capatect.restatic.core.generator;
 
-import org.capatect.restatic.core.model.ResModel;
-import org.stringtemplate.v4.ST;
-import org.stringtemplate.v4.STGroup;
-import org.stringtemplate.v4.STGroupFile;
-
-import java.io.File;
-
 /**
- * Implementation of ResourceClassGenerator which generates code based on the ResModel.
- *
  * @author Jamie Craane
  */
-public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
-
-    @Override
-    public void generate(final File destination, final ResModel resModel) {
-        STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", '$', '$');
-        ST stringTemplate = stringTemplateGroup.getInstanceOf("rootClass");
-        stringTemplate.add("model", resModel);
-        System.out.println(stringTemplate.render());
+public class GeneratorException extends RuntimeException {
+    public GeneratorException(final String s, final Throwable throwable) {
+        super(s, throwable);
     }
 }

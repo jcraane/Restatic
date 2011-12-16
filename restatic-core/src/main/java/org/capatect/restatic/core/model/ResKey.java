@@ -30,9 +30,11 @@ import org.capatect.restatic.core.Util;
  */
 public final class ResKey {
     private final String name;
+    private final String originalName;
 
-    private ResKey(final String name) {
+    private ResKey(final String name, final String originalName) {
         this.name = name;
+        this.originalName = originalName;
     }
 
     /**
@@ -42,7 +44,7 @@ public final class ResKey {
      * @return an instance of this class with the key converted to a Java constant identifier.
      */
     public static ResKey createAndConvertConstantIdentifier(final String key) {
-        return new ResKey(KeyToJavaConstantIdentifierConverter.convert(key));
+        return new ResKey(KeyToJavaConstantIdentifierConverter.convert(key), key);
     }
 
     /**
@@ -50,6 +52,13 @@ public final class ResKey {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return The original, uncoverted name, of the key as it was passed in the createAndConvertConstantIdentifier method.
+     */
+    public String getOriginalName() {
+        return originalName;
     }
 
     @Override
@@ -68,6 +77,7 @@ public final class ResKey {
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
+
 
     /**
      * Helper class for converting resource bundle keys to Java constant identifiers.

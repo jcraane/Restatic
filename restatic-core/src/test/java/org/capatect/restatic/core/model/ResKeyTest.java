@@ -104,4 +104,12 @@ public class ResKeyTest {
         assertEquals("_", ResKey.KeyToJavaConstantIdentifierConverter.convert("***/:"));
         assertEquals("_A_", ResKey.KeyToJavaConstantIdentifierConverter.convert("***/:a*("));
     }
+
+    @Test
+    public void createKey() {
+        ResKey resKey = ResKey.createAndConvertConstantIdentifier("person.firstname");
+        assertEquals("PERSON_FIRSTNAME", resKey.getName());
+        assertEquals("person.firstname", resKey.getOriginalName());
+    }
+
 }
