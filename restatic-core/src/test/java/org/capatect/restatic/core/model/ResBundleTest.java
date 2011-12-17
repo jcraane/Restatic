@@ -65,6 +65,9 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        String separator = File.separator;
+        assertEquals("org" + separator + "capatect" + separator + "test" + separator + "resources.properties",
+                resBundle.getOriginalPathAndName());
         assertTrue(resBundle.isValid());
     }
 
@@ -106,7 +109,6 @@ public class ResBundleTest {
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
-        assertTrue(resBundle.isValid());
     }
 
     @Test

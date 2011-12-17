@@ -65,9 +65,11 @@ public final class ResBundle {
 
     private final Set<ResLocale> locales = new HashSet<ResLocale>();
     private final String bundleClassName;
+    private final String originalPathAndName;
 
-    private ResBundle(final String name) {
+    private ResBundle(final String name, final String originalPathAndResourceBundleName) {
         this.bundleClassName = name;
+        this.originalPathAndName = originalPathAndResourceBundleName;
     }
 
     /**
@@ -97,30 +99,37 @@ public final class ResBundle {
         Validate.notNull(resourceBundle, "The resourceBundle may not be null.");
         Validate.notNull(configuration, "The configuration may not be null.");
 
-        String packageName = extractResourceBundlePackage(resourceBundle, configuration.getSourceDirectories());
+        String packageOnFileSystem = extractResourceBundlePackage(resourceBundle.getPath(), configuration.getSourceDirectories());
+        String packageName = packageOnFileSystem.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
         String aliasPackage = configuration.getAliasFor(packageName);
         String javaClassIdentifier = ResourceBundleToJavaClassIdentifierConverter.convert(aliasPackage, resourceBundle.getName());
 
-        ResBundle resBundle = getExistingOrCreateNew(javaClassIdentifier);
+        ResBundle resBundle = getExistingOrCreateNew(javaClassIdentifier,
+                getOriginalPathAndResourceBundleName(resourceBundle, packageOnFileSystem));
         ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
         resBundle.locales.add(resLocale);
 
         return resBundle;
     }
 
-    private static ResBundle getExistingOrCreateNew(final String javaClassIdentifier) {
+    private static String getOriginalPathAndResourceBundleName(final File resourceBundle, final String packageOnFileSystem) {
+        return packageOnFileSystem +
+                PATH_SEPARATOR +
+                resourceBundle.getName();
+    }
+
+    private static ResBundle getExistingOrCreateNew(final String javaClassIdentifier, final String packageOnFileSystem) {
         ResBundle resBundle = bundles.get(javaClassIdentifier);
         if (resBundle == null) {
-            resBundle = new ResBundle(javaClassIdentifier);
+            resBundle = new ResBundle(javaClassIdentifier, packageOnFileSystem);
             bundles.put(javaClassIdentifier, resBundle);
         }
         return resBundle;
     }
 
     private static String extractResourceBundlePackage(
-            final File resourceBundle,
+            final String resourceBundlePath,
             final Set<File> sourceRootPaths) {
-        String resourceBundlePath = resourceBundle.getPath();
         String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
 
         for (File sourceRootPath : sourceRootPaths) {
@@ -135,7 +144,6 @@ public final class ResBundle {
             }
         }
 
-        bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
         return bundlePackage;
     }
 
@@ -157,6 +165,10 @@ public final class ResBundle {
         }
 
         return true;
+    }
+
+    public String getOriginalPathAndName() {
+        return originalPathAndName;
     }
 
     /**
