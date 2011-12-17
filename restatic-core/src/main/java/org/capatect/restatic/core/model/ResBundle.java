@@ -172,6 +172,23 @@ public final class ResBundle {
     }
 
     /**
+     * Returns the total set of unique keys for this resource bundle and all locales in this resource bundle.
+     *
+     * @return All unique keys of all locales of this resource bundle.
+     */
+    public Set<ResKey> getAllUniqueKeysForLocales() {
+        final Set<ResKey> keys = new HashSet<ResKey>();
+
+        for (ResLocale locale : locales) {
+            for (ResKey resKey : locale.getKeys()) {
+                keys.add(resKey);
+            }
+        }
+
+        return keys;
+    }
+
+    /**
      * Helper class which converts a resource bundle and path to a Java class identifier which is used
      * in source generation.
      */

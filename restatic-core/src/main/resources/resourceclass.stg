@@ -10,10 +10,17 @@ public static final class $model.rootClassName$ {
 "
 
 resourceBundle(bundle) ::= "
-    // TODO: Add comments on original classname
+    /**
+     * Class generated form $bundle.originalPathAndName$.
+     */
     public static final class $bundle.bundleClassName$ {
-        TODO: Key unique keys from bundle and print them.
+        $bundle.allUniqueKeysForLocales:bundleKey()$
     }
 
+
+"
+
+bundleKey(key) ::= "
+    public static final String $key.name$ = \"$key.originalName$\";
 
 "

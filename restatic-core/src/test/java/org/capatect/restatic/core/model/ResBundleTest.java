@@ -112,6 +112,21 @@ public class ResBundleTest {
     }
 
     @Test
+    public void getAllUniqueKeysFromLocales() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/locale_nl_NL.properties");
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals(1, resBundle.getLocales().size());
+
+        resourceBundle = new File(rootPath, "org/capatect/test/locale_en_US.properties");
+        resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
+        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals(2, resBundle.getLocales().size());
+
+        assertEquals(3, resBundle.getAllUniqueKeysForLocales().size());
+    }
+
+    @Test
     public void isValid() {
         File resourceBundle = new File(rootPath, "org/capatect/test/invalid.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
