@@ -23,7 +23,10 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Implementation of ResourceClassGenerator which generates code based on the ResModel.
@@ -31,14 +34,48 @@ import java.io.File;
  * @author Jamie Craane
  */
 public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
+    private static final char DELIMITER_CHAR = '$';
 
     @Override
     public void generate(final File destination, final ResModel resModel) {
-        STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", '$', '$');
+        STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", DELIMITER_CHAR, DELIMITER_CHAR);
         ST stringTemplate = stringTemplateGroup.getInstanceOf("rootClass");
         stringTemplate.add("model", resModel);
 
-        // TODO: Save to file in configuration.
-        System.out.println(stringTemplate.render());
+        final String renderedTemplate = stringTemplate.render();
+        generateTemplateAndWriteToFile(destination, renderedTemplate, resModel);
+    }
+
+    private void generateTemplateAndWriteToFile(final File destination, final String renderedTemplate, final ResModel resModel) {
+        BufferedWriter writer = null;
+        try {
+            createDestinationDirectory(destination);
+            final File outputSourceFile = new File(destination, resModel.getRootClassName() + ".java");
+            writer = new BufferedWriter(new FileWriter(outputSourceFile));
+            writer.write(renderedTemplate);
+        } catch (IOException e) {
+            throw new GeneratorException("Unable to generate source file, see stacktrace for details.", e);
+        } finally {
+            closeWriter(writer);
+        }
+    }
+
+    private void createDestinationDirectory(final File destination) {
+        if (!destination.exists()) {
+            boolean created = destination.mkdirs();
+            if (!created) {
+                throw new IllegalArgumentException(String.format("Directory %s could not be created.", destination.getAbsolutePath()));
+            }
+        }
+    }
+
+    private void closeWriter(final BufferedWriter writer) {
+        if (writer != null) {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                // Ignore
+            }
+        }
     }
 }

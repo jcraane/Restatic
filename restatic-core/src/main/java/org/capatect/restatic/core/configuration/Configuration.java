@@ -87,9 +87,11 @@ public final class Configuration {
         // Validate parameters.
         Validate.notNull(anOutputDirectory, "Parameter anOutputDirectory is not allowed to be null");
         Validate.notEmpty(aSourceDirectories, "Parameter aSourceDirectories is not allowed to be empty");
+
         for (File sourceDirectory : aSourceDirectories) {
             Validate.isTrue(sourceDirectory.isDirectory(), "Parameter sourceDirectories must contain valid directories");
         }
+
         Validate.notNull(aFileFilter, "Parameter aFileFilter is not allowed to be null");
         Validate.notNull(aPackageAliases, "Parameter aPackageAliases is not allowed to be null");
         Validate.notEmpty(aRootClassName, "Parameter aRootClassName is not allowed to be empty");

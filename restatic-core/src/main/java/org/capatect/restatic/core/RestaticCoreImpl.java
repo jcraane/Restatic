@@ -37,5 +37,6 @@ public final class RestaticCoreImpl implements RestaticCore {
         LOGGER.debug("generateSources(configuration={})", configuration);
 
         // TODO implement the generation process.
+
     }
 }
