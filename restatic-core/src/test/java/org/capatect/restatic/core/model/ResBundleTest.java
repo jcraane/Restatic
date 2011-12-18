@@ -99,6 +99,22 @@ public class ResBundleTest {
     }
 
     @Test
+    public void sameAliasForDifferentResourceBundles() {
+        Configuration configurationWithAliases = new ConfigurationBuilder().addSourceDirectory(rootPath).
+                toOutputDirectory(new File("test")).
+                aliasPackage("org.capatect.test").to("test").
+                aliasPackage("org.capatect.test2").to("test").getConfiguration();
+
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
+        resourceBundle = new File(rootPath, "org/capatect/test2/resources.properties");
+        resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
+
+        assertEquals("TestResources", resBundle.getBundleClassName());
+        assertEquals(4, resBundle.getAllUniqueKeysForLocales().size());
+    }
+
+    @Test
     public void createBundleAndAddLocales() {
         File resourceBundle = new File(rootPath, "org/capatect/test/locale_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);

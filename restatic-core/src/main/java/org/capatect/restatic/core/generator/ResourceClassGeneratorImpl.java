@@ -37,6 +37,8 @@ public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
         STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", '$', '$');
         ST stringTemplate = stringTemplateGroup.getInstanceOf("rootClass");
         stringTemplate.add("model", resModel);
+
+        // TODO: Save to file in configuration.
         System.out.println(stringTemplate.render());
     }
 }

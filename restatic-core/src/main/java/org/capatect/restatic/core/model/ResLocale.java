@@ -134,6 +134,29 @@ public final class ResLocale {
         return Collections.unmodifiableSet(keys);
     }
 
+    /**
+     * Merges the keys of the given locale with this locale if and only if the locales are the same.
+     *
+     * @param resLocaleToMerge The ResLocale where the keys are merged with the keys from this locale.
+     * @throws IllegalArgumentException If the locales of the ResLocale to merge is not the same or resLocaleToMerge is null.
+     */
+    public void merge(final ResLocale resLocaleToMerge) {
+        Validate.notNull(resLocaleToMerge, "The resLocaleToMerge may not be null.");
+
+        if (differentLocales(resLocaleToMerge)) {
+            throw new IllegalArgumentException("The locale to merge does not have the same locale as the locale to merge to.");
+        }
+
+        for (ResKey resKey : resLocaleToMerge.getKeys()) {
+            this.keys.add(resKey);
+        }
+    }
+
+    private boolean differentLocales(final ResLocale resLocaleToMerge) {
+        return this.defaultLocale != resLocaleToMerge.defaultLocale ||
+                !this.locale.equals(resLocaleToMerge.locale);
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

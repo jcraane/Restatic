@@ -66,4 +66,38 @@ public class ResLocaleTest {
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_firstname")));
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
     }
+
+    @Test
+    public void mergeLocales() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+
+        resourceBundle = new File(rootPath, "org/capatect/test2/resources.properties");
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
+
+        resLocale.merge(resLocaleToMerge);
+        assertEquals(5, resLocale.getKeys().size());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.lastname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.version")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.name")));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void localeToMergeIsNull() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        resLocale.merge(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void mergeLocalesInvalidLocale() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+
+        resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
+        resLocale.merge(resLocaleToMerge);
+    }
 }

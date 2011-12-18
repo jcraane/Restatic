@@ -63,7 +63,7 @@ public final class ResBundle {
     private static final String EXTENSION_SEPERATOR = ".";
     private static final String DEFAULT_PACKAGE = "";
 
-    private final Set<ResLocale> locales = new HashSet<ResLocale>();
+    private final Map<ResLocale, ResLocale> locales = new HashMap<ResLocale, ResLocale>();
     private final String bundleClassName;
     private final String originalPathAndName;
 
@@ -85,7 +85,7 @@ public final class ResBundle {
      * @return The locales for this bundle.
      */
     public Set<ResLocale> getLocales() {
-        return Collections.unmodifiableSet(locales);
+        return Collections.unmodifiableSet(new HashSet<ResLocale>(locales.values()));
     }
 
     /**
@@ -106,10 +106,21 @@ public final class ResBundle {
 
         ResBundle resBundle = getExistingOrCreateNew(javaClassIdentifier,
                 getOriginalPathAndResourceBundleName(resourceBundle, packageOnFileSystem));
-        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
-        resBundle.locales.add(resLocale);
+
+        addNewLocaleOrMergeKeysToExistingLocale(resourceBundle, resBundle);
 
         return resBundle;
+    }
+
+    private static void addNewLocaleOrMergeKeysToExistingLocale(final File resourceBundle, final ResBundle resBundle) {
+        final ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        ResLocale localeFromBundle = resBundle.locales.get(resLocale);
+
+        if (localeFromBundle == null) {
+            resBundle.locales.put(resLocale, resLocale);
+        } else {
+            localeFromBundle.merge(resLocale);
+        }
     }
 
     private static String getOriginalPathAndResourceBundleName(final File resourceBundle, final String packageOnFileSystem) {
@@ -154,7 +165,7 @@ public final class ResBundle {
      */
     public boolean isValid() {
         ResLocale previousLocale = null;
-        for (ResLocale locale : locales) {
+        for (ResLocale locale : locales.values()) {
             if (previousLocale != null) {
                 if (previousLocale.getKeys().size() != locale.getKeys().size()) {
                     return false;
@@ -179,7 +190,7 @@ public final class ResBundle {
     public Set<ResKey> getAllUniqueKeysForLocales() {
         final Set<ResKey> keys = new HashSet<ResKey>();
 
-        for (ResLocale locale : locales) {
+        for (ResLocale locale : locales.values()) {
             for (ResKey resKey : locale.getKeys()) {
                 keys.add(resKey);
             }
