@@ -117,9 +117,11 @@ public final class ResBundle {
         ResLocale localeFromBundle = resBundle.locales.get(resLocale);
 
         if (localeFromBundle == null) {
+            LOGGER.info("The locale [{}] does not exists yet for bundle [{}], adding locale to bundle.", resLocale.getLocale(), resBundle.bundleClassName);
             resBundle.locales.put(resLocale, resLocale);
         } else {
-            localeFromBundle.merge(resLocale);
+            LOGGER.info("The locale [{}] for resource byndle [{}] already exists, merging keys.", localeFromBundle.getLocale(), resBundle.bundleClassName);
+            localeFromBundle.mergeKeys(resLocale);
         }
     }
 

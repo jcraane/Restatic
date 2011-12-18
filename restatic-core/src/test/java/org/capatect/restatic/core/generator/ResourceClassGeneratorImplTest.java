@@ -51,7 +51,6 @@ public class ResourceClassGeneratorImplTest {
 
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/labels.properties"));
-        // TODO: Resourcebundle komt nog twee keer voor, The List in ResModel should actually be a Set/Map depending if we want to get indivudual bundles as weel instead of only preserve uniqueness.
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test2/version.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/version.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/another-bundle.properties"));

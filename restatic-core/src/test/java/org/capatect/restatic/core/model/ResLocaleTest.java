@@ -75,7 +75,7 @@ public class ResLocaleTest {
         resourceBundle = new File(rootPath, "org/capatect/test2/resources.properties");
         ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
 
-        resLocale.merge(resLocaleToMerge);
+        resLocale.mergeKeys(resLocaleToMerge);
         assertEquals(5, resLocale.getKeys().size());
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.lastname")));
@@ -88,7 +88,7 @@ public class ResLocaleTest {
     public void localeToMergeIsNull() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
-        resLocale.merge(null);
+        resLocale.mergeKeys(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -98,6 +98,6 @@ public class ResLocaleTest {
 
         resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
         ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
-        resLocale.merge(resLocaleToMerge);
+        resLocale.mergeKeys(resLocaleToMerge);
     }
 }

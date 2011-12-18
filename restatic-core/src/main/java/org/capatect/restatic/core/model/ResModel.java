@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
@@ -34,7 +36,7 @@ public final class ResModel {
 
     private final String rootClassName;
     private final Configuration configuration;
-    private final Map<ResBundle, ResBundle> bundles = new HashMap<ResBundle, ResBundle>();
+    private final Set<ResBundle> bundles = new HashSet<ResBundle>();
 
     private ResModel(final Configuration configuration) {
         Validate.notNull(configuration, "configuration may not be null.");
@@ -49,6 +51,7 @@ public final class ResModel {
      * @param configuration The Configuration object which holds the configuration used in resource bundle parsing.
      */
     public static ResModel create(final Configuration configuration) {
+        LOGGER.trace("Create new ResModel with configuration [{}].", configuration);
         return new ResModel(configuration);
     }
 
@@ -66,13 +69,13 @@ public final class ResModel {
      */
     public void addResourceBundle(final File resourceBundle) {
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configuration);
-        bundles.put(resBundle, resBundle);
+        bundles.add(resBundle);
     }
 
     /**
      * @return List of ResBundles belonging to this model.
      */
     public Set<ResBundle> getBundles() {
-        return Collections.unmodifiableSet(new HashSet<ResBundle>(bundles.values()));
+        return Collections.unmodifiableSet(bundles);
     }
 }
