@@ -36,22 +36,25 @@ public class ResourceClassGeneratorImplTest {
 
     @Before
     public void setup() {
-        rootPath = FileTestUtils.getRootPath("src/test/resmodel-test");
+        rootPath = FileTestUtils.getRootPath("src/test/generator-test");
         defaultConfiguration = new ConfigurationBuilder()
                 .addSourceDirectory(rootPath)
                 .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .aliasPackage("org.capatect.test2").to("test")
+                .aliasPackage("org.capatect.test3").to("test")
                 .getConfiguration();
     }
 
     @Test
     public void addOneResourceBundleWithOneLocale() {
-        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-
         ResModel resModel = ResModel.create(defaultConfiguration);
-        resModel.addResourceBundle(resourceBundle);
 
-        resourceBundle = new File(rootPath, "org/capatect/test/labels.properties");
-        resModel.addResourceBundle(resourceBundle);
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/labels.properties"));
+        // TODO: Resourcebundle komt nog twee keer voor, The List in ResModel should actually be a Set/Map depending if we want to get indivudual bundles as weel instead of only preserve uniqueness.
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test2/version.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/version.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/another-bundle.properties"));
 
         ResourceClassGenerator generator = new ResourceClassGeneratorImpl();
         generator.generate(FileTestUtils.getRootPath("target/generated-testcode"), resModel);

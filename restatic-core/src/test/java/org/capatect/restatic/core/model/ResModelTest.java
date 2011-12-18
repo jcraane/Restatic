@@ -67,5 +67,10 @@ public class ResModelTest {
         assertEquals("OrgCapatectTestResources", resModel.getBundles().get(0).getBundleClassName());
     }
 
+    @Test
+    public void addBundlesWhichAliasToSameNameAndPackage() {
+        // TODO: These bundles may only appear once in the model, see also ResourceClassGeneratorImplTest.
+    }
+
     // TODO: Add test for resource bundle validation.
 }
