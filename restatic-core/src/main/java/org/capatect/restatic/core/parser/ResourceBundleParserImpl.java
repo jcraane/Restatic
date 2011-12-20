@@ -57,7 +57,6 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
         if (configuration.isResourceBundleValidationEnabled()) {
             // TODO: Perform validation.
-            // TODO: Should we implement validation on the model itself?
         }
 
         return resModel;

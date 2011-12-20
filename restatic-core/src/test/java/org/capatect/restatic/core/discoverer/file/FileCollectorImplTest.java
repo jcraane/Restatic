@@ -25,25 +25,25 @@ import static junit.framework.Assert.assertEquals;
 /**
  * @author Jamie Craane
  */
-public class FileCollectorTest {
+public class FileCollectorImplTest {
     @Test
     public void findPropertiesFiles() {
         FileFilter filter = AntStylePatternFileNameFilter.create("**/*.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File rootPath = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(rootPath, filter);
         List<File> matchedFiles = fileCollector.collect();
         assertEquals(3, matchedFiles.size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyRootPath() {
-        FileCollector.createWithPathAndFilter(null, new DefaultFileFilter());
+        FileCollectorImpl.createWithPathAndFilter(null, new DefaultFileFilter());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void emptyNullFilter() {
-        FileCollector.createWithPathAndFilter(new File(System.getProperty("basedir", "restatic-core")), null);
+        FileCollectorImpl.createWithPathAndFilter(new File(System.getProperty("basedir", "restatic-core")), null);
     }
 
     @Test
@@ -51,14 +51,14 @@ public class FileCollectorTest {
         FileFilter filter = AntStylePatternFileNameFilter.create("org/capatect/restatic/discoverer/resources/bundleone/resources.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File rootPath = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, filter);
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(rootPath, filter);
         List<File> matchedFiles = fileCollector.collect();
         assertEquals(1, matchedFiles.size());
     }
 
     /**
      * Implementation of the FileFilter which only exists for testing purposes.
-     *
+     * <p/>
      * This implementation does nothing.
      */
     private static class DefaultFileFilter implements FileFilter {
