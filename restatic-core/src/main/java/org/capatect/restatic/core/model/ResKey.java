@@ -78,6 +78,15 @@ public final class ResKey {
         return name != null ? name.hashCode() : 0;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ResKey");
+        sb.append("{name='").append(name).append('\'');
+        sb.append(", originalName='").append(originalName).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 
     /**
      * Helper class for converting resource bundle keys to Java constant identifiers.

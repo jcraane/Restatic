@@ -152,14 +152,11 @@ public class ResBundleTest {
         assertFalse(resBundle.isValid());
     }
 
-    @Test
+    @Test(expected = IllegalStateException.class)
     public void addSameResourceBundleTwice() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
-        assertEquals(1, resBundle.getLocales().size());
-        assertTrue(resBundle.isValid());
     }
 
     @Test

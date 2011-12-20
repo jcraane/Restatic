@@ -116,13 +116,6 @@ public final class Configuration {
     }
 
     /**
-     * @return The aliases for package names which are used as class names in resource bundle generation.
-     */
-    public Set<PackageAlias> getPackageAliases() {
-        return Collections.unmodifiableSet(packageAliases);
-    }
-
-    /**
      * @return true if resource bundle validation is enabled, false otherwise.
      */
     public boolean isResourceBundleValidationEnabled() {
