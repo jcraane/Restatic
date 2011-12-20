@@ -139,6 +139,7 @@ public final class ResLocale {
      *
      * @param resLocaleToMerge The ResLocale where the keys are merged with the keys from this locale.
      * @throws IllegalArgumentException If the locales of the ResLocale to merge is not the same or resLocaleToMerge is null.
+     * @throws IllegalStateException    If a key in resLocaleToMerge already exists in the list of keys of this locale.
      */
     public void mergeKeys(final ResLocale resLocaleToMerge) {
         Validate.notNull(resLocaleToMerge, "The resLocaleToMerge may not be null.");
@@ -148,6 +149,10 @@ public final class ResLocale {
         }
 
         for (ResKey resKey : resLocaleToMerge.getKeys()) {
+            if (this.keys.contains(resKey)) {
+                throw new IllegalStateException(String.format("This locale already contains a key [%S].", resKey));
+            }
+
             this.keys.add(resKey);
         }
     }

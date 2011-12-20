@@ -39,13 +39,16 @@ import java.util.Set;
  *//*.properties.</li>
  * <li>packageAliases: By default, generated classes from resource bundles have the camel cased package name
  * as class name. Sometimes this name is too long to be readable. The packageAliases can be used to use another
- * name for the generated classes than the package name.</li>
+ * name for the generated classes than the package name.
+ * It is possible to use the same alias for different packages. Resource bundles with the same name in the aliased package are merged, that is the keys of the resource bundles are merged. If because of the alias a duplicate key is merged, an IllegalStateException thrown.
+ * </li>
  * <li>resourceBundleValidationEnabled: if true validates the parsed resource bundles. When there are resource bundles
  * for different locales, validation tests if all keys are present in all resource bundles and if there are
  * no duplicate keys present.</li>
  * <li>rootClassName: the name of the generated root class which is generated. Defaults to R.</li>
  * </ul>
  * <p/>
+ *
  *
  * In instance of this class is obtained by using the ConfigurationBuilder which ensures a valid Configuration object is created.
  *

@@ -69,11 +69,8 @@ public class ResLocaleTest {
 
     @Test
     public void mergeLocales() {
-        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
-        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
-
-        resourceBundle = new File(rootPath, "org/capatect/test2/resources.properties");
-        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
 
         resLocale.mergeKeys(resLocaleToMerge);
         assertEquals(5, resLocale.getKeys().size());
@@ -82,6 +79,13 @@ public class ResLocaleTest {
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.firstname")));
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.version")));
         assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.name")));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void mergeDuplicateKeys() {
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test3/resources.properties"));
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
+        resLocale.mergeKeys(resLocaleToMerge);
     }
 
     @Test(expected = IllegalArgumentException.class)
