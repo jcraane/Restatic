@@ -15,11 +15,9 @@ resourceBundle(bundle) ::= "
      */
     public static final class $bundle.bundleClassName$ {
         $bundle.allUniqueKeysForLocales:bundleKey()$
-
-    }
+    }$\n$
 "
 
 bundleKey(key) ::= "
-    public static final String $key.name$ = \"$key.originalName$\";
-
+    public static final String $key.name$ = \"$key.original$\n$ame$\";$\n$
 "
