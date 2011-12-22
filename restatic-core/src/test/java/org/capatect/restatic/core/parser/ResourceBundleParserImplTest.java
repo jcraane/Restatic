@@ -47,6 +47,19 @@ public class ResourceBundleParserImplTest {
         FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
         ResModel resModel = parser.parse(fileCollector.collect(rootPath));
         assertNotNull(resModel);
-        assertEquals(2, resModel.getBundles().size());
+        assertEquals(3, resModel.getBundles().size());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void invalidResourceBundle() {
+        File rootPath = FileTestUtils.getRootPath("src/test/parse-test");
+        Configuration configuration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .getConfiguration();
+        ResourceBundleParser parser = new ResourceBundleParserImpl(configuration);
+
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
+        parser.parse(fileCollector.collect(rootPath));
     }
 }
