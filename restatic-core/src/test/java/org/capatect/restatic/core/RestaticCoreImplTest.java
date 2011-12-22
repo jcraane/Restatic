@@ -23,8 +23,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Jamie Craane
@@ -36,10 +38,17 @@ public class RestaticCoreImplTest {
 
         File bundle1 = new File("bundle1.properties");
         File bundle2 = new File("bundle1.properties");
-        when(fileCollector.collect()).thenReturn(Arrays.asList(bundle1, bundle2));
+        List<File> collectedFiles = Arrays.asList(bundle1, bundle2);
+        when(fileCollector.collect()).thenReturn(collectedFiles);
+
+//        Configuration configuration = new ConfigurationBuilder().
+        /*ResModel.
+
+        ResourceBundleParser parser = mock(ResourceBundleParser.class);
+        when(parser.parse(collectedFiles)).then()
 
         // TODO: Add other mock classes and verify behavior.
-
         verify(fileCollector);
+        verify(parser);*/
     }
 }

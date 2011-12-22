@@ -41,6 +41,7 @@ public final class ResLocale {
     private static final String EXTENSION_SEPERATOR = ".";
 
     public static final String DEFAULT_LOCALE = "";
+    private static final String XML_EXTENSION = ".xml";
 
     private final String locale;
 
@@ -72,18 +73,25 @@ public final class ResLocale {
 
     private static void extractKeysFromResourceBundleAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
         Properties properties = new Properties();
+        properties = loadProperties(resourceBundle);
+        Set<Object> keySet = properties.keySet();
+        for (Object key : keySet) {
+            resLocale.keys.add(ResKey.createAndConvertConstantIdentifier((String) key));
+        }
+    }
+
+    private static Properties loadProperties(final File resourceBundle) {
         BufferedInputStream bis = null;
         try {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("Reading resource bundle {} and locale {}.", resourceBundle.getAbsolutePath(), resLocale);
-            }
-
             bis = new BufferedInputStream(new FileInputStream(resourceBundle));
-            properties.load(new BufferedInputStream(bis));
-            Set<Object> keySet = properties.keySet();
-            for (Object key : keySet) {
-                resLocale.keys.add(ResKey.createAndConvertConstantIdentifier((String) key));
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(bis);
+            Properties properties = new Properties();
+            if (isXmlResourceBundle(resourceBundle)) {
+                properties.loadFromXML(bis);
+            } else {
+                properties.load(bis);
             }
+            return properties;
         } catch (FileNotFoundException e) {
             throw new ParseException(String.format("Parsing of %s failed.", resourceBundle.getAbsolutePath()), e, resourceBundle.getAbsolutePath());
         } catch (IOException e) {
@@ -91,6 +99,10 @@ public final class ResLocale {
         } finally {
             closeInputStream(bis);
         }
+    }
+
+    private static boolean isXmlResourceBundle(final File resourceBundle) {
+        return resourceBundle.getName().endsWith(XML_EXTENSION);
     }
 
     private static void closeInputStream(final BufferedInputStream bis) {

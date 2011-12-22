@@ -68,6 +68,15 @@ public class ResLocaleTest {
     }
 
     @Test
+    public void createXmlResourceBundle() {
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/xml/resources.xml"));
+        assertTrue(resLocale.isDefaultLocale());
+        assertEquals(ResLocale.DEFAULT_LOCALE, resLocale.getLocale());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.lastname")));
+    }
+
+    @Test
     public void mergeLocales() {
         ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
         ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
