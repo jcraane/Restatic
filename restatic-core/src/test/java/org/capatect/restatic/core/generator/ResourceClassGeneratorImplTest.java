@@ -55,8 +55,8 @@ public class ResourceClassGeneratorImplTest {
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/version.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test3/another-bundle.properties"));
 
-        ResourceClassGenerator generator = new ResourceClassGeneratorImpl();
-        generator.generate(FileTestUtils.getRootPath("target/generated-testcode"), resModel);
+        ResourceClassGenerator generator = new ResourceClassGeneratorImpl(defaultConfiguration);
+        generator.generate(resModel);
     }
 
 }

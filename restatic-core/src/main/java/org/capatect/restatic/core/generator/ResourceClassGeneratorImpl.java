@@ -18,6 +18,7 @@
 
 package org.capatect.restatic.core.generator;
 
+import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.model.ResModel;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -36,21 +37,27 @@ import java.io.IOException;
 public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
     private static final char DELIMITER_CHAR = '$';
 
+    private final Configuration configuration;
+
+    public ResourceClassGeneratorImpl(final Configuration configuration) {
+        this.configuration = configuration;
+    }
+
     @Override
-    public void generate(final File destination, final ResModel resModel) {
+    public void generate(final ResModel resModel) {
         STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", DELIMITER_CHAR, DELIMITER_CHAR);
         ST stringTemplate = stringTemplateGroup.getInstanceOf("rootClass");
         stringTemplate.add("model", resModel);
 
         final String renderedTemplate = stringTemplate.render();
-        generateTemplateAndWriteToFile(destination, renderedTemplate, resModel);
+        writeTemplateToSourceFile(configuration.getOutputDirectory(), renderedTemplate, resModel.getRootClassName());
     }
 
-    private void generateTemplateAndWriteToFile(final File destination, final String renderedTemplate, final ResModel resModel) {
+    private void writeTemplateToSourceFile(final File destination, final String renderedTemplate, final String rootClassName) {
         BufferedWriter writer = null;
         try {
             createDestinationDirectory(destination);
-            final File outputSourceFile = new File(destination, resModel.getRootClassName() + ".java");
+            final File outputSourceFile = new File(destination, rootClassName + ".java");
             writer = new BufferedWriter(new FileWriter(outputSourceFile));
             writer.write(renderedTemplate);
         } catch (IOException e) {

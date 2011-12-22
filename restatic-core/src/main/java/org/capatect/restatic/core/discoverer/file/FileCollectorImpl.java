@@ -32,12 +32,6 @@ import java.util.List;
  * @author Jamie Craane
  */
 public final class FileCollectorImpl implements FileCollector {
-
-    /**
-     * Base directory to explore.
-     */
-    private final File rootPath;
-
     /**
      * File filter for callbacks.
      */
@@ -48,35 +42,32 @@ public final class FileCollectorImpl implements FileCollector {
     /**
      * Creates a new instance of the FileCollectorImpl with the given rootPath and filter.
      *
-     * @param rootPath The root path to search for files, for example src/main/resource.
-     * @param filter   An implementation of the FileFilter interface which filters the files from the given rootPath.
+     * @param filter An implementation of the FileFilter interface which filters the files from the given rootPath.
      * @return
      */
-    public static FileCollector createWithPathAndFilter(final File rootPath, final FileFilter filter) {
-        return new FileCollectorImpl(rootPath, filter);
+    public static FileCollector createWithPathAndFilter(final FileFilter filter) {
+        return new FileCollectorImpl(filter);
     }
 
     /**
-     * @param rootPath   path to the classFile (usually top level package as com in com.google.common)
      * @param fileFilter the file filter to match.
      */
-    private FileCollectorImpl(final File rootPath, final FileFilter fileFilter) {
-        Validate.notNull(rootPath, "The rootPath may not be null.");
+    private FileCollectorImpl(final FileFilter fileFilter) {
         Validate.notNull(fileFilter, "The fileFilter may not be null.");
 
-        this.rootPath = rootPath;
         this.filter = fileFilter;
     }
 
     /**
      * Collections all files recursively form the given rootPath which matches the file filter.
      *
+     * @param rootPath path to the classFile (usually top level package as com in com.google.common)
      * @return An unmodifiable List of files which matches the FileFilter for all directories under rootPath.
      */
     @Override
-    public List<File> collect() {
+    public List<File> collect(final File rootPath) {
         for (File file : rootPath.listFiles()) {
-            recursiveFileSearch(file);
+            recursiveFileSearch(rootPath, file);
         }
 
         return Collections.unmodifiableList(matchedFiles);
@@ -88,22 +79,23 @@ public final class FileCollectorImpl implements FileCollector {
      * it passes the filter of DepMaker, and if yes, call proceedFile with the
      * file.
      *
-     * @param file File where to start the recursiveFileSearch
+     * @param rootPath path to the classFile (usually top level package as com in com.google.common)
+     * @param file     File where to start the recursiveFileSearch
      */
-    private void recursiveFileSearch(final File file) {
+    private void recursiveFileSearch(final File rootPath, final File file) {
         if (file.isDirectory()) {
             for (File f : file.listFiles()) {
-                recursiveFileSearch(f);
+                recursiveFileSearch(rootPath, f);
             }
         } else {
-            String path = stripRootPathFromFilePath(file);
+            String path = stripRootPathFromFilePath(rootPath, file);
             if (filter.matches(path)) {
                 matchedFiles.add(file);
             }
         }
     }
 
-    private String stripRootPathFromFilePath(final File file) {
+    private String stripRootPathFromFilePath(final File rootPath, final File file) {
         String filePath = file.getPath();
         return filePath.substring(rootPath.getPath().length() + 1, filePath.length());
     }

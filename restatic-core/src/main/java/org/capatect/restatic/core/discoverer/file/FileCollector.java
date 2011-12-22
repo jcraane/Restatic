@@ -25,5 +25,5 @@ import java.util.List;
  * @author Jamie Craane
  */
 public interface FileCollector {
-    List<File> collect();
+    List<File> collect(final File rootPath);
 }

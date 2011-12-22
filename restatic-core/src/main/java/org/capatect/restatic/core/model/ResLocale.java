@@ -72,8 +72,7 @@ public final class ResLocale {
     }
 
     private static void extractKeysFromResourceBundleAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
-        Properties properties = new Properties();
-        properties = loadProperties(resourceBundle);
+        Properties properties = loadProperties(resourceBundle);
         Set<Object> keySet = properties.keySet();
         for (Object key : keySet) {
             resLocale.keys.add(ResKey.createAndConvertConstantIdentifier((String) key));
@@ -84,7 +83,6 @@ public final class ResLocale {
         BufferedInputStream bis = null;
         try {
             bis = new BufferedInputStream(new FileInputStream(resourceBundle));
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(bis);
             Properties properties = new Properties();
             if (isXmlResourceBundle(resourceBundle)) {
                 properties.loadFromXML(bis);
@@ -130,7 +128,6 @@ public final class ResLocale {
 
         return locale;
     }
-
 
     /**
      * @return The locale, for example nl_NL, en_US, en or an empty String for the default locale.

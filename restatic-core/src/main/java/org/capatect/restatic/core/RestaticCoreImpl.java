@@ -16,8 +16,20 @@
 package org.capatect.restatic.core;
 
 import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.discoverer.file.FileCollector;
+import org.capatect.restatic.core.discoverer.file.FileCollectorImpl;
+import org.capatect.restatic.core.generator.ResourceClassGenerator;
+import org.capatect.restatic.core.generator.ResourceClassGeneratorImpl;
+import org.capatect.restatic.core.model.ResModel;
+import org.capatect.restatic.core.parser.ResourceBundleParser;
+import org.capatect.restatic.core.parser.ResourceBundleParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Provides the core functionality of the Restatic module.
@@ -26,17 +38,33 @@ import org.slf4j.LoggerFactory;
  * @author Jeroen Post
  */
 public final class RestaticCoreImpl implements RestaticCore {
-
     /**
      * The Logger instance for this class.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(RestaticCoreImpl.class);
 
+    private FileCollector fileCollector;
+    private ResourceBundleParser resourceBundleParser;
+    private ResourceClassGenerator resourceClassGenerator;
+    private Set<File> sourceDirectories;
+
+    public RestaticCoreImpl(final Configuration configuration) {
+        fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
+        resourceBundleParser = new ResourceBundleParserImpl(configuration);
+        resourceClassGenerator = new ResourceClassGeneratorImpl(configuration);
+        sourceDirectories = configuration.getSourceDirectories();
+    }
+
     @Override
-    public void generateSources(final Configuration configuration) {
-        LOGGER.debug("generateSources(configuration={})", configuration);
+    public void run() {
+        LOGGER.debug("run()");
 
-        // TODO implement the generation process.
+        final List<File> resourceBundles = new ArrayList<File>();
+        for (File sourceDirectory : sourceDirectories) {
+            resourceBundles.addAll(fileCollector.collect(sourceDirectory));
+        }
 
+        final ResModel resModel = resourceBundleParser.parse(resourceBundles);
+        resourceClassGenerator.generate(resModel);
     }
 }

@@ -15,14 +15,19 @@
  */
 package org.capatect.restatic.core;
 
-import org.capatect.restatic.core.configuration.Configuration;
-
 /**
  * Provides the core functionality of the restatic module.
  *
  * @author Jamie Craane
  */
 public interface RestaticCore {
-
-    void generateSources(Configuration configuration);
+    /**
+     * Runs the restatic core which consists of:
+     * <ul>
+     * <li>Discovering resource bundles.</li>
+     * <li>Parse resource bundles.</li>
+     * <li>Generate sourcs from resource bundles.</li>
+     * </ul>
+     */
+    void run();
 }

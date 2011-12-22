@@ -15,13 +15,6 @@
  */
 package org.capatect.restatic.plugin.maven;
 
-import java.io.File;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -32,9 +25,16 @@ import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
 
+import java.io.File;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Simple mojo class to generate Restatic sources.
- *
+ * <p/>
  * Example plugin configuration:
  * <pre>
  *  <plugin>
@@ -49,7 +49,7 @@ import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
  *          <sourceDirectories>
  *              <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
  *              <sourceDirectory>${project.basedir}/src/test/java</sourceDirectory>
-  *         </sourceDirectories>
+ *         </sourceDirectories>
  *          <includes>
  *              <include>&#042;&#042;/test.properties</include>
  *              <include>&#042;&#042;/resource.properties</include>
@@ -69,10 +69,8 @@ import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
  * </pre>
  *
  * @author Jeroen Post
- *
  * @goal generate-restatic
  * @phase generate-resources
- *
  */
 public class GenerateRestaticSourcesMojo extends AbstractMojo {
 
@@ -160,8 +158,8 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
         getLog().info("Using configuration: " + configuration);
 
         // Generate sources using the RestaticCore.
-        final RestaticCore core = new RestaticCoreImpl();
-        core.generateSources(configuration);
+        final RestaticCore core = new RestaticCoreImpl(configuration);
+        core.run(configuration);
     }
 
     private void validateConfiguration() throws MojoExecutionException {

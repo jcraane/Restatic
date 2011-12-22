@@ -18,37 +18,74 @@
 
 package org.capatect.restatic.core;
 
+import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.discoverer.file.FileCollector;
+import org.capatect.restatic.core.generator.ResourceClassGenerator;
+import org.capatect.restatic.core.model.ResModel;
+import org.capatect.restatic.core.parser.ResourceBundleParser;
+import org.easymock.IArgumentMatcher;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.easymock.EasyMock.*;
 
 /**
  * @author Jamie Craane
  */
 public class RestaticCoreImplTest {
     @Test
-    public void generateSources() {
-        FileCollector fileCollector = mock(FileCollector.class);
+    public void generateSources() throws NoSuchFieldException, IllegalAccessException {
+        File rootPath = FileTestUtils.getRootPath("src/test/generator-test");
 
         File bundle1 = new File("bundle1.properties");
         File bundle2 = new File("bundle1.properties");
         List<File> collectedFiles = Arrays.asList(bundle1, bundle2);
-        when(fileCollector.collect()).thenReturn(collectedFiles);
 
-//        Configuration configuration = new ConfigurationBuilder().
-        /*ResModel.
+        Configuration configuration = new ConfigurationBuilder().
+                addSourceDirectory(rootPath).
+                toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic")).getConfiguration();
 
-        ResourceBundleParser parser = mock(ResourceBundleParser.class);
-        when(parser.parse(collectedFiles)).then()
+        ResModel resModel = ResModel.create(configuration);
 
-        // TODO: Add other mock classes and verify behavior.
-        verify(fileCollector);
-        verify(parser);*/
+        reportMatcher(new IArgumentMatcher() {
+            @Override
+            public boolean matches(final Object o) {
+                return o instanceof File;
+            }
+
+            @Override
+            public void appendTo(final StringBuffer stringBuffer) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+        FileCollector fileCollector = createMock(FileCollector.class);
+        expect(fileCollector.collect(rootPath)).andReturn(collectedFiles);
+
+        ResourceBundleParser parser = createMock(ResourceBundleParser.class);
+        expect(parser.parse(collectedFiles)).andReturn(resModel);
+
+        ResourceClassGenerator generator = createMock(ResourceClassGenerator.class);
+        generator.generate(resModel);
+
+        replay(fileCollector, parser, generator);
+
+        RestaticCore restaticCore = new RestaticCoreImpl(configuration);
+        setField(restaticCore, "fileCollector", fileCollector);
+        setField(restaticCore, "resourceBundleParser", parser);
+        setField(restaticCore, "resourceClassGenerator", generator);
+        restaticCore.run();
+
+        verify(fileCollector, parser, generator);
+    }
+
+    private void setField(RestaticCore restaticCore, String fieldName, Object object) throws NoSuchFieldException, IllegalAccessException {
+        Field field = restaticCore.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(restaticCore, object);
     }
 }

@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -43,18 +44,9 @@ public class ResourceBundleParserImplTest {
                 .getConfiguration();
         ResourceBundleParser parser = new ResourceBundleParserImpl(configuration);
 
-        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(rootPath, configuration.getFileFilter());
-        ResModel resModel = parser.parse(fileCollector.collect());
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
+        ResModel resModel = parser.parse(fileCollector.collect(rootPath));
         assertNotNull(resModel);
-    }
-
-    @Test
-    public void parseXmlResourceBundles() {
-
-    }
-
-    @Test
-    public void validateResourceModel() {
-
+        assertEquals(2, resModel.getBundles().size());
     }
 }

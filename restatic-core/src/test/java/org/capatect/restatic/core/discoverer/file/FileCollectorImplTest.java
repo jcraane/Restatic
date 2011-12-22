@@ -31,19 +31,14 @@ public class FileCollectorImplTest {
         FileFilter filter = AntStylePatternFileNameFilter.create("**/*.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File rootPath = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(rootPath, filter);
-        List<File> matchedFiles = fileCollector.collect();
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(filter);
+        List<File> matchedFiles = fileCollector.collect(rootPath);
         assertEquals(3, matchedFiles.size());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void emptyRootPath() {
-        FileCollectorImpl.createWithPathAndFilter(null, new DefaultFileFilter());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void emptyNullFilter() {
-        FileCollectorImpl.createWithPathAndFilter(new File(System.getProperty("basedir", "restatic-core")), null);
+        FileCollectorImpl.createWithPathAndFilter(null);
     }
 
     @Test
@@ -51,8 +46,8 @@ public class FileCollectorImplTest {
         FileFilter filter = AntStylePatternFileNameFilter.create("org/capatect/restatic/discoverer/resources/bundleone/resources.properties");
         File baseDir = new File(System.getProperty("basedir", "restatic-core"));
         File rootPath = new File(baseDir, "src/test/resources");
-        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(rootPath, filter);
-        List<File> matchedFiles = fileCollector.collect();
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(filter);
+        List<File> matchedFiles = fileCollector.collect(rootPath);
         assertEquals(1, matchedFiles.size());
     }
 
