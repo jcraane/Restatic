@@ -4,7 +4,7 @@ rootClass(model) ::= "
 *
 * Do not modify by hand.
 */
-public static final class $model.rootClassName$ {
+public final class $model.rootClassName$ {
     $model.bundles:resourceBundle()$
 }
 "

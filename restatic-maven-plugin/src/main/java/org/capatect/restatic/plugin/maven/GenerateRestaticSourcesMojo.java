@@ -159,7 +159,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
 
         // Generate sources using the RestaticCore.
         final RestaticCore core = new RestaticCoreImpl(configuration);
-        core.run(configuration);
+        core.run();
     }
 
     private void validateConfiguration() throws MojoExecutionException {
