@@ -63,6 +63,19 @@ public final class ResModel {
     }
 
     /**
+     * @return True if all resource bundles contains locales with the same number of keys, false otherwise.
+     */
+    public boolean isValid() {
+        for (ResBundle bundle : bundles) {
+            if (!bundle.isValid()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Addes a resource bundle to the resource model.
      *
      * @param resourceBundle The resource bundle to add to the resource model.

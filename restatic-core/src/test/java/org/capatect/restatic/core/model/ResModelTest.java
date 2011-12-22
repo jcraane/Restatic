@@ -24,7 +24,6 @@ import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.util.CollectionFilter;
 import org.capatect.restatic.core.util.Predicate;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -74,6 +73,7 @@ public class ResModelTest {
             }
         });
         assertTrue(filteredBundles.size() == 1);
+        assertTrue(resModel.isValid());
     }
 
     @Test
@@ -100,9 +100,12 @@ public class ResModelTest {
         assertEquals(5, filteredBundles.get(0).getAllUniqueKeysForLocales().size());
     }
 
-    @Ignore
     @Test
-    public void validate() {
-        // TODO: Add test for resource bundle validation.
+    public void isValid() {
+        ResModel resModel = ResModel.create(defaultConfiguration);
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid_en_US.properties"));
+        assertFalse(resModel.isValid());
+
     }
 }
