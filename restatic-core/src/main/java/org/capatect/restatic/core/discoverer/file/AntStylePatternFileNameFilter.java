@@ -1,4 +1,3 @@
-package org.capatect.restatic.core.discoverer.file;
 /*
  * Copyright 2002-2011 the original author or authors.
  *
