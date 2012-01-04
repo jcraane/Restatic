@@ -18,54 +18,99 @@
 
 package org.capatect.restatic.core.model;
 
+import org.capatect.restatic.core.FileTestUtils;
+import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import java.io.File;
+
+import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Jamie Craane
  */
 public class ResLocaleTest {
-    @Test
-    public void createDefaultLocale() {
-        ResLocale resLocale = new ResLocale(null);
-        assertTrue(resLocale.isDefaultLocale());
-        assertEquals(ResLocale.DEFAULT_LOCALE, resLocale.getLocale());
+    private File rootPath;
 
-        resLocale = new ResLocale("");
-        assertTrue(resLocale.isDefaultLocale());
-        assertEquals(ResLocale.DEFAULT_LOCALE, resLocale.getLocale());
-    }
-
-    @Test
-    public void create() {
-        ResLocale resLocale = new ResLocale("nl_NL");
-        assertEquals("nl_NL", resLocale.getLocale());
-        assertFalse(resLocale.isDefaultLocale());
+    @Before
+    public void setup() {
+        rootPath = FileTestUtils.getRootPath("src/test/reslocale-test");
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void addNullKey() {
-        ResLocale resLocale = new ResLocale("nl_NL");
-        resLocale.addKey(null);
+    public void nullResourceBundle() {
+        ResLocale.createFromResourceBundle(null);
     }
 
     @Test
-    public void addKeys() {
-        ResLocale resLocale = new ResLocale("nl_NL");
-        assertFalse(resLocale.isDefaultLocale());
-        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
-        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key1"));
-        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key2"));
+    public void createWithDefaultLocale() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        assertEquals("", resLocale.getLocale());
+        assertTrue(resLocale.isDefaultLocale());
         assertEquals(3, resLocale.getKeys().size());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_lastname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_firstname")));
     }
 
     @Test
-    public void addDuplicateKey() {
-        ResLocale resLocale = new ResLocale("nl_NL");
+    public void createWithLocale() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        assertEquals("nl_NL", resLocale.getLocale());
         assertFalse(resLocale.isDefaultLocale());
-        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
-        resLocale.addKey(ResKey.createAndConvertConstantIdentifier("key"));
-        assertEquals(1, resLocale.getKeys().size());
+        assertEquals(2, resLocale.getKeys().size());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person_firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
+    }
+
+    @Test
+    public void createXmlResourceBundle() {
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/xml/resources.xml"));
+        assertTrue(resLocale.isDefaultLocale());
+        assertEquals(ResLocale.DEFAULT_LOCALE, resLocale.getLocale());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.lastname")));
+    }
+
+    @Test
+    public void mergeLocales() {
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
+
+        resLocale.mergeKeys(resLocaleToMerge);
+        assertEquals(5, resLocale.getKeys().size());
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("button.label")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.lastname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("person.firstname")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.version")));
+        assertTrue(resLocale.getKeys().contains(ResKey.createAndConvertConstantIdentifier("application.name")));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void mergeDuplicateKeys() {
+        ResLocale resLocale = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test3/resources.properties"));
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
+        resLocale.mergeKeys(resLocaleToMerge);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void localeToMergeIsNull() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+        resLocale.mergeKeys(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void mergeLocalesInvalidLocale() {
+        File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
+        ResLocale resLocale = ResLocale.createFromResourceBundle(resourceBundle);
+
+        resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
+        ResLocale resLocaleToMerge = ResLocale.createFromResourceBundle(resourceBundle);
+        resLocale.mergeKeys(resLocaleToMerge);
     }
 }

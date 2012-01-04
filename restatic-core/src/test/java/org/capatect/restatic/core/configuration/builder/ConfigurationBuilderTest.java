@@ -15,16 +15,14 @@
  */
 package org.capatect.restatic.core.configuration.builder;
 
-import java.io.File;
-
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import java.io.File;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Jamie Craane
@@ -114,7 +112,7 @@ public class ConfigurationBuilderTest {
         assertTrue(configuration.getSourceDirectories().contains(sourceDirectory2));
     }
 
-//    @Test(expected = UnsupportedOperationException.class)
+    //    @Test(expected = UnsupportedOperationException.class)
     public void testUnmodifiableSourceRootPaths() {
 //        new Configuration.ConfigurationBuilder(new File("/org/capatect/restatic/core/bundleone")).build().getSourceRootPaths().remove(0);
     }
@@ -131,22 +129,22 @@ public class ConfigurationBuilderTest {
 //        assertEquals("C", configuration.getPackageAliases().get(new PackageName("org.capatect.restatic.core")).getAlias());
     }
 
-//    @Test(expected = IllegalArgumentException.class)
+    //    @Test(expected = IllegalArgumentException.class)
     public void buildWithNullPackage() {
 //        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage(null).to("C").build();
     }
 
-//    @Test(expected = IllegalArgumentException.class)
+    //    @Test(expected = IllegalArgumentException.class)
     public void buildWithEmptyPackage() {
 //        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("").to("C").build();
     }
 
-//    @Test(expected = IllegalArgumentException.class)
+    //    @Test(expected = IllegalArgumentException.class)
     public void buildWithNullPackageAlias() {
 //        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("org.capatext.restatic").to(null).build();
     }
 
-//    @Test(expected = IllegalArgumentException.class)
+    //    @Test(expected = IllegalArgumentException.class)
     public void buildWithEmptyPackageAlias() {
 //        new Configuration.ConfigurationBuilder(new File("path")).aliasPackage("org.capatext.restatic").to("").build();
     }

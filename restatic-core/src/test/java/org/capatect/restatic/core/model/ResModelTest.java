@@ -18,17 +18,18 @@
 
 package org.capatect.restatic.core.model;
 
-import java.io.File;
-import java.util.HashSet;
-
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
+import org.capatect.restatic.core.util.CollectionFilter;
+import org.capatect.restatic.core.util.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import java.io.File;
+import java.util.List;
+
+import static junit.framework.Assert.*;
 
 /**
  * @author Jamie Craane
@@ -48,40 +49,63 @@ public class ResModelTest {
 
     @Test
     public void create() {
-        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceDirectories());
+        ResModel resModel = ResModel.create(defaultConfiguration);
         assertNotNull(resModel);
         assertEquals("R", resModel.getRootClassName());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createNullRootClassName() {
-        ResModel.create(null, defaultConfiguration.getSourceDirectories());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createEmptyRootClassName() {
-        ResModel.create("", defaultConfiguration.getSourceDirectories());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createNullSourceRootPath() {
-        ResModel.create("R", null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void createNullSourceRootPathElement() {
-        ResModel.create("R", new HashSet<File>() {{
-            add(null);
-        }});
+    public void createNullConfiguration() {
+        ResModel.create(null);
     }
 
     @Test
     public void addOneResourceBundleWithOneLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
 
-        ResModel resModel = ResModel.create(defaultConfiguration.getRootClassName(), defaultConfiguration.getSourceDirectories());
+        ResModel resModel = ResModel.create(defaultConfiguration);
         resModel.addResourceBundle(resourceBundle);
         assertEquals(1, resModel.getBundles().size());
-        assertEquals("OrgCapatectTestResources", resModel.getBundles().get(0).getBundleClassName());
+        List<ResBundle> filteredBundles = CollectionFilter.filter(resModel.getBundles(), new Predicate<ResBundle>() {
+            @Override
+            public boolean apply(final ResBundle type) {
+                return type.getBundleClassName().equals("OrgCapatectTestResources");
+            }
+        });
+        assertTrue(filteredBundles.size() == 1);
+        assertTrue(resModel.isValid());
+    }
+
+    @Test
+    public void addBundlesWhichAliasToSameNameAndPackage() {
+        Configuration configuration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .aliasPackage("org.capatect.test").to("test")
+                .aliasPackage("org.capatect.test2").to("test")
+                .getConfiguration();
+
+        ResModel resModel = ResModel.create(configuration);
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/resources.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test2/resources.properties"));
+
+        assertEquals(1, resModel.getBundles().size());
+        List<ResBundle> filteredBundles = CollectionFilter.filter(resModel.getBundles(), new Predicate<ResBundle>() {
+            @Override
+            public boolean apply(final ResBundle type) {
+                return type.getBundleClassName().equals("TestResources");
+            }
+        });
+        assertTrue(filteredBundles.size() == 1);
+        assertEquals(5, filteredBundles.get(0).getAllUniqueKeysForLocales().size());
+    }
+
+    @Test
+    public void isValid() {
+        ResModel resModel = ResModel.create(defaultConfiguration);
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid.properties"));
+        resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid_en_US.properties"));
+        assertFalse(resModel.isValid());
+
     }
 }

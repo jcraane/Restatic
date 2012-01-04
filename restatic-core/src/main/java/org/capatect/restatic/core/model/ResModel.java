@@ -15,15 +15,15 @@ package org.capatect.restatic.core.model;
  * limitations under the License.
  */
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
@@ -33,33 +33,26 @@ import org.slf4j.LoggerFactory;
  */
 public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
-    private static final String PATH_SEPARATOR = File.separator;
-    private static final String PACKAGE_SEPERATOR = ".";
 
     private final String rootClassName;
-    private final Set<File> sourceRootPaths;
-    private final List<ResBundle> bundles = new ArrayList<ResBundle>();
+    private final Configuration configuration;
+    private final Set<ResBundle> bundles = new HashSet<ResBundle>();
 
-    private ResModel(final String rootClassName, final Set<File> sourceRootPaths) {
-        LOGGER.trace("ResModel({})", rootClassName);
+    private ResModel(final Configuration configuration) {
+        Validate.notNull(configuration, "configuration may not be null.");
 
-        Validate.notEmpty(rootClassName, "The rootClassName may not be null.");
-        Validate.noNullElements(sourceRootPaths, "sourceRootPaths may not be null.");
-
-        this.rootClassName = rootClassName;
-        this.sourceRootPaths = Collections.unmodifiableSet(sourceRootPaths);
+        this.rootClassName = configuration.getRootClassName();
+        this.configuration = configuration;
     }
 
     /**
      * Creates a new instance of a ResModel.
      *
-     * @param rootClassName   The rootClassName which is used in source generation to name the top-level class in the hierarchy.
-     * @param sourceRootPaths The sourceRootPaths where to look for resource bundles. This is needed to strip the source root paths
-     *                        from the actual resource bundles path to determine the actual Java package of the
-     *                        resource bundle.
+     * @param configuration The Configuration object which holds the configuration used in resource bundle parsing.
      */
-    public static ResModel create(final String rootClassName, final Set<File> sourceRootPaths) {
-        return new ResModel(rootClassName, sourceRootPaths);
+    public static ResModel create(final Configuration configuration) {
+        LOGGER.trace("Create new ResModel with configuration [{}].", configuration);
+        return new ResModel(configuration);
     }
 
     /**
@@ -70,35 +63,32 @@ public final class ResModel {
     }
 
     /**
+     * @return True if all resource bundles contains locales with the same number of keys, false otherwise.
+     */
+    public boolean isValid() {
+        for (ResBundle bundle : bundles) {
+            if (!bundle.isValid()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Addes a resource bundle to the resource model.
      *
      * @param resourceBundle The resource bundle to add to the resource model.
      */
     public void addResourceBundle(final File resourceBundle) {
-        String bundlePackage = extractResourceBundlePackage(resourceBundle);
-        ResBundle resBundle = ResBundle.createAndConvertToJavaClassIdentifier(bundlePackage, resourceBundle.getName());
+        ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configuration);
         bundles.add(resBundle);
-    }
-
-    private String extractResourceBundlePackage(final File resourceBundle) {
-        String resourceBundlePath = resourceBundle.getPath();
-        String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
-
-        for (File sourceRootPath : sourceRootPaths) {
-            if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
-                bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
-                break;
-            }
-        }
-
-        bundlePackage = bundlePackage.replaceAll(PATH_SEPARATOR, PACKAGE_SEPERATOR);
-        return bundlePackage;
     }
 
     /**
      * @return List of ResBundles belonging to this model.
      */
-    public List<ResBundle> getBundles() {
-        return Collections.unmodifiableList(bundles);
+    public Set<ResBundle> getBundles() {
+        return Collections.unmodifiableSet(bundles);
     }
 }

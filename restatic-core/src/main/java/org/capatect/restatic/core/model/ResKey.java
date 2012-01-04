@@ -19,6 +19,7 @@
 package org.capatect.restatic.core.model;
 
 import org.apache.commons.lang.Validate;
+import org.capatect.restatic.core.Util;
 
 /**
  * Represents a key in a ResBundle.
@@ -29,9 +30,11 @@ import org.apache.commons.lang.Validate;
  */
 public final class ResKey {
     private final String name;
+    private final String originalName;
 
-    private ResKey(final String name) {
+    private ResKey(final String name, final String originalName) {
         this.name = name;
+        this.originalName = originalName;
     }
 
     /**
@@ -41,7 +44,7 @@ public final class ResKey {
      * @return an instance of this class with the key converted to a Java constant identifier.
      */
     public static ResKey createAndConvertConstantIdentifier(final String key) {
-        return new ResKey(KeyToJavaConstantIdentifierConverter.convert(key));
+        return new ResKey(KeyToJavaConstantIdentifierConverter.convert(key), key);
     }
 
     /**
@@ -49,6 +52,13 @@ public final class ResKey {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return The original, uncoverted name, of the key as it was passed in the createAndConvertConstantIdentifier method.
+     */
+    public String getOriginalName() {
+        return originalName;
     }
 
     @Override
@@ -66,6 +76,16 @@ public final class ResKey {
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("ResKey");
+        sb.append("{name='").append(name).append('\'');
+        sb.append(", originalName='").append(originalName).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     /**
@@ -90,10 +110,7 @@ public final class ResKey {
         public static String convert(String resourceBundleKey) {
             Validate.notEmpty(resourceBundleKey, "The key may not be null or empty.");
 
-            resourceBundleKey = resourceBundleKey.replaceAll("[\\/\\.@#!`~$%^&*()+={}:;'><?,\\[\\]\"]+", REPLACE_CHAR);
-            resourceBundleKey = resourceBundleKey.trim();
-
-            return resourceBundleKey.toUpperCase();
+            return Util.replaceInvalidJavaIdentifierCharsWithUnderscore(resourceBundleKey).toUpperCase();
         }
     }
 }

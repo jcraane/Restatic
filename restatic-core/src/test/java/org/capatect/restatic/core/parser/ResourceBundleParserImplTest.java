@@ -18,15 +18,17 @@
 
 package org.capatect.restatic.core.parser;
 
-import java.io.File;
-
 import org.capatect.restatic.core.FileTestUtils;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.discoverer.file.FileCollector;
+import org.capatect.restatic.core.discoverer.file.FileCollectorImpl;
 import org.capatect.restatic.core.model.ResModel;
 import org.junit.Test;
 
+import java.io.File;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
 /**
@@ -42,18 +44,22 @@ public class ResourceBundleParserImplTest {
                 .getConfiguration();
         ResourceBundleParser parser = new ResourceBundleParserImpl(configuration);
 
-        FileCollector fileCollector = FileCollector.createWithPathAndFilter(rootPath, configuration.getFileFilter());
-        ResModel resModel = parser.parse(fileCollector.collect());
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
+        ResModel resModel = parser.parse(fileCollector.collect(rootPath));
         assertNotNull(resModel);
+        assertEquals(3, resModel.getBundles().size());
     }
 
-    @Test
-    public void parseXmlResourceBundles() {
+    @Test(expected = IllegalStateException.class)
+    public void invalidResourceBundle() {
+        File rootPath = FileTestUtils.getRootPath("src/test/parse-test");
+        Configuration configuration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .getConfiguration();
+        ResourceBundleParser parser = new ResourceBundleParserImpl(configuration);
 
-    }
-
-    @Test
-    public void validateResourceModel() {
-
+        FileCollector fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
+        parser.parse(fileCollector.collect(rootPath));
     }
 }
