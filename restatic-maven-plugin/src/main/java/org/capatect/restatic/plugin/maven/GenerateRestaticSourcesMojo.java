@@ -15,22 +15,24 @@
  */
 package org.capatect.restatic.plugin.maven;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.capatect.restatic.core.RestaticCore;
-import org.capatect.restatic.core.RestaticCoreImpl;
-import org.capatect.restatic.core.configuration.Configuration;
-import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
-import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
-
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.model.Resource;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.capatect.restatic.core.RestaticCore;
+import org.capatect.restatic.core.RestaticCoreImpl;
+import org.capatect.restatic.core.configuration.Configuration;
+import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
+import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
 
 /**
  * Simple mojo class to generate Restatic sources.
@@ -84,7 +86,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
     /**
      * The default source directory as specified by Maven.
      *
-     * @parameter default-value="${project.build.sourceDirectory}"
+     * @parameter default-value="${project.basedir}/src/main/resources"
      * @readonly
      */
     private File defaultSourceDirectory;
@@ -125,6 +127,14 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
      */
     private Set<File> sourceDirectories = new HashSet<File>();
 
+    /**
+     * The MavenProject.
+     *
+     * @parameter expression="${project}"
+     * @required
+     * @readonly
+     */
+    private MavenProject mavenProject;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -160,6 +170,17 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
         // Generate sources using the RestaticCore.
         final RestaticCore core = new RestaticCoreImpl(configuration);
         core.run();
+
+        // Add generated resources to project
+        addResourceToProject();
+    }
+
+    private void addResourceToProject() {
+        // Add generated resources to project
+        final Resource resource = new Resource();
+        resource.setDirectory(outputDirectory.getAbsolutePath());
+        mavenProject.addResource(resource);
+
     }
 
     private void validateConfiguration() throws MojoExecutionException {
