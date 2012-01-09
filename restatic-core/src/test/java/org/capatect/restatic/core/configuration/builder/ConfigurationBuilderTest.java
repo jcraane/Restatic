@@ -174,7 +174,7 @@ public class ConfigurationBuilderTest {
                 .toOutputDirectory(outputDirectory)
                 .getConfiguration();
 
-        assertEquals("R", configuration.getRootClassName());
+        assertEquals("R", configuration.getFullyQualifiedGeneratedRootClassName());
     }
 
     @Test
@@ -185,7 +185,7 @@ public class ConfigurationBuilderTest {
                 .withRootClassName(rootClassName)
                 .getConfiguration();
 
-        assertEquals(rootClassName, configuration.getRootClassName());
+        assertEquals(rootClassName, configuration.getFullyQualifiedGeneratedRootClassName());
     }
 
     @Test(expected = IllegalArgumentException.class)

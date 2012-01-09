@@ -50,7 +50,7 @@ public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
         stringTemplate.add("model", resModel);
 
         final String renderedTemplate = stringTemplate.render();
-        writeTemplateToSourceFile(configuration.getOutputDirectory(), renderedTemplate, resModel.getRootClassName());
+        writeTemplateToSourceFile(configuration.getOutputDirectory(), renderedTemplate, resModel.getFullyQualifiedGeneratedRootClassName());
     }
 
     private void writeTemplateToSourceFile(final File destination, final String renderedTemplate, final String rootClassName) {

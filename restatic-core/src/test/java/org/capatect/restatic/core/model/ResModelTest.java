@@ -51,7 +51,7 @@ public class ResModelTest {
     public void create() {
         ResModel resModel = ResModel.create(defaultConfiguration);
         assertNotNull(resModel);
-        assertEquals("R", resModel.getRootClassName());
+        assertEquals("R", resModel.getFullyQualifiedGeneratedRootClassName());
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -4,7 +4,7 @@ rootClass(model) ::= "
 *
 * Do not modify by hand.
 */
-public final class $model.rootClassName$ {
+public final class $model.fullyQualifiedGeneratedRootClassName$ {
     $model.bundles:resourceBundle()$
 }
 "
@@ -19,5 +19,5 @@ resourceBundle(bundle) ::= "
 "
 
 bundleKey(key) ::= "
-    public static final String $key.name$ = \"$key.original$\n$ame$\";$\n$
+    public static final String $key.name$ = \"$key.originalName$\";$\n$
 "

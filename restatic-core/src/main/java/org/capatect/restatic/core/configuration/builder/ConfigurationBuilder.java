@@ -15,17 +15,17 @@
  */
 package org.capatect.restatic.core.configuration.builder;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.Validate;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.PackageAlias;
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
 import org.capatect.restatic.core.discoverer.file.FileFilter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Jeroen Post
@@ -51,7 +51,7 @@ public class ConfigurationBuilder {
 
     private boolean resourceBundleValidationEnabled;
 
-    private String rootClassName;
+    private String fullyQualifiedGeneratedRootClassName;
 
     private final Set<File> sourceDirectories;
 
@@ -63,7 +63,7 @@ public class ConfigurationBuilder {
         outputDirectory = null;
         packageAliasBuilders = new ArrayList<PackageAliasBuilder>();
         resourceBundleValidationEnabled = false;
-        rootClassName = DEFAULT_ROOT_CLASS_NAME;
+        fullyQualifiedGeneratedRootClassName = DEFAULT_ROOT_CLASS_NAME;
         sourceDirectories = new HashSet<File>();
     }
 
@@ -104,7 +104,7 @@ public class ConfigurationBuilder {
      */
     public Configuration getConfiguration() {
         return new Configuration(outputDirectory, sourceDirectories, fileFilter,
-                createPackageAliases(packageAliasBuilders), resourceBundleValidationEnabled, rootClassName);
+                createPackageAliases(packageAliasBuilders), resourceBundleValidationEnabled, fullyQualifiedGeneratedRootClassName);
     }
 
     public ConfigurationBuilder toOutputDirectory(final File anOutputDirectory) {
@@ -124,7 +124,7 @@ public class ConfigurationBuilder {
     public ConfigurationBuilder withRootClassName(final String aRootClassName) {
         Validate.notEmpty(aRootClassName, "Parameter aRootClassName is not allowed to be empty");
 
-        this.rootClassName = aRootClassName;
+        this.fullyQualifiedGeneratedRootClassName = aRootClassName;
 
         return this;
     }

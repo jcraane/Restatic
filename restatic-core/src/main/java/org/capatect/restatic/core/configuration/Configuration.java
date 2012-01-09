@@ -68,7 +68,7 @@ public final class Configuration {
     private final File outputDirectory;
     private final Set<PackageAlias> packageAliases;
     private final boolean resourceBundleValidationEnabled;
-    private final String rootClassName;
+    private final String fullyQualifiedGeneratedRootClassName;
     private final Set<File> sourceDirectories;
 
     /**
@@ -104,7 +104,7 @@ public final class Configuration {
         fileFilter = aFileFilter;
         packageAliases = aPackageAliases;
         resourceBundleValidationEnabled = anIsResourceBundleValidationEnabled;
-        rootClassName = aRootClassName;
+        fullyQualifiedGeneratedRootClassName = aRootClassName;
     }
 
     public FileFilter getFileFilter() {
@@ -122,8 +122,8 @@ public final class Configuration {
         return resourceBundleValidationEnabled;
     }
 
-    public String getRootClassName() {
-        return rootClassName;
+    public String getFullyQualifiedGeneratedRootClassName() {
+        return fullyQualifiedGeneratedRootClassName;
     }
 
     /**
@@ -142,7 +142,7 @@ public final class Configuration {
                 .append("outputDirectory", outputDirectory)
                 .append("packageAliases", packageAliases)
                 .append("resourceBundleValidationEnabled", resourceBundleValidationEnabled)
-                .append("rootClassName", rootClassName)
+                .append("rootClassName", fullyQualifiedGeneratedRootClassName)
                 .append("sourceDirectories", sourceDirectories)
                 .toString();
     }

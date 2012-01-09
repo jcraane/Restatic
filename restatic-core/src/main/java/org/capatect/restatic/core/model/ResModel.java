@@ -34,14 +34,14 @@ import java.util.Set;
 public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
 
-    private final String rootClassName;
+    private final String fullyQualifiedGeneratedRootClassName;
     private final Configuration configuration;
     private final Set<ResBundle> bundles = new HashSet<ResBundle>();
 
     private ResModel(final Configuration configuration) {
         Validate.notNull(configuration, "configuration may not be null.");
 
-        this.rootClassName = configuration.getRootClassName();
+        this.fullyQualifiedGeneratedRootClassName = configuration.getFullyQualifiedGeneratedRootClassName();
         this.configuration = configuration;
     }
 
@@ -58,8 +58,8 @@ public final class ResModel {
     /**
      * @return The name of the root class to generate.
      */
-    public String getRootClassName() {
-        return rootClassName;
+    public String getFullyQualifiedGeneratedRootClassName() {
+        return fullyQualifiedGeneratedRootClassName;
     }
 
     /**
