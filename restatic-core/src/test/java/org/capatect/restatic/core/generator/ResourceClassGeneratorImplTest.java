@@ -38,6 +38,7 @@ public class ResourceClassGeneratorImplTest {
     public void setup() {
         rootPath = FileTestUtils.getRootPath("src/test/generator-test");
         defaultConfiguration = new ConfigurationBuilder()
+                .withFullyQualitiedRootClassName("org.capatec.R")
                 .addSourceDirectory(rootPath)
                 .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
                 .aliasPackage("org.capatect.test2").to("test")

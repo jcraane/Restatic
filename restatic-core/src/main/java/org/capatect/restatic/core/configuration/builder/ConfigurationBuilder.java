@@ -121,7 +121,7 @@ public class ConfigurationBuilder {
         return this;
     }
 
-    public ConfigurationBuilder withRootClassName(final String aRootClassName) {
+    public ConfigurationBuilder withFullyQualitiedRootClassName(final String aRootClassName) {
         Validate.notEmpty(aRootClassName, "Parameter aRootClassName is not allowed to be empty");
 
         this.fullyQualifiedGeneratedRootClassName = aRootClassName;

@@ -51,7 +51,9 @@ public class ResModelTest {
     public void create() {
         ResModel resModel = ResModel.create(defaultConfiguration);
         assertNotNull(resModel);
-        assertEquals("R", resModel.getFullyQualifiedGeneratedRootClassName());
+        assertEquals("R", resModel.getRootClassName());
+        assertEquals("", resModel.getRootClassPackage());
+        assertFalse(resModel.isNotDefaultPackage());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -101,11 +103,24 @@ public class ResModelTest {
     }
 
     @Test
+    public void createResModelWithFullyQualifiedClassName() {
+        Configuration configuration = new ConfigurationBuilder()
+                .addSourceDirectory(rootPath)
+                .withFullyQualitiedRootClassName("org.capatect.R")
+                .toOutputDirectory(FileTestUtils.getRootPath("target/generated-sources/restatic"))
+                .getConfiguration();
+
+        ResModel resModel = ResModel.create(configuration);
+        assertEquals("R", resModel.getRootClassName());
+        assertEquals("org.capatect", resModel.getRootClassPackage());
+        assertTrue(resModel.isNotDefaultPackage());
+    }
+
+    @Test
     public void isValid() {
         ResModel resModel = ResModel.create(defaultConfiguration);
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid_en_US.properties"));
         assertFalse(resModel.isValid());
-
     }
 }

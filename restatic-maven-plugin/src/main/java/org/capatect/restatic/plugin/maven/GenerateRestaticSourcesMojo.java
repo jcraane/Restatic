@@ -15,13 +15,6 @@
  */
 package org.capatect.restatic.plugin.maven;
 
-import java.io.File;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -33,6 +26,13 @@ import org.capatect.restatic.core.RestaticCoreImpl;
 import org.capatect.restatic.core.configuration.Configuration;
 import org.capatect.restatic.core.configuration.builder.ConfigurationBuilder;
 import org.capatect.restatic.core.discoverer.file.AntStylePatternFileNameFilter;
+
+import java.io.File;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Simple mojo class to generate Restatic sources.
@@ -146,7 +146,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
         // Create ConfigurationBuilder.
         final ConfigurationBuilder builder = new ConfigurationBuilder()
                 .addFileFilter(AntStylePatternFileNameFilter.create(includes.toArray(new String[includes.size()])))
-                .withRootClassName(rootClassName)
+                .withFullyQualitiedRootClassName(rootClassName)
                 .withResourceBundleValidationEnabled(resourceBundleValidationEnabled)
                 .toOutputDirectory(outputDirectory);
 

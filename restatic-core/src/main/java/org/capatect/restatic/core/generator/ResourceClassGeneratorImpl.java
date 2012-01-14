@@ -50,14 +50,16 @@ public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
         stringTemplate.add("model", resModel);
 
         final String renderedTemplate = stringTemplate.render();
-        writeTemplateToSourceFile(configuration.getOutputDirectory(), renderedTemplate, resModel.getFullyQualifiedGeneratedRootClassName());
+        writeTemplateToSourceFile(configuration.getOutputDirectory(), renderedTemplate, resModel);
     }
 
-    private void writeTemplateToSourceFile(final File destination, final String renderedTemplate, final String rootClassName) {
+    private void writeTemplateToSourceFile(final File destination, final String renderedTemplate, final ResModel resModel) {
         BufferedWriter writer = null;
         try {
-            createDestinationDirectory(destination);
-            final File outputSourceFile = new File(destination, rootClassName + ".java");
+
+            File destinationIncludingPackageDir = new File(destination, replacePackageWithPathSeperator(resModel));
+            createDestinationDirectory(destinationIncludingPackageDir);
+            final File outputSourceFile = new File(destinationIncludingPackageDir, resModel.getRootClassName() + ".java");
             writer = new BufferedWriter(new FileWriter(outputSourceFile));
             writer.write(renderedTemplate);
         } catch (IOException e) {
@@ -65,6 +67,10 @@ public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
         } finally {
             closeWriter(writer);
         }
+    }
+
+    private String replacePackageWithPathSeperator(final ResModel resModel) {
+        return resModel.getRootClassPackage().replaceAll("\\.", "/");
     }
 
     private void createDestinationDirectory(final File destination) {

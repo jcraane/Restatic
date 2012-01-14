@@ -182,7 +182,7 @@ public class ConfigurationBuilderTest {
         final Configuration configuration = new ConfigurationBuilder()
                 .addSourceDirectory(sourceDirectory)
                 .toOutputDirectory(outputDirectory)
-                .withRootClassName(rootClassName)
+                .withFullyQualitiedRootClassName(rootClassName)
                 .getConfiguration();
 
         assertEquals(rootClassName, configuration.getFullyQualifiedGeneratedRootClassName());
@@ -193,7 +193,7 @@ public class ConfigurationBuilderTest {
         new ConfigurationBuilder()
                 .addSourceDirectory(sourceDirectory)
                 .toOutputDirectory(outputDirectory)
-                .withRootClassName("")
+                .withFullyQualitiedRootClassName("")
                 .getConfiguration();
     }
 }

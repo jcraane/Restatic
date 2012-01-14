@@ -34,15 +34,35 @@ import java.util.Set;
 public final class ResModel {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResModel.class);
 
-    private final String fullyQualifiedGeneratedRootClassName;
+    private String rootClassName;
+    private String rootClassPackage;
     private final Configuration configuration;
     private final Set<ResBundle> bundles = new HashSet<ResBundle>();
+    private boolean defaultPackage = true;
 
     private ResModel(final Configuration configuration) {
         Validate.notNull(configuration, "configuration may not be null.");
 
-        this.fullyQualifiedGeneratedRootClassName = configuration.getFullyQualifiedGeneratedRootClassName();
         this.configuration = configuration;
+        this.rootClassName = extractClassName(configuration.getFullyQualifiedGeneratedRootClassName());
+        this.rootClassPackage = extractPackage(configuration.getFullyQualifiedGeneratedRootClassName());
+    }
+
+    private String extractPackage(final String fullyQualitiefRootClass) {
+        if (fullyQualitiefRootClass.indexOf(".") != -1) {
+            return fullyQualitiefRootClass.substring(0, fullyQualitiefRootClass.lastIndexOf("."));
+        }
+
+        this.defaultPackage = false;
+        return "";
+    }
+
+    private String extractClassName(final String fullyQualitiefRootClass) {
+        if (fullyQualitiefRootClass.indexOf(".") != -1) {
+            return fullyQualitiefRootClass.substring(fullyQualitiefRootClass.lastIndexOf(".") + 1, fullyQualitiefRootClass.length());
+        }
+
+        return fullyQualitiefRootClass;
     }
 
     /**
@@ -53,13 +73,6 @@ public final class ResModel {
     public static ResModel create(final Configuration configuration) {
         LOGGER.trace("Create new ResModel with configuration [{}].", configuration);
         return new ResModel(configuration);
-    }
-
-    /**
-     * @return The name of the root class to generate.
-     */
-    public String getFullyQualifiedGeneratedRootClassName() {
-        return fullyQualifiedGeneratedRootClassName;
     }
 
     /**
@@ -90,5 +103,17 @@ public final class ResModel {
      */
     public Set<ResBundle> getBundles() {
         return Collections.unmodifiableSet(bundles);
+    }
+
+    public String getRootClassName() {
+        return this.rootClassName;
+    }
+
+    public String getRootClassPackage() {
+        return this.rootClassPackage;
+    }
+
+    public boolean isNotDefaultPackage() {
+        return defaultPackage;
     }
 }
