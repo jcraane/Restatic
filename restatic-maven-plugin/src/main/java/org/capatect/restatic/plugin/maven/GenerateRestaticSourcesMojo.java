@@ -124,7 +124,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
     /**
      * The name of the root class.
      *
-     * @parameter default-value="R"
+     * @parameter default-value="org.capatect.restatic.R"
      */
     private String rootClassName;
 
