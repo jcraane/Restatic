@@ -64,7 +64,7 @@ public class ResBundleTest {
     public void createWithDefaultLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_RESOURCES", resBundle.getBundleClassName());
         String separator = File.separator;
         assertEquals("org" + separator + "capatect" + separator + "test" + separator + "resources.properties",
                 resBundle.getOriginalPathAndName());
@@ -75,7 +75,7 @@ public class ResBundleTest {
     public void createWithLocale() {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestResources", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_RESOURCES", resBundle.getBundleClassName());
         assertTrue(resBundle.isValid());
     }
 
@@ -83,7 +83,7 @@ public class ResBundleTest {
     public void createWithDefaultPackage() {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("DefaultPackageResources", resBundle.getBundleClassName());
+        assertEquals("DEFAULT_PACKAGE_RESOURCES", resBundle.getBundleClassName());
         assertTrue(resBundle.isValid());
     }
 
@@ -94,7 +94,7 @@ public class ResBundleTest {
 
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
-        assertEquals("TestResources", resBundle.getBundleClassName());
+        assertEquals("TEST_RESOURCES", resBundle.getBundleClassName());
         assertTrue(resBundle.isValid());
     }
 
@@ -110,7 +110,7 @@ public class ResBundleTest {
         resourceBundle = new File(rootPath, "org/capatect/test2/resources.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
 
-        assertEquals("TestResources", resBundle.getBundleClassName());
+        assertEquals("TEST_RESOURCES", resBundle.getBundleClassName());
         assertEquals(4, resBundle.getAllUniqueKeysForLocales().size());
     }
 
@@ -118,12 +118,12 @@ public class ResBundleTest {
     public void createBundleAndAddLocales() {
         File resourceBundle = new File(rootPath, "org/capatect/test/locale_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_LOCALE", resBundle.getBundleClassName());
         assertEquals(1, resBundle.getLocales().size());
 
         resourceBundle = new File(rootPath, "org/capatect/test/locale_en_US.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_LOCALE", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
     }
 
@@ -131,12 +131,12 @@ public class ResBundleTest {
     public void getAllUniqueKeysFromLocales() {
         File resourceBundle = new File(rootPath, "org/capatect/test/locale_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_LOCALE", resBundle.getBundleClassName());
         assertEquals(1, resBundle.getLocales().size());
 
         resourceBundle = new File(rootPath, "org/capatect/test/locale_en_US.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
-        assertEquals("OrgCapatectTestLocale", resBundle.getBundleClassName());
+        assertEquals("ORG_CAPATECT_TEST_LOCALE", resBundle.getBundleClassName());
         assertEquals(2, resBundle.getLocales().size());
 
         assertEquals(3, resBundle.getAllUniqueKeysForLocales().size());
@@ -162,21 +162,21 @@ public class ResBundleTest {
     @Test
     public void convertResourceBundleToJavaClassIdentifier() {
         String className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.capatect.resources", "resources.properties");
-        assertEquals("OrgCapatectResourcesResources", className);
+        assertEquals("ORG_CAPATECT_RESOURCES_RESOURCES", className);
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("", "resources.properties");
-        assertEquals("Resources", className);
+        assertEquals("RESOURCES", className);
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources.properties");
-        assertEquals("OrgTestResources", className);
+        assertEquals("ORG_TEST_RESOURCES", className);
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_nl_NL.properties");
-        assertEquals("OrgTestResources", className);
+        assertEquals("ORG_TEST_RESOURCES", className);
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("org.test", "resources_en.properties");
-        assertEquals("OrgTestResources", className);
+        assertEquals("ORG_TEST_RESOURCES", className);
 
         className = ResBundle.ResourceBundleToJavaClassIdentifierConverter.convert("", "default-resources.properties");
-        assertEquals("DefaultResources", className);
+        assertEquals("DEFAULT_RESOURCES", className);
     }
 }

@@ -238,13 +238,15 @@ public final class ResBundle {
             StringBuilder nameBuilder = new StringBuilder(32);
             String[] pathParts = packageName.split("\\.");
             for (String pathPart : pathParts) {
-                pathPart = capitalizeFirstLetter(pathPart);
-                nameBuilder.append(pathPart);
+                if (!StringUtils.isEmpty(pathPart)) {
+                    pathPart = pathPart.toUpperCase();
+                    nameBuilder.append(pathPart).append(RESOURCE_BUNDLE_NAME_SEPARATOR);
+                }
             }
 
             final String nameWithoutExtensionAndLocale = stripLocaleInformationAndExtension(resourceBundleFileName);
             final String validJavaIdentifierName = Util.replaceInvalidJavaIdentifierCharsWithUnderscore(nameWithoutExtensionAndLocale);
-            final String className = capitalizeNameParts(validJavaIdentifierName);
+            final String className = validJavaIdentifierName.toUpperCase();
 
             String resourceBundleClassName = nameBuilder.append(className).toString();
             LOGGER.trace("Resourcebundle classname: {}", resourceBundleClassName);
@@ -271,25 +273,6 @@ public final class ResBundle {
                 name = name.substring(0, underScoreIndex);
             }
             return name;
-        }
-
-        private static String capitalizeNameParts(String name) {
-            String[] parts = name.split(RESOURCE_BUNDLE_NAME_SEPARATOR);
-
-            StringBuilder nameBuilder = new StringBuilder(32);
-            for (String part : parts) {
-                nameBuilder.append(capitalizeFirstLetter(part));
-            }
-
-            return nameBuilder.toString();
-        }
-
-        private static String capitalizeFirstLetter(String text) {
-            if (StringUtils.isEmpty(text)) {
-                return text;
-            }
-
-            return Character.toUpperCase(text.charAt(0)) + text.substring(1);
         }
     }
 }

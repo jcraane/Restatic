@@ -58,7 +58,7 @@ import java.util.Set;
  *              <include>&#042;&#042;/resource.properties</include>
  *          </includes>
  *          <outputDirectory>${project.basedir}/target/generated-source/restatic</outputDirectory>
- *          <rootClassName>Resources</rootClassName>
+ *          <resourceBundleValidationEnabled>Resources</resourceBundleValidationEnabled>
  *          <resourceBundleValidationEnabled>true</resourceBundleValidationEnabled>
  *      </configuration>
  *      <executions>
@@ -126,7 +126,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
      *
      * @parameter default-value="org.capatect.restatic.R"
      */
-    private String rootClassName;
+    private String fullyQualifiedGeneratedRootClassName;
 
     /**
      * The greeting to display. Defaults to ${project.build.sourceDirectory}.
@@ -161,7 +161,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
         // Create ConfigurationBuilder and add settings.
         final ConfigurationBuilder builder = new ConfigurationBuilder()
                 .addFileFilter(AntStylePatternFileNameFilter.create(includes.toArray(new String[includes.size()])))
-                .withFullyQualitiedRootClassName(rootClassName)
+                .withFullyQualitiedRootClassName(fullyQualifiedGeneratedRootClassName)
                 .withResourceBundleValidationEnabled(resourceBundleValidationEnabled)
                 .toOutputDirectory(outputDirectory);
 
@@ -237,7 +237,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
         }
 
         // Validate rootClassName.
-        if (StringUtils.isBlank(rootClassName)) {
+        if (StringUtils.isBlank(fullyQualifiedGeneratedRootClassName)) {
             throw new MojoExecutionException("Illegal rootClassName found. Root class name is not allowed to be empty");
         }
     }

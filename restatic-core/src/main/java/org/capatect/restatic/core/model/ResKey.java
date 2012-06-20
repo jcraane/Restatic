@@ -94,8 +94,6 @@ public final class ResKey {
      * @author Jamie Craane
      */
     static final class KeyToJavaConstantIdentifierConverter {
-        private static final String REPLACE_CHAR = "_";
-
         private KeyToJavaConstantIdentifierConverter() {
             // Prevent instantiation.
         }

@@ -43,7 +43,6 @@ public class ResourceClassGeneratorImpl implements ResourceClassGenerator {
         this.configuration = configuration;
     }
 
-    @Override
     public void generate(final ResModel resModel) {
         STGroup stringTemplateGroup = new STGroupFile("resourceclass.stg", DELIMITER_CHAR, DELIMITER_CHAR);
         ST stringTemplate = stringTemplateGroup.getInstanceOf("rootClass");

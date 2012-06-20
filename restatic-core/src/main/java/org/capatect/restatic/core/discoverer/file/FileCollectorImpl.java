@@ -64,7 +64,6 @@ public final class FileCollectorImpl implements FileCollector {
      * @param rootPath path to the classFile (usually top level package as com in com.google.common)
      * @return An unmodifiable List of files which matches the FileFilter for all directories under rootPath.
      */
-    @Override
     public List<File> collect(final File rootPath) {
         for (File file : rootPath.listFiles()) {
             recursiveFileSearch(rootPath, file);

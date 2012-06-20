@@ -49,7 +49,6 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
         this.configuration = configuration;
     }
 
-    @Override
     public ResModel parse(final List<File> resourceBundles) {
         LOGGER.trace("Start parsing the resource bundles");
 

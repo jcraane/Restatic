@@ -32,7 +32,6 @@ public class CollectionFilterTest {
     @Test(expected = IllegalArgumentException.class)
     public void nullSet() {
         CollectionFilter.filter(null, new Predicate<Object>() {
-            @Override
             public boolean apply(final Object type) {
                 return false;  //To change body of implemented methods use File | Settings | File Templates.
             }
@@ -53,14 +52,12 @@ public class CollectionFilterTest {
         }};
 
         assertEquals(1, CollectionFilter.filter(strings, new Predicate<String>() {
-            @Override
             public boolean apply(final String type) {
                 return "Test".equals(type);
             }
         }).size());
 
         assertEquals(0, CollectionFilter.filter(strings, new Predicate<String>() {
-            @Override
             public boolean apply(final String type) {
                 return false;
             }

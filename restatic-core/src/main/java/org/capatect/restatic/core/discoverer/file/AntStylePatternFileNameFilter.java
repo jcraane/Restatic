@@ -15,15 +15,15 @@
  */
 package org.capatect.restatic.core.discoverer.file;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.core.util.AntPathMatcher;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Filter which matches filenames and directories by using Ant style patterns.
@@ -68,7 +68,6 @@ public class AntStylePatternFileNameFilter implements FileFilter {
      * @param fileName The filename to test for.
      * @return true if the given filename at least matches one pattern.
      */
-    @Override
     public boolean matches(final String fileName) {
         final AntPathMatcher antPathMatcher = new AntPathMatcher();
         for (final String pattern : patterns) {

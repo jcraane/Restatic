@@ -57,8 +57,6 @@ public class FileCollectorImplTest {
      * This implementation does nothing.
      */
     private static class DefaultFileFilter implements FileFilter {
-
-        @Override
         public boolean matches(final String name) {
             return false;  //To change body of implemented methods use File | Settings | File Templates.
         }

@@ -36,6 +36,7 @@ import java.util.Set;
  *
  * @author Jamie Craane
  * @author Jeroen Post
+ *         <p/>
  */
 public final class RestaticCoreImpl implements RestaticCore {
     /**
@@ -55,7 +56,6 @@ public final class RestaticCoreImpl implements RestaticCore {
         sourceDirectories = configuration.getSourceDirectories();
     }
 
-    @Override
     public void run() {
         LOGGER.debug("run()");
 

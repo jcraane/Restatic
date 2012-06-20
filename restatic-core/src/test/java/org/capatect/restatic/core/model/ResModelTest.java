@@ -69,9 +69,8 @@ public class ResModelTest {
         resModel.addResourceBundle(resourceBundle);
         assertEquals(1, resModel.getBundles().size());
         List<ResBundle> filteredBundles = CollectionFilter.filter(resModel.getBundles(), new Predicate<ResBundle>() {
-            @Override
             public boolean apply(final ResBundle type) {
-                return type.getBundleClassName().equals("OrgCapatectTestResources");
+                return type.getBundleClassName().equals("ORG_CAPATECT_TEST_RESOURCES");
             }
         });
         assertTrue(filteredBundles.size() == 1);
@@ -93,9 +92,8 @@ public class ResModelTest {
 
         assertEquals(1, resModel.getBundles().size());
         List<ResBundle> filteredBundles = CollectionFilter.filter(resModel.getBundles(), new Predicate<ResBundle>() {
-            @Override
             public boolean apply(final ResBundle type) {
-                return type.getBundleClassName().equals("TestResources");
+                return type.getBundleClassName().equals("TEST_RESOURCES");
             }
         });
         assertTrue(filteredBundles.size() == 1);

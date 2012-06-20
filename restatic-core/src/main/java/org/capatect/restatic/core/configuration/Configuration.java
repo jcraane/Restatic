@@ -156,7 +156,6 @@ public final class Configuration {
         Validate.notNull(javaPackage, "The javaPackage may not be null.");
 
         Predicate<PackageAlias> packagePredicate = new Predicate<PackageAlias>() {
-            @Override
             public boolean apply(final PackageAlias type) {
                 return javaPackage.equalsIgnoreCase(type.getPackageName());
             }

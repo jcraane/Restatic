@@ -53,12 +53,10 @@ public class RestaticCoreImplTest {
         ResModel resModel = ResModel.create(configuration);
 
         reportMatcher(new IArgumentMatcher() {
-            @Override
             public boolean matches(final Object o) {
                 return o instanceof File;
             }
 
-            @Override
             public void appendTo(final StringBuffer stringBuffer) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
