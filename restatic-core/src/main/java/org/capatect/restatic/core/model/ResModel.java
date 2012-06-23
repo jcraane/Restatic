@@ -21,9 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ResModel abstraction for Restatic. This model is created by the ResourceBundleParser and handed over
@@ -76,16 +74,24 @@ public final class ResModel {
     }
 
     /**
-     * @return True if all resource bundles contains locales with the same number of keys, false otherwise.
+     * @return List of ValidationResult, one for each resource bundle that has errors.
      */
-    public boolean isValid() {
+    public List<ValidationResult> getValidationResults() {
+        List<ValidationResult> result = new ArrayList<ValidationResult>();
         for (ResBundle bundle : bundles) {
-            if (!bundle.isValid()) {
-                return false;
+            if (bundle.getValidationResult().hasErrors()) {
+                result.add(bundle.getValidationResult());
             }
         }
 
-        return true;
+        return Collections.unmodifiableList(result);
+    }
+
+    /**
+     * @return True if all resource bundles contains locales with the same number of keys, false otherwise.
+     */
+    public boolean isValid() {
+        return getValidationResults().size() == 0;
     }
 
     /**

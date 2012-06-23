@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -68,7 +67,7 @@ public class ResBundleTest {
         String separator = File.separator;
         assertEquals("org" + separator + "capatect" + separator + "test" + separator + "resources.properties",
                 resBundle.getOriginalPathAndName());
-        assertTrue(resBundle.isValid());
+        assertTrue(resBundle.getValidationResult().getErrors().size() == 0);
     }
 
     @Test
@@ -76,7 +75,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources_nl_NL.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("ORG_CAPATECT_TEST_RESOURCES", resBundle.getBundleClassName());
-        assertTrue(resBundle.isValid());
+        assertTrue(resBundle.getValidationResult().getErrors().size() == 0);
     }
 
     @Test
@@ -84,7 +83,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "default-package-resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
         assertEquals("DEFAULT_PACKAGE_RESOURCES", resBundle.getBundleClassName());
-        assertTrue(resBundle.isValid());
+        assertTrue(resBundle.getValidationResult().getErrors().size() == 0);
     }
 
     @Test
@@ -95,7 +94,7 @@ public class ResBundleTest {
         File resourceBundle = new File(rootPath, "org/capatect/test/resources.properties");
         ResBundle resBundle = ResBundle.createOrReturn(resourceBundle, configurationWithAliases);
         assertEquals("TEST_RESOURCES", resBundle.getBundleClassName());
-        assertTrue(resBundle.isValid());
+        assertTrue(resBundle.getValidationResult().getErrors().size() == 0);
     }
 
     @Test
@@ -149,7 +148,7 @@ public class ResBundleTest {
         resourceBundle = new File(rootPath, "org/capatect/test/invalid_en_US.properties");
         resBundle = ResBundle.createOrReturn(resourceBundle, defaultConfiguration);
 
-        assertFalse(resBundle.isValid());
+        assertTrue(resBundle.getValidationResult().getErrors().size() > 0);
     }
 
     @Test(expected = IllegalStateException.class)

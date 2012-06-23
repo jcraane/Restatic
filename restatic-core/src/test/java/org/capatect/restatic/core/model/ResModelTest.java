@@ -74,7 +74,7 @@ public class ResModelTest {
             }
         });
         assertTrue(filteredBundles.size() == 1);
-        assertTrue(resModel.isValid());
+        assertTrue(resModel.getValidationResults().size() == 0);
     }
 
     @Test
@@ -119,6 +119,6 @@ public class ResModelTest {
         ResModel resModel = ResModel.create(defaultConfiguration);
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid.properties"));
         resModel.addResourceBundle(new File(rootPath, "org/capatect/test/invalid_en_US.properties"));
-        assertFalse(resModel.isValid());
+        assertFalse(resModel.getValidationResults().size() == 0);
     }
 }

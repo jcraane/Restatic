@@ -48,12 +48,14 @@ public final class RestaticCoreImpl implements RestaticCore {
     private ResourceBundleParser resourceBundleParser;
     private ResourceClassGenerator resourceClassGenerator;
     private Set<File> sourceDirectories;
+    private boolean resourceBundleValidationEnabled;
 
     public RestaticCoreImpl(final Configuration configuration) {
         fileCollector = FileCollectorImpl.createWithPathAndFilter(configuration.getFileFilter());
         resourceBundleParser = new ResourceBundleParserImpl(configuration);
         resourceClassGenerator = new ResourceClassGeneratorImpl(configuration);
         sourceDirectories = configuration.getSourceDirectories();
+        resourceBundleValidationEnabled = configuration.isResourceBundleValidationEnabled();
     }
 
     public void run() {
@@ -65,6 +67,13 @@ public final class RestaticCoreImpl implements RestaticCore {
         }
 
         final ResModel resModel = resourceBundleParser.parse(resourceBundles);
+
+        if (resourceBundleValidationEnabled) {
+            if (!resModel.isValid()) {
+                throw new IllegalStateException(String.format("One ore more of the resource bundles are not valid, see the validation errors for details: [%s].", resModel.getValidationResults()));
+            }
+        }
+
         resourceClassGenerator.generate(resModel);
     }
 }

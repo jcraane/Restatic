@@ -60,8 +60,7 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
         if (configuration.isResourceBundleValidationEnabled()) {
             if (!resModel.isValid()) {
-                throw new IllegalStateException("One or more of the resource bundles are not valid because they contain" +
-                        " not the same number of keys for all locales.");
+                throw new IllegalStateException(String.format("One ore more resource bundles are not valid, see the validation errors for details [%s]", resModel.getValidationResults()));
             }
         }
 
