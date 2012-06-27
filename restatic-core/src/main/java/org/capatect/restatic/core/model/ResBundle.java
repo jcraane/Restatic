@@ -180,7 +180,7 @@ public final class ResBundle {
     /**
      * See class documentation.
      *
-     * @return True if all locales contain the same amount of keys, false otherwise.
+     * @return True if all locales contain the same number of keys, false otherwise.
      */
     public ValidationResult getValidationResult() {
         ValidationResult validationResult = new ValidationResult();
@@ -188,7 +188,7 @@ public final class ResBundle {
         for (ResLocale locale : locales.values()) {
             if (previousLocale != null) {
                 if (previousLocale.getKeys().size() != locale.getKeys().size()) {
-                    validationResult.addValidationError(String.format("The resource bundle [%s] does not contain the same amount of keys for the locales [%s] and [%s].", this.bundleClassName, locale.getLocale(), previousLocale.getLocale()));
+                    validationResult.addValidationError(String.format("The resource bundle [%s] does not contain the same number of keys for the locales [%s] and [%s].", this.bundleClassName, locale.getLocale(), previousLocale.getLocale()));
                 }
             }
 
