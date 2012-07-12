@@ -22,7 +22,7 @@ import org.slf4j.spi.LoggerFactoryBinder;
 /**
  * The StaticLoggerBinder used by Slf4j to return the {@link org.slf4j.ILoggerFactory} implementation, in this
  * case a MojoLoggerFactory.
- * 
+ *
  * @author Jeroen Post
  */
 public class StaticLoggerBinder implements LoggerFactoryBinder {
@@ -30,7 +30,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     /**
      * The one and only instance of this class.
      */
-    private static StaticLoggerBinder SINGLETON;
+    private static StaticLoggerBinder SINGLETON = new StaticLoggerBinder();
 
     private static final String loggerFactoryClassStr = MojoLoggerFactory.class.getName();
 
@@ -50,10 +50,6 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
      * @return the StaticLoggerBinder singleton.
      */
     public static final StaticLoggerBinder getSingleton() {
-        if (SINGLETON == null) {
-            SINGLETON = new StaticLoggerBinder();
-        }
-
         return SINGLETON;
     }
 
