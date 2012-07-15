@@ -165,6 +165,7 @@ public class GenerateRestaticSourcesMojo extends AbstractMojo {
                 .withResourceBundleValidationEnabled(resourceBundleValidationEnabled)
                 .toOutputDirectory(outputDirectory);
 
+        // Aliases
         for (final Map.Entry<String, String> alias : aliases.entrySet()) {
             builder.aliasPackage(alias.getKey()).to(alias.getValue());
         }
