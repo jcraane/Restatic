@@ -91,7 +91,7 @@ public final class Configuration {
         Validate.notNull(anOutputDirectory, "Parameter anOutputDirectory is not allowed to be null");
         Validate.notEmpty(aSourceDirectories, "Parameter aSourceDirectories is not allowed to be empty");
 
-        for (File sourceDirectory : aSourceDirectories) {
+        for (final File sourceDirectory : aSourceDirectories) {
             Validate.isTrue(sourceDirectory.isDirectory(), "Parameter sourceDirectories must contain valid directories");
         }
 
@@ -160,7 +160,6 @@ public final class Configuration {
                 return javaPackage.equalsIgnoreCase(type.getPackageName());
             }
 
-            ;
         };
 
         String alias = getAliasOrPackage(javaPackage, packagePredicate);

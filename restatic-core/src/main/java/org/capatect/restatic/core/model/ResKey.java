@@ -63,14 +63,17 @@ public final class ResKey {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ResKey resKey = (ResKey) o;
 
-        if (name != null ? !name.equals(resKey.name) : resKey.name != null) return false;
+        return !(name != null ? !name.equals(resKey.name) : resKey.name != null);
 
-        return true;
     }
 
     @Override
@@ -105,7 +108,7 @@ public final class ResKey {
          * @param resourceBundleKey The key to convert to a valid Java constant identifier.
          * @return A valid Java constant identifier for the given key.
          */
-        public static String convert(String resourceBundleKey) {
+        public static String convert(final String resourceBundleKey) {
             Validate.notEmpty(resourceBundleKey, "The key may not be null or empty.");
 
             return Util.replaceInvalidJavaIdentifierCharsWithUnderscore(resourceBundleKey).toUpperCase();

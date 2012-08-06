@@ -65,7 +65,7 @@ public final class FileCollectorImpl implements FileCollector {
      * @return An unmodifiable List of files which matches the FileFilter for all directories under rootPath.
      */
     public List<File> collect(final File rootPath) {
-        for (File file : rootPath.listFiles()) {
+        for (final File file : rootPath.listFiles()) {
             recursiveFileSearch(rootPath, file);
         }
 
@@ -83,7 +83,7 @@ public final class FileCollectorImpl implements FileCollector {
      */
     private void recursiveFileSearch(final File rootPath, final File file) {
         if (file.isDirectory()) {
-            for (File f : file.listFiles()) {
+            for (final File f : file.listFiles()) {
                 recursiveFileSearch(rootPath, f);
             }
         } else {

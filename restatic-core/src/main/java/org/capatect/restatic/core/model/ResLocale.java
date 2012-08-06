@@ -48,7 +48,7 @@ public final class ResLocale {
     private final Set<ResKey> keys = new HashSet<ResKey>();
     private boolean defaultLocale;
 
-    private ResLocale(String locale) {
+    private ResLocale(final String locale) {
         defaultLocale = StringUtils.isEmpty(locale);
         this.locale = defaultLocale ? DEFAULT_LOCALE : locale;
     }
@@ -74,7 +74,7 @@ public final class ResLocale {
     private static void extractKeysFromResourceBundleAndAddToLocale(final File resourceBundle, final ResLocale resLocale) {
         Properties properties = loadProperties(resourceBundle);
         Set<Object> keySet = properties.keySet();
-        for (Object key : keySet) {
+        for (final Object key : keySet) {
             resLocale.keys.add(ResKey.createAndConvertConstantIdentifier((String) key));
         }
     }
@@ -157,7 +157,7 @@ public final class ResLocale {
             throw new IllegalArgumentException("The locale to merge does not have the same locale as the locale to merge to.");
         }
 
-        for (ResKey resKey : resLocaleToMerge.getKeys()) {
+        for (final ResKey resKey : resLocaleToMerge.getKeys()) {
             if (this.keys.contains(resKey)) {
                 throw new IllegalStateException(String.format("This locale already contains a key [%S].", resKey));
             }
@@ -173,15 +173,20 @@ public final class ResLocale {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ResLocale resLocale = (ResLocale) o;
 
-        if (defaultLocale != resLocale.defaultLocale) return false;
-        if (locale != null ? !locale.equals(resLocale.locale) : resLocale.locale != null) return false;
+        if (defaultLocale != resLocale.defaultLocale) {
+            return false;
+        }
+        return !(locale != null ? !locale.equals(resLocale.locale) : resLocale.locale != null);
 
-        return true;
     }
 
     @Override

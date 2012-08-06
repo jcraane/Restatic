@@ -46,7 +46,7 @@ public final class CollectionFilter {
         Validate.notNull(predicate, "The predicate may not be null.");
 
         final List<T> result = new ArrayList<T>();
-        for (T element : target) {
+        for (final T element : target) {
             if (predicate.apply(element)) {
                 result.add(element);
             }

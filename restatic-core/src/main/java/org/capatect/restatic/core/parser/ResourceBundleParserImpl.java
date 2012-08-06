@@ -54,7 +54,7 @@ public final class ResourceBundleParserImpl implements ResourceBundleParser {
 
         final ResModel resModel = ResModel.create(configuration);
 
-        for (File resourceBundle : resourceBundles) {
+        for (final File resourceBundle : resourceBundles) {
             resModel.addResourceBundle(resourceBundle);
         }
 

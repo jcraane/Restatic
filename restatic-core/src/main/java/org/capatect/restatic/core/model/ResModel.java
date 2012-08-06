@@ -47,7 +47,7 @@ public final class ResModel {
     }
 
     private String extractPackage(final String fullyQualitiefRootClass) {
-        if (fullyQualitiefRootClass.indexOf(".") != -1) {
+        if (fullyQualitiefRootClass.contains(".")) {
             return fullyQualitiefRootClass.substring(0, fullyQualitiefRootClass.lastIndexOf("."));
         }
 
@@ -56,7 +56,7 @@ public final class ResModel {
     }
 
     private String extractClassName(final String fullyQualitiefRootClass) {
-        if (fullyQualitiefRootClass.indexOf(".") != -1) {
+        if (fullyQualitiefRootClass.contains(".")) {
             return fullyQualitiefRootClass.substring(fullyQualitiefRootClass.lastIndexOf(".") + 1, fullyQualitiefRootClass.length());
         }
 
@@ -78,7 +78,7 @@ public final class ResModel {
      */
     public List<ValidationResult> getValidationResults() {
         List<ValidationResult> result = new ArrayList<ValidationResult>();
-        for (ResBundle bundle : bundles) {
+        for (final ResBundle bundle : bundles) {
             if (bundle.getValidationResult().hasErrors()) {
                 result.add(bundle.getValidationResult());
             }

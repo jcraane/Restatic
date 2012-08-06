@@ -145,8 +145,8 @@ public final class ResBundle {
             final Set<File> sourceRootPaths) {
         String bundlePackage = resourceBundlePath.substring(0, resourceBundlePath.lastIndexOf(PATH_SEPARATOR));
 
-        for (File sourceRootPath : sourceRootPaths) {
-            if (bundlePackage.indexOf(sourceRootPath.getPath()) != -1) {
+        for (final File sourceRootPath : sourceRootPaths) {
+            if (bundlePackage.contains(sourceRootPath.getPath())) {
                 if (bundlePackage.length() > sourceRootPath.getPath().length()) {
                     bundlePackage = bundlePackage.substring(sourceRootPath.getPath().length() + 1, bundlePackage.length());
                     break;
@@ -162,14 +162,17 @@ public final class ResBundle {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ResBundle resBundle = (ResBundle) o;
 
-        if (bundleClassName != null ? !bundleClassName.equals(resBundle.bundleClassName) : resBundle.bundleClassName != null) return false;
+        return !(bundleClassName != null ? !bundleClassName.equals(resBundle.bundleClassName) : resBundle.bundleClassName != null);
 
-        return true;
     }
 
     @Override
@@ -185,7 +188,7 @@ public final class ResBundle {
     public ValidationResult getValidationResult() {
         ValidationResult validationResult = new ValidationResult();
         ResLocale previousLocale = null;
-        for (ResLocale locale : locales.values()) {
+        for (final ResLocale locale : locales.values()) {
             if (previousLocale != null) {
                 if (previousLocale.getKeys().size() != locale.getKeys().size()) {
                     validationResult.addValidationError(String.format("The resource bundle [%s] does not contain the same number of keys for the locales [%s] and [%s].", this.bundleClassName, locale.getLocale(), previousLocale.getLocale()));
@@ -210,8 +213,8 @@ public final class ResBundle {
     public Set<ResKey> getAllUniqueKeysForLocales() {
         final Set<ResKey> keys = new HashSet<ResKey>();
 
-        for (ResLocale locale : locales.values()) {
-            for (ResKey resKey : locale.getKeys()) {
+        for (final ResLocale locale : locales.values()) {
+            for (final ResKey resKey : locale.getKeys()) {
                 keys.add(resKey);
             }
         }
@@ -233,7 +236,7 @@ public final class ResBundle {
          * @param resourceBundleFileName The resourceBundleFileName of the resource bundle, for example resources.properties or resources_nl_NL.properties.
          * @return A Java class resourceBundleFileName based on the packageName and resourceBundleFileName of the resource bundle.
          */
-        public static String convert(String packageName, String resourceBundleFileName) {
+        public static String convert(final String packageName, final String resourceBundleFileName) {
             LOGGER.trace("convert({}, {})", packageName, resourceBundleFileName);
 
             StringBuilder nameBuilder = new StringBuilder(32);

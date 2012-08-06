@@ -37,7 +37,7 @@ import java.util.List;
 public class AntStylePatternFileNameFilter implements FileFilter {
     private final List<String> patterns = new ArrayList<String>();
 
-    private AntStylePatternFileNameFilter(String... patterns) {
+    private AntStylePatternFileNameFilter(final String... patterns) {
         this.patterns.addAll(Arrays.asList(patterns));
     }
 
@@ -48,7 +48,7 @@ public class AntStylePatternFileNameFilter implements FileFilter {
      * @return instance of AntStylePatternFileNameFilter with the given patterns.
      * @throws if patterns is null or contains an null element.
      */
-    public static AntStylePatternFileNameFilter create(String... patterns) {
+    public static AntStylePatternFileNameFilter create(final String... patterns) {
         Validate.notNull(patterns, "filter may not be null");
         Validate.noNullElements(patterns);
 

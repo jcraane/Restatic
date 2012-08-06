@@ -62,7 +62,7 @@ public final class RestaticCoreImpl implements RestaticCore {
         LOGGER.debug("run()");
 
         final List<File> resourceBundles = new ArrayList<File>();
-        for (File sourceDirectory : sourceDirectories) {
+        for (final File sourceDirectory : sourceDirectories) {
             resourceBundles.addAll(fileCollector.collect(sourceDirectory));
         }
 
