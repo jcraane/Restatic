@@ -129,6 +129,7 @@
     <modules>
         <module>restatic-core</module>
         <module>restatic-maven-plugin</module>
+        <module>restatic-gradle-plugin</module>
     </modules>
 
 </project>
