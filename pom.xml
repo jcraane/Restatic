@@ -68,7 +68,30 @@
         </dependencies>
     </dependencyManagement>
 
+    <distributionManagement>
+        <repository>
+            <id>maven-capaxit-releases</id>
+            <name>Maven Repo for Capax IT (releases)</name>
+            <url>svn:https://capaxit-maven-repo.googlecode.com/svn/maven/releases</url>
+            <uniqueVersion>false</uniqueVersion>
+        </repository>
+        <snapshotRepository>
+            <id>maven-capaxit-snapshot</id>
+            <name>Maven Repo Capax IT (snapshots)</name>
+            <url>svn:https://capaxit-maven-repo.googlecode.com/svn/maven/snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>1.9</version>
+            </extension>
+        </extensions>
+
         <!--<finalName>RestaticParent</finalName>-->
         <plugins>
             <plugin>
